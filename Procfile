@@ -1,1 +1,1 @@
-web: python manage.py collectstatic --noinput; gunicorn iPLMver2.wsgi
+web: gunicorn iPLMver2.wsgi
