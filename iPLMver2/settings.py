@@ -26,7 +26,7 @@ SECRET_KEY = 'sz68q!bdy_(f^!q%azzlt-s)r0_qb7e@jbh)7=68u!z*(i5+^n'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["https://iplm-site.herokuapp.com/","127.0.0.1"]
+ALLOWED_HOSTS = ["iplm-site.herokuapp.com","127.0.0.1"]
 
 
 # Application definition
