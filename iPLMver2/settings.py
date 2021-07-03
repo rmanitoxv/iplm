@@ -50,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'iPLMver2.urls'
@@ -136,7 +137,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'files')
 MEDIA_URL = '/files/'
 AUTH_USER_MODEL = 'CRS.User'
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'cperson.dummy@gmail.com'
 EMAIL_HOST_PASSWORD = 'CpersonEmail2021'
