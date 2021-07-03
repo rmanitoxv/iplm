@@ -1,1 +1,1 @@
-web: gunicorn iPLMver2.wsgi
+web: python manage.py collectstatic;gunicorn iPLMver2.wsgi --log-file - --log-level debug
