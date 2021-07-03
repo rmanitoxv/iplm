@@ -23,6 +23,10 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
     <!--Icon-->
     <link rel="icon" href="{% static 'CRS/images/cStudents/iPLM.png'%}" type="image/png" sizes="16x16">
+
+    <style>
+        tr:nth-child(even) {background-color: #f2f2f2;}
+    </style>
 </head>
 
 <body>
@@ -31,18 +35,18 @@
 
        <!-- Sidebar -->
        <nav id="sidebar">
-            <div class="sidebar-header">
-                <li>
-                    <p><br><br><img src="{% static 'CRS/images/fHomeAndProfile/hat.png' %}" width="126px" height="87px"><br><br>
-                </li>
-            </div>
+        <div class="sidebar-header">
+            <li>
+                <p><br><br><img src="{% static 'CRS/images/fHomeAndProfile/hat.png' %}" width="126px" height="87px"><br><br>
+            </li>
+        </div>
         <ul class="sidebar components">
             <li class="active"><a href="{% url 'chairperson' %}"><img src="{% static 'CRS/images/cDepartment/home.svg' %}" width="54px" height="68.71px"></a></li>
             <li><a href="{% url 'is_active' %}"><img src="{% static 'CRS/images/cDepartment/department.svg' %}" width="97px" height="60.56px"></a></li>
             <li><a href="{% url 'dept_student' %}"><img src="{% static 'CRS/images/cDepartment/students.svg' %}" width="90px" height="67.14px"></a></li>
             <li><a href="{% url 'full_time' %}"><img src="{% static 'CRS/images/cDepartment/faculty.svg' %}" width="65px" height="74.22px"></a></li>
-            <li><a href="#"><img src="{% static 'CRS/images/cDepartment/others.svg' %}" width="61px" height="68.06px"></a></li>
-            <li><a href="#"><img src="{% static 'CRS/images/cDepartment/log-out.svg' %}" width="72px" height="68.71px"></a></li>
+            <li><a href="{% url 'cOthers-studyPlan' %}"><img src="{% static 'CRS/images/cDepartment/others.svg' %}" width="61px" height="68.06px"></a></li>
+            <li><a href="{% url 'logout' %}"><img src="{% static 'CRS/images/cDepartment/log-out.svg' %}" width="72px" height="68.71px"></a></li>
         </ul>
 		</nav>
 		<!--End of Sidebar -->
@@ -121,7 +125,7 @@
                 {% block body %}
                 <div class="sub-year row">
                     <p id="fulltime">{{year}}&nbsp;&nbsp;&nbsp;&nbsp;</p><!-- DB YEAR -->
-                    <div class="row" id="studentCount">Student: {{count}}</div><!-- STUDENT COUNT -->
+                    <div class="row" id="studentCount" style="margin-left: -50px;">Student: {{count}}</div><!-- STUDENT COUNT -->
                     
                 </div>
                 <hr class="new">

@@ -12,7 +12,7 @@ Revised July 2007
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		</td>
 		<td align="right" width=50>
-			<img src="D:\Pia\Downloads\iPLM-master (June 4 2021) with altered forms\CRS\static\CRS\images\plmlogo.png", height="70px" width="70px">
+			<img src="C:\Users\Vea\Desktop\iPLM-master\CRS\static\CRS\images\plm.png", height="70px" width="70px">
 		</td>
 		<td align="center">
 			Republic of the Philippines
@@ -48,7 +48,7 @@ Revised July 2007
 			I have the honor to apply for the issuance of my Transfer Credentials this <u><b>{{ studentDay }}</b></u> day of <u><b>{{ studentMonth }}</b></u>, <u><b>{{ studentYear }}</b></u>.
 		</td>
 
-		<td width=50% align="center">
+		<td width=50% align="left" style="margin-left: 100px;">
 			<b><u>{{ studentCollege }}</u></b>
 			<br>
 			College
@@ -56,7 +56,7 @@ Revised July 2007
 	</tr>
 	
 	<tr>
-		<td width=50% align="center">
+		<td width=50% align="left" style="margin-left: 100px;">
 			<b><u>{{ studentCredentials }}</u></b>
 			<br>
 			Credentials Submitted
@@ -67,37 +67,42 @@ Revised July 2007
 			I am going to enroll in <u><b>{{ studentSchool }}</b></u> located at <u><b>{{ studentSchooladdress }}</b></u>
 		</td>
 
-		<td width=50% align="center">
+		<td width=50% align="left" style="margin-left: 100px;">
 			<b><u>{{ studentFirstSY }}</u></b>
 			<br>
 			First Enrollment in College
 		</td>
 	</tr>
+
+	<tr></tr>
 	
 	<tr>
 		<td width=50% align="right">
-		<table width=100%>
-			<tr>
-				<td width=50%>
-				</td>
+			<table width=100%>
+				<tr>
+					<td width=50%>
+					</td>
+					
+					<td align="center">
+						<u><b>_____________________</b></u>
+						<br>
+						Signature
+					</td>
+				</tr>
 				
-				<td align="center">
-					<u><b>_____________________</b></u>
-					<br>
-					Signature
-				</td>
-			</tr>
-		</table
+			</table>
 		</td>
 
-		<td width=50% align="center">
+		<hr>
+
+		<td width=50% align="left" style="margin-left: 100px;">
 			<b><u>{{ studentLastPSY }}</u></b>
 			<br>
 			Last Enrollment in College
 		</td>
-		
-
 	</tr>
+
+	<tr></tr>
 
 	<tr>
 		<td width=50%>
@@ -132,7 +137,7 @@ Revised July 2007
 			</table>
 		</td>
 
-		<td width=50% align="center">
+		<td width=50% align="left" style="margin-left: 100px;">
 			<b><u>{{ studentNoOfSem }}</u></b>
 			<br>
 			No. Of Semester/ Summers Attended
@@ -140,26 +145,28 @@ Revised July 2007
 
 	</tr>
 
-	<tr>
+	<tr></tr>
+	<tr >
 		<td width=50% align="center">
 			<u><b>{{ studentHomeaddress }}</b></u>
 			<br>
 			Address
 		</td>
+
 		
-		<td width=50% align="center">
+
+		<td width=50% style="margin-left: 100px;" align="left">
 			<u><b>{{ studentDegree }}</b></u>
 			<br>
 			Title/Degree Obtained
 		</td>
 	</tr>
-
 	<tr>
 		<td width=50% align="right">
 		<table width=100%>
+			<tr></tr><tr></tr>
 			<tr>
-				<td width=50%>
-				</td>
+				<td></td>
 				
 				<td align="center">
 					<u><b>________________________</b></u>
@@ -172,11 +179,12 @@ Revised July 2007
 		
 		<td width=50% align="right">
 		<table width=100%>
+			<tr></tr><tr></tr>
 			<tr>
 				<td align="center">
 					<u><b>_______________________</b></u>
 					<br>
-					Receiving Clerk
+					Date Obtained
 				</td>
 				
 				<td width=50%>
@@ -193,17 +201,16 @@ Revised July 2007
 <br>
 
 <table align="center">
-	<tr>
-		<td align="center">
-		<img src="{% static 'CRS/images/plm.png' %}" height="70px" width="70px">
+	<tr align="center">
+		<td align="left" width=50 style="margin-left: 220px;">
+			<img src="C:\Users\Vea\Desktop\iPLM-master\CRS\static\CRS\images\plm.png", height="70px" width="70px">
 		</td>
-		
 		<td align="center">
-		<b>PAMANTASAN NG LUNGSOD NG MAYNILA</b>
-		<br>
-		<i>(University of the City of Manila)</i>
-		<br>
-		Intramuros, Manila
+			<b>PAMANTASAN NG LUNGSOD NG MAYNILA</b>
+			<br>
+			<i>(University of the City of Manila)</i>
+			<br>
+			Intramuros, Manila
 		</td>
 	</tr>
 	
@@ -217,14 +224,11 @@ Revised July 2007
 </table>
 
 <table width=100% align="center">
-	<tr>
-		<td width=60% colspan=1>
-		</td>
-		
-		<td width=40% colspan=1>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ studentMonth }} {{ studentDay }}, {{ studentYear }}
-		</td>
+
+
+	<tr style="float: right;">
+			{{ studentMonth }} {{ studentDay }}, {{ studentYear }}
+
 	</tr>
 	
 	<tr>

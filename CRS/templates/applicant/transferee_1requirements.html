@@ -15,6 +15,12 @@
   <!--  ICON -->
   <link rel="icon" href="{% static '/CRS/images/cHome/iPLM.png' %}" type="image/png" sizes="16x16">
   <style>
+
+	body {
+			overflow-x: hidden;
+			overflow-y: hidden;
+		}
+
 	/*SCROLLBAR*/
 	::-webkit-scrollbar {
 		width: 10px;
@@ -36,6 +42,19 @@
 	::-webkit-scrollbar-thumb:hover {
 		background: #8f8f8f; 
 	}
+
+
+	@keyframes MoveInFromBottom {
+        0% {
+            opacity: 0;
+            transform: translateY(3rem);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+        
 </style>
 </head>
 

@@ -134,13 +134,13 @@
         .icon:hover .dropdown-menu {
             display: inline-block;
             cursor: default;
-            border-radius: 30px 30px 30px 30px;
+            border-radius: 20px;
             transition: all 0.5s;
             box-shadow: 0px 5px 15px #888888;
         }
 
         #notif:hover {
-            background: #ecc429;
+            background: #0C66CC;
             border-radius: 30px;
             cursor: pointer;
         }
@@ -148,7 +148,7 @@
         .dropdown-menu {
             background-color: white;
             border: none;
-            width: 300px;
+            width: 310px;
             margin-top: 20px;
         }
 
@@ -177,6 +177,9 @@
             width: auto;
             margin-left: 700px;
             margin-bottom: 20px;
+        }
+        .icon:focus{
+            outline: none;
         }
      </style>
 
@@ -229,7 +232,8 @@
 
                                     <div class="dropdown-menu">
                                         <p id="notiftitle">Faculty Information<br></p>
-                                        <p id="notifdrops"><b>1. Resume</b></p>
+                                        <p id="notifdrops"><b>Faculty ID:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>{{info.facultyID}}</p>
+                                        <p id="notifdrops"><b>Time Unavailable:&nbsp;&nbsp;</b><br>{{info.facultyIn}} - {{info.facultyOut}}<br><br></p>
                                     </div> 
                                 </button>
 
@@ -253,9 +257,9 @@
                                             <th scope="col"><p id="head3"><b>Subject Name</b></p></th>
                                             <th scope="col"><p id="head3"><b>Section</b></p></th>
                                             <th scope="col"><p id="head3"><b>Day</b></p></th>
-                                            <th scope="col"><p id="head3" style="padding-top: 10px;"><b>Time Start</b></p></th>
-                                            <th scope="col"><p id="head3" style="padding-top: 10px;"><b>Time End</b></p></th>
-                                            <th scope="col"><p id="head3" style="padding-top: 10px;"><b>Session Type</b></p> </th>
+                                            <th scope="col"><p id="head3"><b>Time Start</b></p></th>
+                                            <th scope="col"><p id="head3"><b>Time End</b></p></th>
+                                            <th scope="col"><p id="head3"><b>Session Type</b></p> </th>
                                             <th scope="col"><p id="head3"><b>Remove</b></p> </th>
                                         </tr>
                                         {% for i in facultySchedule %}
@@ -282,7 +286,7 @@
 
                             <br><hr class = "grey"><br>
 
-                            <div class="tableTitle" style="margin-left: 55px;">Subjects&nbsp;&nbsp;</div><br>
+                            <div class="tableTitle" style="margin-left: 55px;">Available Subjects&nbsp;&nbsp;</div><br>
                             <form>
                                 <div class="tablepanel-2 table-responsive-lg">
                                     <table class="borderless table">
@@ -292,9 +296,9 @@
                                             <th scope="col"><p id="head3">Subject Name</p></th>
                                             <th scope="col"><p id="head3">Section</p></th>
                                             <th scope="col"><p id="head3">Day</p></th>
-                                            <th scope="col"><p id="head3" style="padding-top: 10px;">Time Start</p></th>
-                                            <th scope="col"><p id="head3" style="padding-top: 10px;">Time End</p></th>
-                                            <th scope="col"><p id="head3" style="padding-top: 10px;">Session Type</p> </th>
+                                            <th scope="col"><p id="head3">Time Start</p></th>
+                                            <th scope="col"><p id="head3">Time End</p></th>
+                                            <th scope="col"><p id="head3">Session Type</p> </th>
                                             <th scope="col"><p id="head3">Add</p> </th>
                                         </tr>
                                         {% for i in schedule %}

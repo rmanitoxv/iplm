@@ -111,6 +111,46 @@
             color:  #0C66CC;
             margin-right: 10px;
         }
+
+        .alert{
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 15px;
+        color: #0C66CC;
+        box-shadow: 0 0 10px rgb(216, 216, 216);
+        animation: zoom-in-zoom-out 1s ease;
+        font-size: 18px;
+        width: 300px;
+        }
+
+        .closebtn {
+        margin-left: 15px;
+        color: #0C66CC;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+        }
+
+        .closebtn:hover {
+        color: #0c3869;
+        }
+
+
+
+        @keyframes zoom-in-zoom-out {
+        0% {
+            transform: scale(1, 1);
+        }
+        50% {
+            transform: scale(1.1, 1.1);
+        }
+        100% {
+            transform: scale(1, 1);
+        }
+        }
     </style>
 </head>
 
@@ -176,7 +216,15 @@
 
                         <div class="row">
                             <br><br>
-                            <div><br><br><br><br><br><br><br><br><img src="{% static 'CRS/images/sClassroom/clip-1397.png' %}" width="300px" height="auto"></div>
+                            {% if messages %}
+                            {% for message in messages %}
+                            <div class="alert">
+                                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+                                <b>{{ message }}</b>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                            <div><br><br><br><br><br><br><img src="{% static 'CRS/images/sClassroom/clip-1397.png' %}" width="300px" height="auto"></div>
                         </div>
 
 
@@ -197,11 +245,8 @@
                             <div>
                                 <table>
                                     <tr class="tabletext2">
-                                        <td colspan="2" align="center">                                    {% if messages %}
-                                            {% for message in messages %}
-                                             {{ message }} </p>
-                                            {% endfor %}
-                                        {% endif %}</td>
+                                        <td colspan="2" align="center"> 
+
                                     </tr>
                                     
                                     <tr>

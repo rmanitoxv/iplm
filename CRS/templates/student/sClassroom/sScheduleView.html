@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Schedule</title>
+    <title>Student | Schedule</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,17 +19,31 @@
     .tablepanel {
     overflow-y: scroll;
     overflow-x: hidden;
-    width: 1200px;
+    width: 1300px;
     height: 660px;
-    margin-left: 50px;
+    margin-left: 20px;
     }
 
     .dataStyle {
-    width: 200px;
+        color: #0C66CC;
+        width: 220px; 
+        word-break: break-all;
+        overflow: hidden;
+    }
+
+    #schedtext-1{
+    font-size: 18px;
+    color: #0C66CC;
+    font-family: 'Nunito';
+    width: 100px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: #252525;
+    word-break: break-all;
+    }
+
+    .tabletext2{
+        color: #0C66CC;
     }
 
     .semdetbox {
@@ -136,8 +150,8 @@
                                 <!-----------FROM THIS POINT LAHAT NG <TD> TAG GALING DATABASE-------------------------------------------->
                                     {% for sched  in schedule %}
                                 <tr class="tabletext2">
-                                    <td>{{sched.subjectCode.subjectCode.subjectCode}}</td>
-                                    <td><p  class="dataStyle">{{sched.subjectCode.subjectCode.subjectName}}</p></td>
+                                    <td  id="schedtext-1">{{sched.subjectCode.subjectCode.subjectCode}}</td>
+                                    <td><b>{{sched.subjectCode.subjectCode.subjectName}}</b></td>
                                     <td>{{sched.subjectCode.subjectUnits}}</td>
                                     <td>{{sched.section}}</td>
                                     <td>{{sched.day}}</td>

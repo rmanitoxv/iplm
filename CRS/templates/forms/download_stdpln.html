@@ -15,6 +15,12 @@ body {
 height: 50px; 
 width: 100px; 
 }
+
+
+td{
+	padding-top: 10px;
+	margin-left: 10px;
+}
 </style>
 </head>
 
@@ -37,7 +43,7 @@ width: 100px;
 	</table>
 
 <hr color="black">
-	<table align="center" width=100%>
+	<table align="center" width=100% style="font-size: 14px;">
 		<tr>
 			<td><b>Name:</b></td>
 			<td>
@@ -60,20 +66,60 @@ width: 100px;
 			<td><b>Total Number of Units:</b></td>
 
 			<td>
-				{{ totalnum|floatformat }}<!--INSERT UNITS-->
+				{{ ogunits|floatformat }}<!--INSERT UNITS-->
 			</td>
 		</tr>
 	</table>
 	<hr color="black">
 	<br><br>
 
-	<!--1ST YEAR, 1ST SEM TABLE-->
 	<table border="1" align="center" width=100% style="font-size: 14px;">
 		{% if semesters and subjects %}
-			{{ "<!--" }}
+			<!--open-->
 			{% for semester in semesters %}
 				{% if semester.departmentID == info.departmentID %}
-					{% if semester != status.curricula %}
+					{% if semester == status.curricula %}
+
+						<td colspan="6">{{ semester.cYear }}, {{ semester.cSem }}</td>
+						<tr align="left">
+							<td><b>COURSE CODE</b></td>
+							<td colspan="2"><b>COURSE NAME</b></td>
+							<td><b>UNITS</b></td>
+							<td style="font-size: 10px;"><b>PRE(CO)-REQUISITES</b></td>
+							<td><b>GRADE</b></td>						
+						</tr>
+						{% for l in list %}
+							<tr align="left">
+								<td>{{ l.courseCode }}</td>
+								<td colspan="2">{{ l.courseName }}</td>
+								<td>{{ l.courseUnit }}</td>
+								<td>{{ l.prerequisite|default_if_none:"" }}</td>
+								<td></td>					
+							</tr>
+						{% endfor %}
+						{% for subject in subjects %}
+							{% if semester == subject.curricula %}
+								{% if subject.prerequisite not in fscourseCode %}
+									<tr align="left">
+										<td>{{ subject.courseCode }}</td>
+										<td colspan="2">{{ subject.courseName }}</td>
+										<td>{{ subject.courseUnit }}</td>
+										<td>{{ subject.prerequisite|default_if_none:"" }}</td>
+										<td></td>					
+									</tr>
+								{% endif %}
+							{% endif %}
+						{% endfor %}
+						<tr align="left">
+							<td></td>
+							<td align="right" colspan="2">TOTAL&nbsp;&nbsp;</td>
+							<td>{{ totalnum|floatformat }}</td>
+							<td align="right">GWA&nbsp;&nbsp;</td>
+							<td></td>						
+						</tr>
+
+						{% else %}
+                        <!--close
 
 						<td>{{ semester.cYear }}, {{ semester.cSem }}</td>
 						<tr align="left">
@@ -100,37 +146,7 @@ width: 100px;
 							<td>{{ semester.totalUnits }}</td>
 							<td align="right">GWA&nbsp;&nbsp;</td>
 							<td></td>						
-						</tr>
-
-						{% else %}
-                        {{ "-->" }}
-
-						<td>{{ semester.cYear }}, {{ semester.cSem }}</td><!--<br>INSERT YEAR AND SEM-->
-						<tr align="left">
-							<td><b>COURSE CODE</b></td>
-							<td><b>COURSE NAME</b></td>
-							<td><b>UNITS</b></td>
-							<td><b>PRE(CO)-REQUISITES</b></td>
-							<td><b>GRADE</b></td>						
-						</tr>
-						{% for subject in subjects %}
-							{% if semester == subject.curricula %}
-								<tr align="left">
-									<td>{{ subject.courseCode }}</td><!--INSERT COURSE CODE-->
-									<td>{{ subject.courseName }}</td><!--INSERT COURSE NAME-->
-									<td>{{ subject.courseUnit }}</td><!--INSERT UNITS-->
-									<td>{{ subject.prerequisite|default_if_none:"" }}</td><!--INSERT PRE(CO)-REQUISITES-->
-									<td></td>					
-								</tr>
-							{% endif %}
-						{% endfor %}
-						<tr align="left">
-							<td></td>
-							<td align="right">TOTAL&nbsp;&nbsp;</td>
-							<td>{{ semester.totalUnits }}</td><!--INSERT TOTAL UNITS-->
-							<td align="right">GWA&nbsp;&nbsp;</td>
-							<td></td>						
-						</tr>
+						</tr>-->
 
 					{% endif %}
 				{% endif %}

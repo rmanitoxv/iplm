@@ -19,7 +19,23 @@
 <style>
 	body{
     overflow-y: hidden;
-  }
+  	}
+
+	.container{
+		animation: MoveInFromBottom 1s ease;
+	}
+
+	@keyframes MoveInFromBottom {
+        0% {
+            opacity: 0;
+            transform: translateY(3rem);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+        
 </style>
 
 </head>

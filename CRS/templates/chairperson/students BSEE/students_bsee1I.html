@@ -1,13 +1,12 @@
-{% extends 'chairperson/students BSEE/students_bsee1.html' %}
+{% extends 'chairperson/students BSEE/students_bsee.html' %}
     {% block content %}
         <form method="get">
             {{result.form}}
             <button type="submit">Search</button>
         </form>
         <br>
-        {{ year }}
+        {{ year }} | Irregular
         Students:{{count}}
-        <a href="{% url 'students_bsit1I' %}">Irregular</a>
         <table>
             <thead>
                 <h3></h3>

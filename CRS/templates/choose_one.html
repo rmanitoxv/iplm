@@ -1,7 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<title>Applicant Login</title>
+<title>Chairperson</title>
 <head>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
 <!-- Required meta tags -->
@@ -16,6 +16,64 @@
 <!--  ICON -->
 <link rel="icon" href="{% static 'CRS/images/landingPage/iPLMlogo.png' %}" type="image/png" sizes="16x16">
 
+
+<style>
+
+	body {
+			overflow-x: hidden;
+			overflow-y: hidden;
+		}
+
+	/*SCROLLBAR*/
+	::-webkit-scrollbar {
+		width: 10px;
+	}
+
+	/* Track */
+	::-webkit-scrollbar-track {
+		background: #e4e4e4;
+		border-radius: 12px;
+	}
+	
+	/* Handle */
+	::-webkit-scrollbar-thumb {
+		background: #cbcbcb;
+		border-radius: 12px;
+	}
+
+	/* Handle on hover */
+	::-webkit-scrollbar-thumb:hover {
+		background: #8f8f8f; 
+	}
+
+  .animate1{
+    animation: MoveInFromBottom 1s ease;
+  }
+
+  .animate2{
+    animation: MoveInFromBottom 1.5s ease;
+
+  }
+
+  .animate3{
+    animation: MoveInFromBottom 2s ease;
+ 
+  }
+
+
+	@keyframes MoveInFromBottom {
+        0% {
+            opacity: 0;
+            transform: translateY(3rem);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+        
+</style>
+
 </head>
 <body>
 
@@ -28,20 +86,20 @@
     
     <!--medium, large, small screen -  then ilang columns, max columns is 12 so divide it -->
 
-    <div class="col-lg-4 col-md-4 sm-3 ml-1 pl-1 text-center">
+    <div class="col-lg-4 col-md-4 sm-3 ml-1 pl-1 text-center animate1">
         <br><br>
         <p class="cDescription">Select an account to log in as:</p><br><br>
         <img src="{% static 'CRS/images/landingPage/clip-brainstorm.png' %}" width="290px" height="200px">
         <a href="{% url 'admin' %}"><button class="btn">Admin</button></a>
     </div>
 
-    <div class="col-lg-3 col-md-4 sm-3 ml-1 pl-1 text-center">
+    <div class="col-lg-3 col-md-4 sm-3 ml-1 pl-1 text-center animate2">
         <br><br><br><br>
         <img src="{% static 'CRS/images/landingPage/clip-school-competitions.png' %}" width="260px" height="200px">
         <a href="{% url 'chairperson' %}"><button class="btn">Chairperson</button></a>
     </div>
 
-    <div class="col-lg-4 col-md-4 sm-3 ml-1 pl-1 text-center">
+    <div class="col-lg-4 col-md-4 sm-3 ml-1 pl-1 text-center animate3">
         <br><br><br><br>
         <img src="{% static 'CRS/images/landingPage/clip-pupil.png' %}" width="200px" height="200px">
         <a href="{% url 'fHome' %}"><button class="btn">Faculty</button></a>

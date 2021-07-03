@@ -18,6 +18,76 @@
     <!--  ICON -->
     <link rel="icon" href="{% static 'CRS/images/cHome/iPLM.png' %}" type="image/png" sizes="16x16">
 
+    <style>
+        #subjectMessage {
+        padding-top: 25px;
+        padding-bottom: 10px;
+        padding-left: 20px;
+        padding-right: 30px;
+        margin-left: 130px;
+        margin-top: 40px;
+        font-size: 18px;
+        color: #ffffff;
+        font-family: 'Nunito';
+        background-color: #ff5f02;
+        border: 2px solid #ff5f02;
+        border-radius: 16px;
+        box-shadow: 0 0 10px rgb(199, 199, 199);
+        height: 150px;
+        width: 55%;
+        font-size: 16px;
+        animation: zoom-in-zoom-out 1s ease;
+        }
+        #pbuttons .pbtn {
+        margin-top: 50px;
+        margin-bottom: 30px;
+        margin-left: 400px;
+        border-radius: 15px 15px 15px 15px;
+        font-size: 20px;
+        font-family: 'Nunito';
+        color: #ffff;
+        width: 250px;
+        height: 60px;
+        background-image: linear-gradient(to right, #0C66CC, #2852A4) !important;
+        border: none;
+        }
+
+        #pbuttons .pbtn:hover {
+            background-color: #2852A4;
+            color: #ECC429;
+            cursor: pointer;
+        }
+
+        .closebtn {
+        margin-left: 15px;
+        color: #ffffff;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+        }
+
+        .closebtn:hover {
+        color: #b94807;
+        }
+
+        
+        @keyframes zoom-in-zoom-out {
+        0% {
+            transform: scale(1, 1);
+        }
+        50% {
+            transform: scale(1.1, 1.1);
+        }
+        100% {
+            transform: scale(1, 1);
+        }
+        }
+
+    </style>
+
 </head>
 
 <body>
@@ -119,28 +189,22 @@
 
 
                             {% if messages %}
-                                <div id="subjectMessage" role="alert">
-                                    {% for message in messages %}
-                                        <b>{{ message }}</b>
-                                    {% endfor %}
-                                </div>
+                            <div id="subjectMessage" role="alert">
+                                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                                {% for message in messages %}
+                                    <b>{{ message }}</b>
+                                {% endfor %}
+                            </div>
                             {% endif %}
                             
                             <div class="row">
-                                <div class="col-lg-6">
-                                </div>
+
                                 <div class="col-lg-6" id="pbuttons">
                                     <button type="submit" class="pbtn">Change Password</button>
                                 </div>
                             </div>
                         </form>
-                        {% if messages %}
-                                {% for message in messages %}
-                                    <div class="alert alert-error errorCatch" role="alert">
-                                        {{ message }}
-                                    </div>
-                                {% endfor %}
-                        {% endif %}
+                       
                         <!-- END Form Password -->
 
                     </div>

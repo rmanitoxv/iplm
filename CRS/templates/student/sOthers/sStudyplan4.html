@@ -13,6 +13,28 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     <link rel="stylesheet" href="{% static 'CRS/css/sOthers/sStudyplan4.css' %}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
+
+    <style>
+            #saveacopybtn {
+            width: 180px;
+            height: 60px;
+            background: #0C66CC;
+            color: white;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 20px;
+            letter-spacing: 1px;
+            font-family: 'Nunito';
+            float: right;
+            margin-right: 150px;
+            margin-top: 20px;
+            border: 2px solid #0C66CC;
+            }
+
+            #saveacopybtn:hover {
+                background: #2852a4;
+            }
+    </style>
 </head>
 
 <body>
@@ -91,18 +113,21 @@
                         <form method="POST" enctype="multipart/form-data">
                             {%csrf_token%}   
                         <div>
-                            <button style="text-align:center" id="button2hvr">Submit Study Plan</button>
+                            <button style="padding-left: 20px;" id="button2hvr">Study Plan</button>
                             <input type="file" name="studyPlanUp" required>
-                        </div>
 
+                            
+                        </div>
+                        
                         <!-----------SUBMIT BUTTON------->
                         <div class="rows">
                             <br>
                             <div class="col-lg-12"><img src="{% static 'CRS/images/sOthers/clip-remote.png' %}" height="210px" width="350px">
+                                
                             </div>
                         </div>
 
-                        
+                        <a href="#"><button type="submit"  id="saveacopybtn">Submit</button></a>
                         
                         
                         </form>

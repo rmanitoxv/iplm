@@ -16,7 +16,6 @@
     <!--  ICON -->
     <link rel="icon" href="{% static 'CRS/images/sOthers/iPLM.png' %}" type="image/png" sizes="16x16">
 
-
     <style>
         #checkmark{
             height: 32px;
@@ -27,8 +26,13 @@
             margin-left: 15px;
         }
 
-
         tr:nth-child(even) {background-color: #ffffff;}
+
+        #submitbtn{
+            border: none;
+            padding-bottom: 15px;
+            margin-right:-120px;
+        }
     </style>
 </head>
 
@@ -111,25 +115,18 @@
                         <div class="row">
                             <div class="col-lg-12 pt-3">
                                 <hr>
-                                <p class="pt-5" id="head3">Tick all the subjects taken that has a <br> passed remark </p>
+                                <p class="pt-5" id="head3">Tick all the subjects taken that has a <br> failed remark.</p>
                             </div>
+                            <form method="POST" enctype="multipart/form-data">
+                            {%csrf_token%}
+                                <input type="submit" id="submitbtn" value="Submit">
                         </div>
 
-                        <a href="">
-                            <div id="submitbtn">
-                                Submit
-                            </div>
-                        </a>
-
-                        <a href="{% url 'stdplnview' %}">
-                            <div id="nextbtn">
-                                Next
-                            </div>
-                        </a>
                     </div>
 
                     <div class="fill-in col-lg-8 pr-0">
-                        <form>
+
+
                             <div class="tablepanel table-responsive-lg">
                                 <table class="borderless table">
 
@@ -139,37 +136,37 @@
                                         <th scope="col"><p id="head3"><b>Course Name</b></p></th>
                                         <th scope="col"><p id="head3"><b>Units</b></p></th>
                                         <th scope="col"><p id="head3" style="font-size: 15px;"><b>Pre(Co)-Requisites</b></p></th>
-                                        <th scope="col"><p id="head3"><b>Passed</b></p></th>
+                                        <th scope="col"><p id="head3"><b>Failed</b></p></th>
                                     </tr>
                                     <!----------------------DATABASE STUFF---------------------->
-                                    {% if semesters and subjects %}
-                                        {% for semester in semesters %}
-                                            {% if semester.departmentID == department %}
+                                    {% if status.curricula %}
+                                        {% if semesters and subjects %}
+                                            {% for semester in semesters %}
                                                 {% if semester.schoolYr == status.admissionYr %}
-                                                    {% if semester == status.curricula %}
-                                                    {{ "<!--" }}
-                                                    {% else %}
+                                                        {% if semester == status.curricula %}
+                                                        {{ "<!--" }}
+                                                        {% else %}
 
-                                                        <tr class="tabletext1">
-                                                            <td colspan="5" style="background-color: #cae2ff;"><b>{{ semester.cYear }}, {{ semester.cSem }}</b></td>
-                                                        </tr>
-                                                        {% for subject in subjects %}
-                                                            {% if semester == subject.curricula %}
-                                                                <tr class="tabletext2">
-                                                                    <td><p>{{ subject.courseCode }}</p></td>
-                                                                    <td><p class="subjectName">{{ subject.courseName }}</p></td>
-                                                                    <td><p>{{ subject.courseUnit }}</p></td>
-                                                                    <td><p>{{ subject.prerequisite }}</p></td>
-                                                                    <td><input type="checkbox" checked="checked" id="checkmark"></td>
-                                                                </tr>
-                                                            {% endif %}
-                                                        {% endfor %}
+                                                            <tr class="tabletext1">
+                                                                <td colspan="5" style="background-color: #cae2ff; box-shadow: 0 0 10px rgb(189, 189, 189);"><b>{{ semester.cYear }}, {{ semester.cSem }}</b></td>
+                                                            </tr>
+                                                            {% for subject in subjects %}
+                                                                {% if semester == subject.curricula %}
+                                                                    <tr class="tabletext2">
+                                                                        <td><p>{{ subject.courseCode }}</p></td>
+                                                                        <td><p class="subjectName">{{ subject.courseName }}</p></td>
+                                                                        <td><p>{{ subject.courseUnit }}</p></td>
+                                                                        <td><p>{{ subject.prerequisite|default_if_none:"" }}</p></td>
+                                                                        <td><input type="checkbox" id="checkmark" name="checkmark" value="{{ subject.id }}"></td>
+                                                                    </tr>
+                                                                {% endif %}
+                                                            {% endfor %}
 
+                                                        {% endif %}
                                                     {% endif %}
-                                                {% endif %}
-                                            {% endif %}
-                                        {% endfor %}
-                                        {{ "-->" }}
+                                            {% endfor %}
+                                            {{ "-->" }}
+                                        {% endif %}
                                     {% endif %}
                                     <!---------------------------------------------------------->
 
@@ -177,6 +174,7 @@
 
                                 </table>
                             </div>
+
                         </form>
                     </div>
 

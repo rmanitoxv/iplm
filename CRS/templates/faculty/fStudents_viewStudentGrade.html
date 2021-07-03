@@ -82,6 +82,7 @@
             width: 100%;
             height: 660px;
             margin-left: 50px;
+            border-radius: 25px;
         }
 
         .borderless td,
@@ -299,17 +300,52 @@
     }
 
     #subjectMessage {
-        padding: 10px;
-        padding-top: 15px;
-        font-size: 16px;
-        color: rgb(248, 248, 248);
-        font-family: 'Nunito';
-        background-color: #0C66CC;
-        border: 2px solid #0C66CC;
-        border-radius: 16px;
-        box-shadow: 0 0 10px rgb(199, 199, 199);
-        text-align: center;
+        padding: 20px;
+        background-color: white;
+        border-radius: 15px;
+        color: #0C66CC;
+        box-shadow: 0 0 10px rgb(216, 216, 216);
+        margin-top: 50px;
+        animation: zoom-in-zoom-out 1s ease;
     }
+
+        .alert{
+        padding: 20px;
+        background-color: white;
+        border-radius: 15px;
+        color: #0C66CC;
+        box-shadow: 0 0 10px rgb(216, 216, 216);
+        animation: zoom-in-zoom-out 1s ease;
+        }
+
+        .closebtn {
+        margin-left: 15px;
+        color: #0C66CC;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+        }
+
+        .closebtn:hover {
+        color: #0c3869;
+        }
+
+
+
+        @keyframes zoom-in-zoom-out {
+        0% {
+            transform: scale(1, 1);
+        }
+        50% {
+            transform: scale(1.1, 1.1);
+        }
+        100% {
+            transform: scale(1, 1);
+        }
+        }
 
     </style>
 </head>
@@ -362,7 +398,7 @@
                                
                             </tr>
                             <!-----------FROM THIS POINT LAHAT NG <TD> TAG GALING DATABASE-------------------------------------------->
-                            <tr class="tabletext1">
+                            <tr class="tabletext1" style="box-shadow: 0 0 10px rgb(138, 138, 138);">
                                 <td colspan="3" style="font-size: 20px; background-color: #cae2ff;"><b>1st Yr, 1st Sem</b></td>
                                 <td colspan="2" style="background-color: #cae2ff;"><p id="head3"><b>GWA: </b>{{ ave | floatformat:2 }}</p></td>
                             </tr>
@@ -385,7 +421,7 @@
     
                             <!---------------------------------------------------------->
 
-                            <tr class="tabletext1">
+                            <tr class="tabletext1" style="box-shadow: 0 0 10px rgb(138, 138, 138);">
                                 <td colspan="3" style="font-size: 20px; background-color: #cae2ff;"><b>1st Yr, 2nd Sem</b></td>
                                 <td colspan="2" style="background-color: #cae2ff;"><p id="head3"><b>GWA: </b>{{ ave2|floatformat:2 }}</p></td>
                             </tr>
@@ -406,7 +442,7 @@
                             {% endfor %}
 
                             <!------------------------------------------------------->
-                            <tr class="tabletext1">
+                            <tr class="tabletext1" style="box-shadow: 0 0 10px rgb(138, 138, 138);">
                                 <td colspan="3" style="font-size: 20px; background-color: #cae2ff;"><b>2nd Yr, 1st Sem</b></td>
                                 <td colspan="2" style="background-color: #cae2ff;"><p id="head3"><b>GWA: </b>{{ ave3|floatformat:2 }}</p></td>
                             </tr>
@@ -429,7 +465,7 @@
 
                             <!---------------------------------------------------------->
 
-                            <tr class="tabletext1">
+                            <tr class="tabletext1" style="box-shadow: 0 0 10px rgb(138, 138, 138);">
                                 <td colspan="3"style="font-size: 20px; background-color: #cae2ff;"><b>2nd Yr, 2nd Sem</b></td>
                                 <td colspan="2" style="background-color: #cae2ff;"><p id="head3"><b>GWA: </b>{{ ave4|floatformat:2 }}</p></td>
                             </tr>
@@ -452,7 +488,7 @@
 
                             <!---------------------------------------------------------->
 
-                            <tr class="tabletext1">
+                            <tr class="tabletext1" style="box-shadow: 0 0 10px rgb(138, 138, 138);">
                                 <td colspan="3" style="font-size: 20px; background-color: #cae2ff;"><b>3rd Yr, 1st Sem</b></td>
                                 <td colspan="3" style="font-size: 20px; background-color: #cae2ff;"><p id="head3"><b>GWA: </b>{{ ave5|floatformat:2 }}</p></td>
                             </tr>
@@ -472,7 +508,7 @@
                                         {% endif %}</td>
                             </tr>
                             {% endfor %}
-                            <tr class="tabletext1">
+                            <tr class="tabletext1" style="box-shadow: 0 0 10px rgb(138, 138, 138);">
                                 <td colspan="3"style="font-size: 20px; background-color: #cae2ff;"><b>3rd Yr, 2nd Sem</b></td>
                                 <td colspan="2" style="background-color: #cae2ff;"><p id="head3"><b>GWA: </b>{{ ave6 |floatformat:2 }}</p></td>
                             </tr>
@@ -492,7 +528,7 @@
                             </tr>
                             {% endfor %}
 
-                            <tr class="tabletext1">
+                            <tr class="tabletext1" style="box-shadow: 0 0 10px rgb(138, 138, 138);">
                                 <td colspan="3" style="font-size: 20px; background-color: #cae2ff;"><b>4th Yr, 1st Sem</b></td>
                                 <td colspan="3" style="background-color: #cae2ff;"><p id="head3"><b>GWA: </b>{{ ave7|floatformat:2 }}</p></td>
                             </tr>
@@ -513,7 +549,7 @@
                             </tr>
                             {% endfor %}
 
-                            <tr class="tabletext1">
+                            <tr class="tabletext1" style="box-shadow: 0 0 10px rgb(138, 138, 138);">
                                 <td colspan="3" style="font-size: 20px; background-color: #cae2ff;"><b>4th Yr, 2nd Sem</b></td>
                                 <td colspan="3" style="background-color: #cae2ff;"><p id="head3"><b>GWA: </b>{{ ave8|floatformat:2 }}</p></td>
                             </tr>
@@ -534,7 +570,7 @@
                             </tr>
                             {% endfor %}
                             <!---------------------------------------------------------->
-                            <tr class="tabletext1">
+                            <tr class="tabletext1" style="box-shadow: 0 0 10px rgb(138, 138, 138);">
                                 <td colspan="3" style="font-size: 20px; background-color: #cae2ff;"><b>5th Yr, 1st Sem</b></td>
                                 <td colspan="3" style="background-color: #cae2ff;"><p id="head3"><b>GWA: </b>{{ ave9|floatformat:2 }}</p></td>
                             </tr>
@@ -554,7 +590,7 @@
                             </tr>
                             {% endfor %}
                             <!---------------------------------------------------------->
-                            <tr class="tabletext1">
+                            <tr class="tabletext1" style="box-shadow: 0 0 10px rgb(138, 138, 138);">
                                 <td colspan="3" style="font-size: 20px; background-color: #cae2ff;"><b>5th Yr, 2nd Sem</b></td>
                                 <td colspan="3" style="background-color: #cae2ff;"><p id="head3"><b>GWA: </b>{{ ave10|floatformat:2 }}</p></td>
                             </tr>
@@ -575,7 +611,7 @@
                             </tr>
                             {% endfor %}
                             <!---------------------------------------------------------->
-                            <tr class="tabletext1">
+                            <tr class="tabletext1" style="box-shadow: 0 0 10px rgb(138, 138, 138);">
                                 <td colspan="3" style="font-size: 20px; background-color: #cae2ff;"><b>6th Yr, 1st Sem</b></td>
                                 <td colspan="3" style="background-color: #cae2ff;"><p id="head3"><b>GWA: </b>{{ ave11|floatformat:2 }}</p></td>
                             </tr>
@@ -596,7 +632,7 @@
                             </tr>
                             {% endfor %}
                             <!---------------------------------------------------------->
-                            <tr class="tabletext1">
+                            <tr class="tabletext1" style="box-shadow: 0 0 10px rgb(138, 138, 138);">
                                 <td colspan="3" style="font-size: 20px; background-color: #cae2ff;"><b>6th Yr, 2nd Sem</b></td>
                                 <td colspan="3" style="background-color: #cae2ff;"><p id="head3"><b>GWA: </b>{{ ave12|floatformat:2 }}</p></td>
                             </tr>
@@ -626,12 +662,16 @@
                     <div class="checklist-img row col-lg-1"></div> 
                     
                     <div class="checklist-img row col-lg-3">
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert">
+                            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+                            <b>{{ message }}</b>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        
                         <div class="gradeScreenshot">
-                            {% if messages %}
-                            {% for message in messages %}
-                            <p id="subjectMessage"> {{ message }} </p>
-                            {% endfor %}
-                            {% endif %}
                             {% if grade_file != null %}              
                             
                                 <!--DROPDOWN-->

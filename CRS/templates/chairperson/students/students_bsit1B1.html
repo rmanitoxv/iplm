@@ -64,6 +64,8 @@
 
     }
 
+    tr:nth-child(even) {background-color: #f2f2f2;}
+
     </style>
 </head>
 
@@ -75,9 +77,7 @@
        <nav id="sidebar">
         <div class="sidebar-header">
             <li>
-
-                <!-- static > CRS > images > cStudents -->
-                <p><br><br><img src="{% static 'CRS/images/cStudents/hat.png' %}" width="87px" height="60px"><br><br>
+                <p><br><br><img src="{% static 'CRS/images/fHomeAndProfile/hat.png' %}" width="126px" height="87px"><br><br>
             </li>
         </div>
         <ul class="sidebar components">
@@ -85,11 +85,11 @@
             <li><a href="{% url 'is_active' %}"><img src="{% static 'CRS/images/cDepartment/department.svg' %}" width="97px" height="60.56px"></a></li>
             <li><a href="{% url 'dept_student' %}"><img src="{% static 'CRS/images/cDepartment/students.svg' %}" width="90px" height="67.14px"></a></li>
             <li><a href="{% url 'full_time' %}"><img src="{% static 'CRS/images/cDepartment/faculty.svg' %}" width="65px" height="74.22px"></a></li>
-            <li><a href="#"><img src="{% static 'CRS/images/cDepartment/others.svg' %}" width="61px" height="68.06px"></a></li>
-            <li><a href="#"><img src="{% static 'CRS/images/cDepartment/log-out.svg' %}" width="72px" height="68.71px"></a></li>
+            <li><a href="{% url 'cOthers-studyPlan' %}"><img src="{% static 'CRS/images/cDepartment/others.svg' %}" width="61px" height="68.06px"></a></li>
+            <li><a href="{% url 'logout' %}"><img src="{% static 'CRS/images/cDepartment/log-out.svg' %}" width="72px" height="68.71px"></a></li>
         </ul>
-        </nav>
-        <!--End of Sidebar -->
+		</nav>
+		<!--End of Sidebar -->
 
 
         <!-- Content -->

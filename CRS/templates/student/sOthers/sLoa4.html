@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title> Leave of Absence - 4</title>
+    <title>Students | Leave of Absence</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,6 +13,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     <link rel="stylesheet" href="{% static 'CRS/css/sOthers/sLoaStyle.css' %}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
+    <link rel="icon" href="{% static 'CRS/images/sOthers/iPLM.png' %}" type="image/png" sizes="16x16">
 </head>
 
 <body>
@@ -27,23 +28,14 @@
                 </li>
             </div>
             <ul class="sidebar components">
-                <!-- FILE PATH: Students/sHome/sHome.html-->
-                <li class="active"><a href="{% url 'sHome' %}"><img src="{% static 'CRS/images/sOthers/home.svg' %}" width="54px" height="68.71px"></a></li>
-                
-                <!-- FILE PATH: Students/sHome/sProfile.html-->
-                <li><a href="{% url 'sProfile' %}"><img src="{% static 'CRS/images/sOthers/profile.svg' %}" width="97px" height="60.56px"></a></li>
-                
-                <!-- FILE PATH: Students/sClassroom/sClassroom.html-->
-                <li><a href="{% url 'sClassroom' %}"><img src="{% static 'CRS/images/sOthers/classroom.svg' %}" width="97px" height="74"></a></li>
-                
-                <!-- FILE PATH: Students/sOthers/sOthers.html-->
-                <li><a href="{% url 'sOthers' %}"><img src="{% static 'CRS/images/sOthers/others.svg' %}" width="61px" height="68.06px"></a></li>
-                
-                <!-- FILE PATH: LOG-OUT-->
-                <li><a href="#"><img src="{% static 'CRS/images/sOthers/log-out.svg' %}" width="72px" height="68.71px"></a></li>
+                <li class="active"><a href="{% url 'sHome' %}"><img src="{% static 'CRS/images/sClassroom/home.svg' %}" width="54px" height="68.71px"></a></li>
+                <li><a href="{% url 'sProfile' %}"><img src="{% static 'CRS/images/sClassroom/profile.svg' %}" width="97px" height="60.56px"></a></li>
+                <li><a href="{% url 'sClassroom' %}"><img src="{% static 'CRS/images/sClassroom/classroom.svg' %}" width="97px" height="74"></a></li>
+                <li><a href="{% url 'sOthers' %}"><img src="{% static 'CRS/images/sClassroom/others.svg' %}" width="61px" height="68.06px"></a></li>
+                <li><a href="{% url 'logout' %}"><img src="{% static 'CRS/images/sClassroom/log-out.svg' %}" width="72px" height="68.71px"></a></li>
             </ul>
         </nav>
-        <!--END Sidebar -->
+        <!--End of Sidebar -->
         
         <!-- Content -->
         <div id="content">

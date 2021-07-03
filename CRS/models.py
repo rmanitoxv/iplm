@@ -6,6 +6,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.validators import RegexValidator
 from django.utils import timezone
+from django.db.models import JSONField, Model
 
 now = timezone.now()
 
@@ -735,7 +736,7 @@ class Curricula(models.Model):
     departmentID = models.ForeignKey(Department, verbose_name='Department', null=True, on_delete=models.PROTECT)
     cYear = models.CharField(max_length=100, choices=cYear, verbose_name="Curriculum Year", null=True)
     cSem = models.CharField(max_length=100, choices=cSem, verbose_name="Curriculum Semester", null=True)
-    totalUnits = models.CharField(max_length=50, verbose_name="Total Units", null=True)
+    totalUnits = models.IntegerField(verbose_name="Total Units", null=True)
     schoolYr = models.CharField(max_length=50, verbose_name="School Year", null=True, blank=True)
 
     class Meta:
@@ -750,7 +751,7 @@ class courseList(models.Model):
     curricula = models.ForeignKey(Curricula, verbose_name='Curriculum', null=True, on_delete=models.PROTECT)
     courseCode = models.CharField(max_length=50, verbose_name="Course Code", null=True)
     courseName = models.CharField(max_length=100, verbose_name="Course Name", null=True)
-    courseUnit = models.CharField(max_length=50, verbose_name="Units", null=True)
+    courseUnit = models.IntegerField(verbose_name="Units", null=True)
     prerequisite = models.CharField(max_length=100, verbose_name="Pre(Co)-Requisite", null=True, blank=True)
     counted_in_GWA = models.BooleanField(default=True)
 
@@ -758,8 +759,7 @@ class courseList(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['curricula', 'courseCode'], name='course_outline')
         ]
-        verbose_name_plural = "Course Lists"
-        
+
     def __str__(self):
        return '%s: %s - %s' %(self.curricula.departmentID, self.courseCode, self.courseName)
 
@@ -767,10 +767,7 @@ class studyPlan(models.Model):
     studentinfo = models.ForeignKey(StudentInfo, unique=True, verbose_name='Student', null=True, on_delete=models.CASCADE)
     admissionYr = models.CharField(max_length=50, verbose_name="Admission Year", null=True, blank=True)
     curricula = models.ForeignKey(Curricula, verbose_name='', null=True, blank=True, on_delete=models.SET_NULL)
-    approved = models.BooleanField(default=False)
-
-    class Meta:
-        verbose_name_plural = "Studyplans"
+    failedsubs = JSONField(default='')
 
     def __str__(self):
         return self.studentinfo.studentID

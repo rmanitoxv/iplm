@@ -1596,7 +1596,6 @@ def fProfileEdit(request):
         department=Department.objects.get(id = departmentid)
         
         if (request.method =='POST'):
-            user.email=request.POST.get('newEmail')
             facultyInfo.facultyContact=request.POST.get('newContact')
             user.save()
             facultyInfo.save()
@@ -3938,7 +3937,7 @@ def schedOnline2(request,block_id):
     acads = AcademicYearInfo.objects.get(pk=1)
     info = FacultyInfo.objects.get(facultyUser=id)
     schedule = studentScheduling.objects.filter(realsection=block_id)
-    OrderFormSet = inlineformset_factory(BlockSection, studentScheduling, fields=('subjectCode','instructor', 'section','day','timeStart','timeEnd', 'room', 'type'),widgets={'subjectCode': forms.Select(attrs={"class": "form-control", "id":"instructorField"}), 'instructor': forms.Select(attrs={"class": "form-control", "id":"instructorField"}),'section': forms.NumberInput(attrs={"class": "form-control", "placeholder": "Section", "id":"instructorField"}),'day': forms.Select(attrs={"class": "form-control", "id":"remarks"}),'timeStart': forms.TimeInput(attrs={"class": "form-control", "placeholder": "%H:%M:%S", "id":"timeField"}),'timeEnd': forms.TimeInput(attrs={"class": "form-control","placeholder": "%H:%M:%S", "id":"timeField"}),'room': forms.TextInput(attrs={"class": "form-control", "placeholder": "Room", "id":"instructorField"}),'type': forms.Select(attrs={"class": "form-control", "id":"instructorField"})}, max_num=1, can_delete=False)
+    OrderFormSet = inlineformset_factory(BlockSection, studentScheduling, fields=('subjectCode','instructor', 'section','day','timeStart','timeEnd', 'room', 'type'),widgets={'subjectCode': forms.Select(attrs={"class": "form-control", "id":"instructorField"}), 'instructor': forms.Select(attrs={"class": "form-control", "id":"instructorField"}),'section': forms.NumberInput(attrs={"class": "form-control", "placeholder": "Section", "id":"instructorField"}),'day': forms.Select(attrs={"class": "form-control", "id":"remarks"}),'timeStart': forms.TimeInput(attrs={"class": "form-control", "placeholder": "00:00", "id":"timeField"}),'timeEnd': forms.TimeInput(attrs={"class": "form-control","placeholder": "00:00", "id":"timeField"}),'room': forms.TextInput(attrs={"class": "form-control", "placeholder": "Room", "id":"instructorField"}),'type': forms.Select(attrs={"class": "form-control", "id":"instructorField"})}, max_num=1, can_delete=False)
     block1 = BlockSection.objects.get(id=block_id)
     formset = OrderFormSet(queryset=studentScheduling.objects.none(), instance=block1)
     for form in formset:
@@ -4061,7 +4060,7 @@ def schedOnline2(request,block_id):
                                     formset.save()
                                     validProf = False
                                     messages.success(request, 'Schedule successfully Added!')
-                                    return HttpResponseRedirect(reverse('cStudentSchedOnline2', args=(block_id)))
+                                    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
                         
                                 validProf = False
                                 for databaseInfo in faculty_Schedule:
@@ -4120,16 +4119,16 @@ def schedOnline2(request,block_id):
                                     formset.save()
                                     validProf = False
                                     messages.success(request, 'Schedule successfully Added!')
-                                    return HttpResponseRedirect(reverse('cStudentSchedOnline2', args=(block_id)))
+                                    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
                                 else:
                                     messageBlockingSched = str(dbSubject) +" section:"+ str(dbSection) + "|"+str(dbDay)+"|"+str(dbTimeIn)+"-"+str(dbTimeOut)
                                     messages.error(request, 'Professors Time already taken in %s' % messageBlockingSched)
-                                    return HttpResponseRedirect(reverse('cStudentSchedOnline2', args=(block_id)))
+                                    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
                             else:
                                 messages.error(request, 'Time already taken')
-                                return HttpResponseRedirect(reverse('cStudentSchedOnline2', args=(block_id)))
+                                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
                                 #messages.error(request, 'Time already taken')
                     else:
                         continue     
@@ -4145,7 +4144,7 @@ def schedOnline2(request,block_id):
                         formset.save()
                         validProf = False
                         messages.success(request, 'Schedule successfully Added!')
-                        return HttpResponseRedirect(reverse('cStudentSchedOnline2', args=(block_id)))
+                        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
                     validProf = False
                     for databaseInfo in faculty_Schedule:
@@ -4204,21 +4203,21 @@ def schedOnline2(request,block_id):
                         formset.save()
                         validProf = False
                         messages.success(request, 'Schedule successfully Added!')
-                        return HttpResponseRedirect(reverse('cStudentSchedOnline2', args=(block_id)))
+                        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
  
                     else:
                         messageBlockingSched = str(dbSubject) +" section:"+ str(dbSection) + "|"+str(dbDay)+"|"+str(dbTimeIn)+"-"+str(dbTimeOut)
                         messages.error(request, 'Professors Time already taken in %s' % messageBlockingSched)
-                        return HttpResponseRedirect(reverse('cStudentSchedOnline2', args=(block_id)))
+                        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
             else:
                 formset.save()
                 messages.success(request, 'Schedule successfully Added!')
-                return HttpResponseRedirect(reverse('cStudentSchedOnline2', args=(block_id)))
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         else:
             messages.error(request, 'There is an error upon adding!')
-            return HttpResponseRedirect(reverse('cStudentSchedOnline2', args=(block_id)))
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     return render(request, 'chairperson/Stud_sched/cStudentSchedOnline2.html', {'formset': formset, 'schedule' :schedule})
 
 
@@ -4235,17 +4234,21 @@ def cStudentDeleteSched(request, block_id):
 def studyplan1(request):
     id = request.user.id
     info = StudentInfo.objects.get(studentUser=id)
-    #status = studyPlan.objects.get(studentinfo=info)
-    #semesters = Curricula.objects.all()
-    form = studyPlanForm
-    #form.fields['curricula'].queryset = Curricula.objects.filter(schoolYr=status.admissionYr)
-    #form.fields['curricula'].queryset = studyPlan.objects.filter(studentinfo=info).filter(admissionYr=semesters.schoolYr)
+    instance = get_object_or_404(StudentInfo, studentUser=id)
+    form = studyPlanForm(instance=instance)
+    form.fields['curricula'].queryset = Curricula.objects.filter(schoolYr=info.studentCurriculum).filter(departmentID=info.departmentID)
+
+    '''if :
+        magic = ""
+    else:
+        magic = "disabled"'''
+
     context = {
         'form': form,
+        #'magic': magic,
     }
 
     if (request.method == 'POST'):
-        stdpln = studyPlan(studentinfo=info, admissionYr=info.studentCurriculum)
         if studyPlan.objects.filter(studentinfo=info).exists():
             studyPlan.objects.filter(studentinfo=info).update(admissionYr=info.studentCurriculum)
             instance = get_object_or_404(studyPlan, studentinfo=info)
@@ -4254,6 +4257,7 @@ def studyplan1(request):
                 form.save()
                 return redirect('stdplnsub')
         else:
+            stdpln = studyPlan(studentinfo=info, admissionYr=info.studentCurriculum)
             stdpln.save()
             instance = get_object_or_404(studyPlan, studentinfo=info)
             form = studyPlanForm(request.POST or None, instance=instance)
@@ -4271,11 +4275,16 @@ def studyplan2(request):
     subjects = courseList.objects.all()
     status = studyPlan.objects.get(studentinfo=info)
     context = {
-        'department': info.departmentID,
         'semesters': semesters,
         'subjects': subjects,
         'status': status,
     }
+
+    if (request.method == 'POST'):
+        if studyPlan.objects.filter(studentinfo=info).exists():
+            failedsubs = request.POST.getlist('checkmark')
+            studyPlan.objects.filter(studentinfo=info).update(failedsubs=failedsubs)
+            return redirect('stdplnview')
 
     return render(request, 'student/sOthers/sStudyplan2.html', context)
 
@@ -4285,11 +4294,18 @@ def studyplan3(request):
     semesters = Curricula.objects.all()
     subjects = courseList.objects.all()
     status = studyPlan.objects.get(studentinfo=info)
+    
+    failedsubs = courseList.objects.filter(id__in=status.failedsubs)
+    list = failedsubs.filter(curricula__cSem=status.curricula.cSem)
+    fscourseCode = failedsubs.all().values_list('courseCode', flat=True)
+
     context = {
-        'department': info.departmentID,
+        'info': info,
         'semesters': semesters,
         'subjects': subjects,
         'status': status,
+        'list': list,
+        'fscourseCode': fscourseCode,
     }
     return render(request, 'student/sOthers/sStudyplan3.html', context)
 
@@ -4297,20 +4313,26 @@ def download_stdpln(request):
     id = request.user.id
     info = StudentInfo.objects.get(studentUser=id)
     status = studyPlan.objects.get(studentinfo=info)
-    dept = info.departmentID
-    
-    totalnum = Curricula.objects.filter(departmentID=dept).aggregate(total=Sum('totalUnits'))['total']
-    
     semesters = Curricula.objects.all()
     subjects = courseList.objects.all()
-    status = studyPlan.objects.get(studentinfo=info)
+
+    failedsubs = courseList.objects.filter(id__in=status.failedsubs)
+    list = failedsubs.filter(curricula__cSem=status.curricula.cSem)
+    fscourseCode = failedsubs.all().values_list('courseCode', flat=True)
+
+    fsunits = list.filter().aggregate(total=Sum('courseUnit'))['total']
+    ogunits = status.curricula.totalUnits
+    #totalnum = fsunits + ogunits
+
     context = {
         'info': info,
         'status': status,
-        'totalnum': totalnum,
         'semesters': semesters,
         'subjects': subjects,
-        'status': status,
+        'list': list,
+        'fscourseCode': fscourseCode,
+        'ogunits': ogunits,
+        #'totalnum': totalnum,
     }
     if status.studentinfo_id == info.studentUser_id:
         response = HttpResponse(content_type='application/pdf')
@@ -4333,16 +4355,26 @@ def sptest(request):
     id = request.user.id
     info = StudentInfo.objects.get(studentUser=id)
     status = studyPlan.objects.get(studentinfo=info)
-    dept = info.departmentID
-    totalnum = Curricula.objects.filter(departmentID=dept).aggregate(total=Sum('totalUnits'))['total']
     semesters = Curricula.objects.all()
     subjects = courseList.objects.all()
+
+    failedsubs = courseList.objects.filter(id__in=status.failedsubs)
+    list = failedsubs.filter(curricula__cSem=status.curricula.cSem)
+    fscourseCode = failedsubs.all().values_list('courseCode', flat=True)
+
+    fsunits = list.filter().aggregate(total=Sum('courseUnit'))['total']
+    ogunits = status.curricula.totalUnits
+    #totalnum = fsunits + ogunits
+
     context = {
         'info': info,
         'status': status,
-        'totalnum': totalnum,
         'semesters': semesters,
         'subjects': subjects,
+        'list': list,
+        'fscourseCode': fscourseCode,
+        'ogunits': ogunits,
+        #'totalnum': totalnum,
     }
 
     return render(request, 'forms/download_stdpln.html', context)

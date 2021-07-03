@@ -15,6 +15,13 @@
     <link rel="stylesheet" href="{% static 'CRS/css/sOthers/sStudyplan1.css' %}">
     <!--  ICON -->
     <link rel="icon" href="{% static 'CRS/images/sOthers/iPLM.png' %}" type="image/png" sizes="16x16">
+
+    <style>
+        #nextbtn{
+            border: none;
+            padding-bottom: 15px;
+        }
+    </style>
 </head>
 
 <body>
@@ -99,7 +106,7 @@
                                     </select-->
                                 </div>
                             </div>
-                            <input type="submit">
+                            <input type="submit" id="nextbtn" value="Next" {{ magic }}>
                             <!--a class="next" href="{% url 'stdplnsub' %}">
                                 <div id="nextbtn">
                                     Next

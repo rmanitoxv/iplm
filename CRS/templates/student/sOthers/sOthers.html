@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title> Student Others </title>
+    <title>Student | Others</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,6 +15,63 @@
     <link rel="stylesheet" href="{% static 'CRS/css/sOthers/sOthersStyle.css' %}">
     <!--  ICON -->
     <link rel="icon" href="{% static 'CRS/images/sClassroom/iPLM.png' %}" type="image/png" sizes="16x16">
+
+    <style>
+        .field {
+            border-radius: 40px 40px 40px 40px;
+            background: #2852A4;
+            width: 50%;
+            height: 25px;
+            padding-right: 20px;
+            padding-left: 20px;
+        }
+
+        .alert{
+        padding: 20px;
+        background-color: #ff5f02;
+        border-radius: 15px;
+        color: white;
+        box-shadow: 0 0 10px rgb(216, 216, 216);
+        animation: zoom-in-zoom-out 1s ease;
+        width: 200px;
+        margin-left: 1150px;
+        }
+
+        .closebtn {
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+        }
+
+        .closebtn:hover {
+        color: #b94807;
+        }
+
+        #notif:hover {
+            background: #D6E000;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+
+
+        @keyframes zoom-in-zoom-out {
+        0% {
+            transform: scale(1, 1);
+        }
+        50% {
+            transform: scale(1.1, 1.1);
+        }
+        100% {
+            transform: scale(1, 1);
+        }
+        }
+    </style>
 </head>
 
 <body>
@@ -46,6 +103,14 @@
                 <!-- Others -->
                 <div class="others-main row">
                     <p id="ohead">Others</p>
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert">
+                        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+                        <b>{{ message }}</b>
+                    </div>
+                    {% endfor %}
+                {% endif %}
                 </div>
                 <!--first row-->
                 <div class="others row">
@@ -59,7 +124,7 @@
                                         <div class="obtntext0 row">
 
                                             <div class="col">
-                                                <p id="obtntext1">Study Plan (Irregular)</p>
+                                                <p id="obtntext1">Study Plan</p>
                                             </div>
 
                                         </div>
@@ -202,12 +267,7 @@
                                             </div> 
                                         </div>
                                     </div>
-                                    <p style="color:#ff8f3c; font-size: 20px;">
-                                    {% if messages %}
-                                    {% for message in messages %}
-                                     {{ message }} </p>
-                                    {% endfor %}
-                                    {% endif %}
+                                    
                                     <div class="sub-obuttons row">
                                         <div class="col">
                                             <p id="obtntext1">Practicum</p>
@@ -226,6 +286,8 @@
                                     </div>
                                 </button>
                             </a>
+
+                               
                             </div>
                             <!--END Practicum Button-->
 

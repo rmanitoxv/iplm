@@ -170,7 +170,7 @@ a:focus {
 /******** HOVER DROPS *******/
 
 #notif:hover {
-    background: #ecc429;
+    background: #D6E000;
     border-radius: 30px;
     cursor: pointer;
 }

@@ -34,9 +34,7 @@
                                     <td id="listname"><p>{{ i.studentUser.lastName }}</p><!-- DB LAST NAME --></td>
                                     <td id="listname"><p>{{ i.studentUser.firstName }}</p><!-- DB FIRST NAME --></td>
                                     <td id="listname"><p>{{ i.studentUser.middleName }}</p><!-- DB MIDDLE NAME --></td>
-                                    <td><!-- DB REMOVE BUTTON -->
-                                        <a href="{% url 'edit_students' i.pk %}" id="buttons"><button type="button" class="Editbtn"><p><b>Edit</b></p></button></a>
-                                    </td>
+                                    <td id="listname"><a href="{% url 'edit_students' i.pk %}"><button class="manage row"><!-- DB MANAGE FACULTY BUTTON BELOW -->Edit</button></a></td>
                                 </tr>
                                 {% endfor %}
                             </table>

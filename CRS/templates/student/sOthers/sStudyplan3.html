@@ -13,6 +13,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
     <link rel="stylesheet" href="{% static 'CRS/css/sOthers/sStudyplan3.css' %}">
+
+    <style>
+        tr:nth-child(even) {background-color: #ffffff;}
+    </style>
 </head>
 
 <body>
@@ -126,27 +130,37 @@
                                     </tr>
                                     <!----------------------DATABASE STUFF---------------------->
                                     {% if semesters and subjects %}
-                                        {{ "<!--" }}
+                                        <!--open-->
                                         {% for semester in semesters %}
-                                            {% if semester.departmentID == department %}
-                                                {% if semester != status.curricula %}
+                                            {% if semester.departmentID == info.departmentID %}
+                                                {% if semester == status.curricula %}
 
-                                                    <tr class="tabletext1">
-                                                        <td>{{ semester.cYear }}, {{ semester.cSem }}</td>
+                                                    <tr class="tabletext1" style="background-color: #cae2ff; box-shadow: 0 0 10px rgb(189, 189, 189);">
+                                                        <td colspan="5" >{{ semester.cYear }}, {{ semester.cSem }}</td>
                                                     </tr>
+                                                    {% for l in list %}
+                                                        <tr class="tabletext2">
+                                                            <td><p>{{ l.courseCode }}</p></td>
+                                                            <td><p class="subjectName">{{ l.courseName }}</p></td>
+                                                            <td><p>{{ l.courseUnit }}</p></td>
+                                                            <td><p>{{ l.prerequisite|default_if_none:"" }}</p></td>
+                                                        </tr>
+                                                    {% endfor %}
                                                     {% for subject in subjects %}
                                                         {% if semester == subject.curricula %}
-                                                            <tr class="tabletext2">
-                                                                <td><p>{{ subject.courseCode }}</p></td>
-                                                                <td><p class="subjectName">{{ subject.courseName }}</p></td>
-                                                                <td><p>{{ subject.courseUnit }}</p></td>
-                                                                <td><p>{{ subject.prerequisite }}</p></td>
-                                                            </tr>
+                                                            {% if subject.prerequisite not in fscourseCode %}
+                                                                <tr class="tabletext2">
+                                                                    <td><p>{{ subject.courseCode }}</p></td>
+                                                                    <td><p class="subjectName">{{ subject.courseName }}</p></td>
+                                                                    <td><p>{{ subject.courseUnit }}</p></td>
+                                                                    <td><p>{{ subject.prerequisite|default_if_none:"" }}</p></td>
+                                                                </tr>
+                                                            {% endif %}
                                                         {% endif %}
                                                     {% endfor %}
 
                                                 {% else %}
-                                                {{ "-->" }}
+                                                <!--close
 
                                                     <tr class="tabletext1">
                                                         <td>{{ semester.cYear }}, {{ semester.cSem }}</td>
@@ -157,10 +171,10 @@
                                                                 <td><p>{{ subject.courseCode }}</p></td>
                                                                 <td><p class="subjectName">{{ subject.courseName }}</p></td>
                                                                 <td><p>{{ subject.courseUnit }}</p></td>
-                                                                <td><p>{{ subject.prerequisite }}</p></td>
+                                                                <td><p>{{ subject.prerequisite|default_if_none:"" }}</p></td>
                                                             </tr>
                                                         {% endif %}
-                                                    {% endfor %}
+                                                    {% endfor %}-->
 
                                                 {% endif %}
                                             {% endif %}

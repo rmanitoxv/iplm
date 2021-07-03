@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Leave of Absence</title>
+    <title>Students | Leave of Absence</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,8 +30,58 @@
         border: 2px solid #ff5f02;
         border-radius: 16px;
         box-shadow: 0 0 10px rgb(199, 199, 199);
+		animation: zoom-in-zoom-out 1s ease;
 		width: 20%;
     }
+
+	.closebtn {
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+        }
+
+        .closebtn:hover {
+        color: #b94807;
+        }
+
+		@keyframes zoom-in-zoom-out {
+        0% {
+            transform: scale(1, 1);
+        }
+        50% {
+            transform: scale(1.1, 1.1);
+        }
+        100% {
+            transform: scale(1, 1);
+        }
+        }
+
+				/*SCROLLBAR*/
+				::-webkit-scrollbar {
+			width: 10px;
+		}
+
+		/* Track */
+		::-webkit-scrollbar-track {
+			background: #e4e4e4;
+			border-radius: 12px;
+		}
+		
+		/* Handle */
+		::-webkit-scrollbar-thumb {
+			background: #cbcbcb;
+			border-radius: 12px;
+		}
+
+		/* Handle on hover */
+		::-webkit-scrollbar-thumb:hover {
+			background: #8f8f8f; 
+		}
 	</style>
 </head>
 
@@ -47,20 +97,11 @@
                 </li>
             </div>
             <ul class="sidebar components">
-                <!-- FILE PATH: Students/sHome/sHome.html-->
-                <li class="active"><a href="{% url 'sHome' %}"><img src="{% static 'CRS/images/sOthers/home.svg' %}" width="54px" height="68.71px"></a></li>
-                
-                <!-- FILE PATH: Students/sHome/sProfile.html-->
-                <li><a href="{% url 'sProfile' %}"><img src="{% static 'CRS/images/sOthers/profile.svg' %}" width="97px" height="60.56px"></a></li>
-                
-                <!-- FILE PATH: Students/sClassroom/sClassroom.html-->
-                <li><a href="{% url 'sClassroom' %}"><img src="{% static 'CRS/images/sOthers/classroom.svg' %}" width="97px" height="74"></a></li>
-                
-                <!-- FILE PATH: Students/sOthers/sOthers.html-->
-                <li><a href="{% url 'sOthers' %}"><img src="{% static 'CRS/images/sOthers/others.svg' %}" width="61px" height="68.06px"></a></li>
-                
-                <!-- FILE PATH: LOG-OUT-->
-                <li><a href="#"><img src="{% static 'CRS/images/sOthers/log-out.svg' %}" width="72px" height="68.71px"></a></li>
+                <li class="active"><a href="{% url 'sHome' %}"><img src="{% static 'CRS/images/sClassroom/home.svg' %}" width="54px" height="68.71px"></a></li>
+                <li><a href="{% url 'sProfile' %}"><img src="{% static 'CRS/images/sClassroom/profile.svg' %}" width="97px" height="60.56px"></a></li>
+                <li><a href="{% url 'sClassroom' %}"><img src="{% static 'CRS/images/sClassroom/classroom.svg' %}" width="97px" height="74"></a></li>
+                <li><a href="{% url 'sOthers' %}"><img src="{% static 'CRS/images/sClassroom/others.svg' %}" width="61px" height="68.06px"></a></li>
+                <li><a href="{% url 'logout' %}"><img src="{% static 'CRS/images/sClassroom/log-out.svg' %}" width="72px" height="68.71px"></a></li>
             </ul>
         </nav>
         <!--End of Sidebar -->
@@ -102,11 +143,17 @@
 					<div class="clearanceHeader">
 						<h1><b>Clearance Form</b></h1>
 						<p>Please complete the form below.</p>
+						
 						{% if messages %}
 							{% for message in messages %}
-							<p id="subjectMessage">{{ message }}</p>
+							<div id="subjectMessage">
+								<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+								{{ message }}
+							</div>
 							{% endfor %}
 						{% endif %}
+
+						
 					</div>
 					
 						<div class="form-group col-lg-12 row">
@@ -131,7 +178,7 @@
 						<form method="POST" enctype="multipart/form-data" onSubmit="alert('Form Submitted, Save a Copy!')">
 							{%csrf_token%}
 							<div class="form-group col-lg-12 row">
-								<label class="form-label">First Enrollment<br>in PLM <span style="color:#ff5f02"><b>*</b></span></label>
+								<label class="form-label">First Enrollment <span style="color:#ff5f02"><b>*</b></span><br>in PLM</label>
 								&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" class="form-control" name="studentFirstCollege2" id="clearanceForm-input-college" required> <!-- DB COLLEGE -->
 								<input type="text" class="form-control" name="studentFirstSY2" id="clearanceForm-input-sy" required> <!-- DB SY -->
 								
@@ -181,7 +228,7 @@
 							<hr id="line">
 							
 							<div class="form-group col-lg-12 row">
-								<label class="form-label">Purpose of<br>Clearance <span style="color:#ff5f02"><b>*</b></span></label>
+								<label class="form-label">Purpose of <span style="color:#ff5f02"><b>*</b></span><br>Clearance</label>
 								<div class="form-check form-check-inline">
 								  <input class="form-check-input" type="radio" name="studentPurpose2" value="Graduation" required>
 								  <label class="form-check-label" name="studentPurpose2">Graduation</label>

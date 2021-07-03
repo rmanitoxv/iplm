@@ -18,22 +18,46 @@
     <link rel="icon" href="{% static 'CRS/images/cHome/iPLM.png' %}" type="image/png" sizes="16x16">
 
     <style>
-        #subjectMessage {
+
+    .alert{
+        padding: 20px;
+        background-color: white;
+        border-radius: 15px;
+        color: #0C66CC;
+        box-shadow: 0 0 10px rgb(216, 216, 216);
         margin-top: 50px;
         margin-left: 1100px;
-        padding: 10px;
-        padding-top: 20px;
-        font-size: 18px;
-        color: #ffffff;
-        font-family: 'Nunito';
-        background-color: #0C66CC;
-        border: 2px solid #0C66CC;
-        border-radius: 16px;
-        box-shadow: 0 0 10px rgb(199, 199, 199);
-        height: 70px;
-        padding-right: 50px;
-        padding-left: 50px;
-    }
+        animation: zoom-in-zoom-out 1s ease;
+        }
+
+        .closebtn {
+        margin-left: 15px;
+        color: #0C66CC;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+        }
+
+        .closebtn:hover {
+        color: #0c3869;
+        }
+
+
+
+        @keyframes zoom-in-zoom-out {
+        0% {
+            transform: scale(1, 1);
+        }
+        50% {
+            transform: scale(1.1, 1.1);
+        }
+        100% {
+            transform: scale(1, 1);
+        }
+        }
     </style>
 </head>
 
@@ -76,7 +100,10 @@
                     <p class="text-profile">Profile</p>
                     {% if messages %}
                     {% for message in messages %}
-                    <p id="subjectMessage"> {{ message }} </p>
+                    <div class="alert">
+                        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+                        <b>{{ message }}</b>
+                    </div>
                     {% endfor %}
                 {% endif %} 
                 </div>
@@ -134,7 +161,7 @@
                                 <p id="text-pbox">Pedegree:</p>
                             </div>
                             <div class="col-lg-3" id="text-pbox">
-                                <!-- DB PEDIGREE PUT HERE -->
+                                None
                             </div>
                             <div class="col-lg-3" >
                                 <p id="text-pbox">PLM Email:</p>
@@ -151,12 +178,14 @@
                             <div class="col-lg-3" id="text-pbox">
                                 {{facultyInfo.facultyGender}}
                             </div>
-                            <div class="col-lg-3">
-                                <p id="text-pbox">Personal Email:</p>
+
+                            <div class="col-lg-3" >
+                                <p id="text-pbox">Contact Number:</p>
                             </div>
-                            <div class="col-lg-3" id="text-pbox">
-                                {{user.email}}
+                            <div class="col-lg-3"id="text-pbox">
+                                {{facultyInfo.facultyContact}}
                             </div>
+                        
                         </div>
                         
                         <div class="phor row">
@@ -167,12 +196,7 @@
                                 {{facultyInfo.facultyCivilstatus}}
                             </div>
 
-                            <div class="col-lg-3" >
-                                <p id="text-pbox">Contact Number:</p>
-                            </div>
-                            <div class="col-lg-3"id="text-pbox">
-                                {{facultyInfo.facultyContact}}
-                            </div>
+                           
                             
                         </div>
                         

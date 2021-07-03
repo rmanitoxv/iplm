@@ -291,9 +291,6 @@ a:focus {
 
 .dataStyle {
     width: 300px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     color: #252525;
 }
 
