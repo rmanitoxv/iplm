@@ -140,7 +140,7 @@ def is_active(request):
     #bsit5 = SubjectSchedule.objects.filter(yearStanding='Fifth Year')
     #bsit6 = SubjectSchedule.objects.filter(yearStanding='Sixth Year')
     context = {'subject' : subject}
-    return render(request, './chairperson/department/is_active.html', context)
+    return render(request, './chairperson/Department/is_active.html', context)
 
 def is_subject_view(request, dept_id):
     subj = studentScheduling.objects.get(pk=dept_id)
@@ -148,11 +148,11 @@ def is_subject_view(request, dept_id):
     count = students.count()
     result = filters.Search(request.GET, queryset=students); students = result.qs
     context = {'subj': subj, 'students': students, 'result': result, 'count' : count}
-    return render(request, './chairperson/department/is_subject_view.html', context)
+    return render(request, './chairperson/Department/is_subject_view.html', context)
 
 def sc_active(request):
     subject = studentScheduling.objects.all
-    return render(request, './chairperson/department/sc_active.html', {'subject': subject})
+    return render(request, './chairperson/Department/sc_active.html', {'subject': subject})
 
 def sc_subject_view(request, dept_id):
     subj = studentScheduling.objects.get(pk=dept_id)
@@ -160,7 +160,7 @@ def sc_subject_view(request, dept_id):
     count = students.count()
     result = filters.Search(request.GET, queryset=students); students = result.qs
     context = {'subj': subj, 'students': students, 'result': result, 'count' : count}
-    return render(request, './chairperson/department/sc_subject_view.html', context)
+    return render(request, './chairperson/Department/sc_subject_view.html', context)
 
 # Students (Chairperson)
 def dept_student(request):
@@ -1440,19 +1440,19 @@ def full_time(request):
     count = work_status.count()
     result = filters.Faculty(request.GET, queryset=work_status); work_status = result.qs
     context = {'work_status': work_status, 'count': count, 'result': result}
-    return render(request, './chairperson/faculty/full_time.html', context)
+    return render(request, './chairperson/Faculty/full_time.html', context)
 def part_time(request):
     id = request.user.id; cperson = FacultyInfo.objects.get(pk=id)
     work_status = FacultyInfo.objects.filter(facultyWorkstatus='Part-Time').filter(departmentID=cperson.departmentID)
     count = work_status.count()
     result = filters.Faculty(request.GET, queryset=work_status); work_status = result.qs
     context = {'work_status': work_status, 'count': count, 'result': result, }
-    return render(request, './chairperson/faculty/part_time.html', context)
+    return render(request, './chairperson/Faculty/part_time.html', context)
 
 def faculty_schedule(request, dept_id):
     info = FacultyInfo.objects.get(pk=dept_id)
     schedule = studentScheduling.objects.filter(instructor_id=dept_id)
-    return render(request, './chairperson/faculty/faculty_schedule.html', {'info': info, 'schedule' : schedule})
+    return render(request, './chairperson/Faculty/faculty_schedule.html', {'info': info, 'schedule' : schedule})
 
 def chairperson_faculty_schedule_edit(request, id):
     if request.user.is_authenticated and request.user.is_chairperson:
