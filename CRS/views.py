@@ -24,6 +24,8 @@ from django.forms import inlineformset_factory
 from django.db.models import Avg, Sum
 from django.core.mail import EmailMultiAlternatives, send_mail, EmailMessage
 from CRS.models import FacultyApplicant
+from django.db.models import Q
+from django.utils import timezone
 
 def index(request):
     if request.method == 'POST':
@@ -1495,7 +1497,8 @@ def add_faculty_schedule(request, sid, id):
         fact = studentScheduling.objects.get(id=sid)
         fact.instructor_id = id
         facultySchedule = studentScheduling.objects.filter(instructor_id=id)
-        validSched = False
+        validSched = True
+        validProf = True
         for data in facultySchedule:
             dbSubject = data.subjectCode
             dbSection = data.section
@@ -1511,6 +1514,23 @@ def add_faculty_schedule(request, sid, id):
             AssignedTimeIn = float(AssignedTimeInList[0])+(float(AssignedTimeInList[1])/60)
             AssignedTimeOutList = str(fact.timeEnd).split(":")
             AssignedTimeOut = float(AssignedTimeOutList[0])+(float(AssignedTimeOutList[1])/60)
+
+            profInfo = FacultyInfo.objects.get(facultyUser = data.instructor)
+                                       
+            profAvailIn = str(profInfo.facultyIn).split(':')
+            profAvailOut = str(profInfo.facultyOut).split(':')
+            FacAvailTimeIn = float(profAvailIn[0])+float(float(profAvailIn[1])/60)
+            FacAvailTimeOut = float(profAvailOut[0])+float(float(profAvailOut[1])/60)
+            if float(AssignedTimeIn) < float(FacAvailTimeIn):
+                #Input Start Time To Early too Availability
+                validProf = False
+                break
+            elif float(AssignedTimeOut) > float(FacAvailTimeOut):
+                validProf = False
+                break
+            else:
+                validProf = True
+            
             if dbDay == AssignedDay:
                 if AssignedTimeIn == dbTimeIn:
                     #Same Sched was assigned
@@ -1529,25 +1549,25 @@ def add_faculty_schedule(request, sid, id):
             else:
                 validSched = True
         else:
-            if facultySchedule.count() == 0:
+            if facultySchedule.count() == 0 and validProf == True:
                 fact.save()
                 validSched = False
+                validProf = False
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
                 
 
 
-        if validSched == True:
+        if validSched == True and validProf == True:
             fact.save()
             validSched = False
+            validProf = False
+            messages.success(request, 'Schedule succesfully added!')
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         else:
             messageBlockingSched = str(dbSubject) +" section:"+ str(dbSection) + "|"+str(dbDay)+"|"+str(TimeIn)+"-"+str(TimeOut)
             messages.error(request, 'Professors Time already taken in %s' % messageBlockingSched)
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-
-        
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))        
     else:
         return redirect ('index')
 
@@ -1634,109 +1654,150 @@ def parttime_sched(request):
             if (request.method=='POST'):
                 facultyin = request.POST.get('in')
                 facultyout = request.POST.get('out')
+
+                convertIn1 = facultyin.split(":")
+                convertIn2 = convertIn1[1].split(" ")
+                if convertIn2[1] == 'PM':
+                    newTimeIn = int(convertIn1[0])+12
+                else:
+                    newTimeIn = int(convertIn1[0])
+                TIMEINCONVERT = str(newTimeIn) + ":" + convertIn2[0]
+
+                convertOut1 = facultyout.split(":")
+                convertOut2 = convertOut1[1].split(" ")
+                if convertOut2[1] == 'PM':
+                    newTimeOut = int(convertOut1[0])+12
+                else:
+                    newTimeOut = int(convertOut1[0])
+                TIMEOUTCONVERT = str(newTimeOut) + ":" + convertOut2[0]
+
+                print("Military Time Conversion:",TIMEINCONVERT,"-",TIMEOUTCONVERT)
+
                 f_in = 0
                 outside = 0
                 # WAG NA KAYO MAGALIT SA MAHABANG CODE HAHAHAHAHAHAHAHHAHAHAHAHA
                 #--- Time in ---
-                if facultyin == '7:00 AM':
+                if TIMEINCONVERT == '7:00':
                     f_in = 0
-                if facultyin == '7:30 AM':
+                if TIMEINCONVERT == '7:30':
                     f_in = 30
-                if facultyin == '8:00 AM':
+                if TIMEINCONVERT == '8:00':
                     f_in = 60
-                if facultyin == '8:30 AM':
+                if TIMEINCONVERT == '8:30':
                     f_in = 90
-                if facultyin == '9:00 AM':
+                if TIMEINCONVERT == '9:00':
                     f_in = 120
-                if facultyin == '9:30 AM':
+                if TIMEINCONVERT == '9:30':
                     f_in = 150
-                if facultyin == '10:00 AM':
+                if TIMEINCONVERT == '10:00':
                     f_in = 180
-                if facultyin == '10:30 AM':
+                if TIMEINCONVERT == '10:30':
                     f_in = 210
-                if facultyin == '11:00 AM':
+                if TIMEINCONVERT == '11:00':
                     f_in = 240
-                if facultyin == '11:30 AM':
+                if TIMEINCONVERT == '11:30':
                     f_in = 270 
-                if facultyin == '12:00 PM':
+                if TIMEINCONVERT == '12:00':
                     f_in = 300
-                if facultyin == '12:30 PM':
+                if TIMEINCONVERT == '12:30':
                     f_in = 330
-                if facultyin == '1:00 PM':
+                if TIMEINCONVERT == '13:00':
                     f_in = 360
-                if facultyin == '1:30 PM':
+                if TIMEINCONVERT == '13:30':
                     f_in = 390
-                if facultyin == '2:00 PM':
-                    f_in = 420
-                if facultyin == '2:30 PM':
-                    f_in = 450
-                if facultyin == '3:00 PM':
-                    f_in = 480
-                if facultyin == '3:30 PM':
-                    f_in = 510
-                if facultyin == '4:00 PM':
-                    f_in = 540
-                if facultyin == '4:30 PM':
-                    f_in = 570
-                if facultyin == '5:00 PM':
-                    f_in = 600
-                if facultyin == '5:30 PM':
-                    f_in = 630
-                if facultyin == '6:00 PM':
-                    f_in = 660
-                if facultyin == '6:30 PM':
+                if TIMEINCONVERT == '14:00':
+                    f_in = 410
+                if TIMEINCONVERT == '14:30':
+                    f_in = 440
+                if TIMEINCONVERT == '15:00':
+                    f_in = 470
+                if TIMEINCONVERT == '15:30':
+                    f_in = 500
+                if TIMEINCONVERT == '16:00':
+                    f_in = 530
+                if TIMEINCONVERT == '16:30':
+                    f_in = 560
+                if TIMEINCONVERT == '17:00':
+                    f_in = 590
+                if TIMEINCONVERT == '17:30':
+                    f_in = 610
+                if TIMEINCONVERT == '18:00':
+                    f_in = 640
+                if TIMEINCONVERT == '18:30':
+                    f_in = 670
+                if TIMEINCONVERT == '19:00':
                     f_in = 690
-                if facultyin == '7:00 PM':
+                if TIMEINCONVERT == '19:30':
                     f_in = 720
-                if facultyin == '7:30 PM':
+                if TIMEINCONVERT == '20:00':
                     f_in = 750
-                if facultyin == '8:00 PM':
-                    f_in = 780
                 
                 #--- Time Out ----
-                if facultyout == '12:00 PM':
+                if TIMEOUTCONVERT == '12:00':
                     outside = 300
-                if facultyout == '12:30 PM':
+                if TIMEOUTCONVERT == '12:30':
                     outside = 330
-                if facultyout == '1:00 PM':
+                if TIMEOUTCONVERT == '13:00':
                     outside = 360
-                if facultyout == '1:30 PM':
+                if TIMEOUTCONVERT == '13:30':
                     outside = 390
-                if facultyout == '2:00 PM':
-                    outside = 420
-                if facultyout == '2:30 PM':
-                    outside = 450
-                if facultyout == '3:00 PM':
-                    outside = 480
-                if facultyout == '3:30 PM':
-                    outside = 510
-                if facultyout == '4:00 PM':
-                    outside = 540
-                if facultyout == '4:30 PM':
-                    outside = 570
-                if facultyout == '5:00 PM':
-                    outside = 600
-                if facultyout == '5:30 PM':
-                    outside = 630
-                if facultyout == '6:00 PM':
-                    outside = 660
-                if facultyout == '6:30 PM':
+                if TIMEOUTCONVERT == '14:00':
+                    outside = 410
+                if TIMEOUTCONVERT == '14:30':
+                    outside = 440
+                if TIMEOUTCONVERT == '15:00':
+                    outside = 470
+                if TIMEOUTCONVERT == '15:30':
+                    outside = 500
+                if TIMEOUTCONVERT == '16:00':
+                    outside = 530
+                if TIMEOUTCONVERT == '16:30':
+                    outside = 560
+                if TIMEOUTCONVERT == '17:00':
+                    outside = 590
+                if TIMEOUTCONVERT == '17:30':
+                    outside = 610
+                if TIMEOUTCONVERT == '18:00':
+                    outside = 640
+                if TIMEOUTCONVERT == '18:30':
+                    outside = 670
+                if TIMEOUTCONVERT == '19:00':
                     outside = 690
-                if facultyout == '7:00 PM':
+                if TIMEOUTCONVERT == '19:30':
                     outside = 720
-                if facultyout == '7:30 PM':
+                if TIMEOUTCONVERT == '20:00':
                     outside = 750
-                if facultyout == '8:00 PM':
+                if TIMEOUTCONVERT == '20:30':
                     outside = 780
-                if facultyout == '8:30 PM':
+                if TIMEOUTCONVERT == '21:00':
                     outside = 810
-                if facultyout == '9:00 PM':
+                if TIMEOUTCONVERT == '21:30':
                     outside = 840
-                if facultyout == '9:30 PM':
+                if TIMEOUTCONVERT == '22:00':
                     outside = 870
-                if facultyout == '10:00 PM':
-                    outside = 900
-                    
+
+                total_teaching_minutes = outside - f_in
+
+                if total_teaching_minutes >= 90 and total_teaching_minutes <= 360:
+                    facultyIn=request.POST.get('in')
+                    facultyOut=request.POST.get('out')
+
+                    f_user.facultyIn = TIMEINCONVERT
+                    f_user.facultyOut = TIMEOUTCONVERT
+
+                    f_user.save()
+                    messages.success(request, 'Successfully added your input!')
+                    return redirect('parttime_sched')
+
+                else:
+                    if total_teaching_minutes < 90:
+                        messages.error (request,'Time is below minimum hours!')
+                    else:
+                        messages.error (request,'Time is above minimum hours!')
+
+
+
+                '''    
                 if outside - f_in == 300 :
                     facultyIn=request.POST.get('in')
                     facultyOut=request.POST.get('out')
@@ -1752,6 +1813,7 @@ def parttime_sched(request):
                     messages.error (request,'Time is above minimum hours!') 
                 if outside - f_in < 300:
                     messages.error (request,'Time is below minimum hours!') 
+                '''
         else:
             messages.error (request,'You are not eligible to view this page.') 
         return render(request,'./faculty/parttime_sched.html',{'user':user})
@@ -2470,7 +2532,7 @@ def sClassroom(request):
 
 def sGradeSubmission1(request):
     if request.user.is_authenticated and request.user.is_student:
-        OrderFormSet = inlineformset_factory(StudentInfo, currchecklist, fields=('owner','curriculumCode', 'subjectGrades','yearTaken','semTaken'),widgets={'curriculumCode': forms.Select(attrs={"class": "form-control", "id":"instructorField"}), 'subjectGrades': forms.Select(attrs={"class": "form-control", "id":"instructorField"}),'yearTaken': forms.Select(attrs={"class": "form-control", "id":"instructorField"}), 'semTaken': forms.Select(attrs={"class": "form-control", "id":"instructorField"})}, extra =13, can_delete=False)
+        OrderFormSet = inlineformset_factory(StudentInfo, currchecklist, fields=('owner','curriculumCode', 'subjectGrades','yearTaken','semTaken'),widgets={'curriculumCode': forms.Select(attrs={"class": "form-control", "id":"instructorField"}), 'subjectGrades': forms.Select(attrs={"class": "form-control", "id":"instructorField"}),'yearTaken': forms.Select(attrs={"class": "form-control", "id":"instructorField"}), 'semTaken': forms.Select(attrs={"class": "form-control", "id":"instructorField"})}, extra =10, can_delete=False)
         id= request.user.id
         info = StudentInfo.objects.get(studentUser=id)
         formset = OrderFormSet(queryset=currchecklist.objects.none(), instance=info)
@@ -2785,6 +2847,7 @@ def sHd4(request):
             stdParentsig = request.FILES.get('stdParentsig')
             studentTransfercert = request.FILES.get('studentTransfercert')
             studentGrades = request.FILES.get('studentGrades')
+            hd_dateSubmitted = timezone.now()
             try:
                 applicant = hdApplicant.objects.get(studentID_id=id)
                 if applicant.remarks == "Returned":
@@ -2796,13 +2859,14 @@ def sHd4(request):
                         applicant.studentTransfercert = request.FILES.get('studentTransfercert')
                         applicant.studentGrades = request.FILES.get('studentGrades')
                         applicant.remarks = 'Submitted'
+                        applicant.hd_dateSubmitted = timezone.now()
                         applicant.save()
                         return redirect('sHd5') 
                 else:
                     messages.error(request,'You have already submitted an application!')
                     return render(request,'student/sOthers/sHd4.html')
             except ObjectDoesNotExist:
-                hd_applicants = hdApplicant(studentID=info,studentDropform=studentDropform,studentClearanceform =studentClearanceform ,studentHdletter=studentHdletter,studentGrades=studentGrades,studentTransfercert=studentTransfercert, stdParentsig=stdParentsig)
+                hd_applicants = hdApplicant(studentID=info,studentDropform=studentDropform,studentClearanceform =studentClearanceform ,studentHdletter=studentHdletter,studentGrades=studentGrades,studentTransfercert=studentTransfercert, stdParentsig=stdParentsig,hd_dateSubmitted=hd_dateSubmitted)
                 hd_applicants.save()
                 return redirect('sHd5')
         return render(request, 'student/sOthers/sHd4.html')
@@ -2986,6 +3050,7 @@ def sLoa3(request):
             studentLOAletter = request.FILES.get('studentLOAletter')
             studentLOAFORM = request.FILES.get('studentLOAFORM')
             studentChecklist = request.FILES.get('studentChecklist')
+            now = timezone.now()
             try:
                 applicant = LOAApplicant.objects.get(studentID_id=id)
                 if applicant.remarks == "Returned":
@@ -2996,13 +3061,14 @@ def sLoa3(request):
                         applicant.studentLOAFORM = request.FILES.get('studentLOAFORM')
                         applicant.studentChecklist = request.FILES.get('studentChecklist')
                         applicant.remarks = 'Submitted'
+                        applicant.LOA_dateSubmitted = timezone.now()
                         applicant.save()
                         return redirect('sLoa4') 
                 else:
                     messages.error(request,'You have already submitted an application!')
                     return render(request,'student/sOthers/sLoa3.html')
             except ObjectDoesNotExist:
-                loaApplicant = LOAApplicant(studentID=info,studentLOAClearanceform =studentLOAClearanceform,studentLOAFORM =studentLOAFORM ,studentLOAletter =studentLOAletter,studentChecklist=studentChecklist,studentStudyplan=studentStudyplan)
+                loaApplicant = LOAApplicant(studentID=info,studentLOAClearanceform =studentLOAClearanceform,studentLOAFORM =studentLOAFORM ,studentLOAletter =studentLOAletter,studentChecklist=studentChecklist,studentStudyplan=studentStudyplan,LOA_dateSubmitted=now)
                 loaApplicant.save()
                 return redirect('sLoa4')
         return render(request, 'student/sOthers/sLoa3.html')
@@ -3044,6 +3110,7 @@ def sPracticum1(request):
             ojtCompanyProfile = request.FILES.get("companyprofile")
             ojtCompanyId = request.FILES.get("companyid")
             ojtMedcert =   request.FILES.get("medcert")
+            ojt_dateSubmitted = timezone.now()
             try:
                 applicant = OjtApplicant.objects.get(studentID_id=id)
                 if applicant.remarks == "Returned":
@@ -3056,13 +3123,14 @@ def sPracticum1(request):
                         applicant.ojtCompanyId = request.FILES.get('companyid')
                         applicant.ojtMedcert = request.FILES.get('medcert')
                         applicant.remarks = 'Submitted'
+                        applicant.ojt_dateSubmitted = timezone.now()
                         applicant.save()
                         return redirect('sPracticum2') 
                 else:
                     messages.error(request,'You have already submitted an application!')
                     return render(request,'student/sOthers/sPracticum1.html')
             except ObjectDoesNotExist:
-                ojtApplicant = OjtApplicant(studentID=info, ojtResume=ojtResume, ojtRecLetter=ojtRecLetter, ojtWaiver=ojtWaiver, ojtAcceptForm=ojtAcceptForm, ojtCompanyProfile=ojtCompanyProfile, ojtCompanyId=ojtCompanyId, ojtMedcert=ojtMedcert)
+                ojtApplicant = OjtApplicant(studentID=info, ojtResume=ojtResume, ojtRecLetter=ojtRecLetter, ojtWaiver=ojtWaiver, ojtAcceptForm=ojtAcceptForm, ojtCompanyProfile=ojtCompanyProfile, ojtCompanyId=ojtCompanyId, ojtMedcert=ojtMedcert,ojt_dateSubmitted=ojt_dateSubmitted)
                 ojtApplicant.save()
                 return redirect('sPracticum2')
         return render(request, 'student/sOthers/sPracticum1.html')
@@ -3140,6 +3208,9 @@ def hd_general(request):
         info = FacultyInfo.objects.get(facultyUser=id)
         student = StudentInfo.objects.filter(departmentID=info.departmentID)
         hd_masterlist = hdApplicant.objects.filter(studentID__in=student)
+        searchthis_query = request.GET.get('searchthis')
+        if searchthis_query != " " and searchthis_query is not None:
+            hd_masterlist = hd_masterlist.filter(Q(studentID__studentUser__lastName__icontains=searchthis_query) | Q(studentID__studentID__icontains=searchthis_query)| Q(studentID__studentUser__firstName__icontains=searchthis_query)| Q(studentID__studentUser__middleName__icontains=searchthis_query) | Q(remarks__icontains=searchthis_query)).distinct()
         context = {
         'info' : info,
         'hd_masterlist' : hd_masterlist,
@@ -3150,6 +3221,7 @@ def hd_masterlist(request):
         id= request.user.id
         info = FacultyInfo.objects.get(facultyUser=id)
         student = StudentInfo.objects.filter(departmentID=info.departmentID)
+        hd_masterlist = hdApplicant.objects.filter(studentID__in=student)
         hd_returned = hdApplicant.objects.filter(studentID__in=student).filter(remarks="Returned")
         hd_submitted = hdApplicant.objects.filter(studentID__in=student).filter(remarks="Submitted")
         hd_forwarded = hdApplicant.objects.filter(studentID__in=student).filter(remarks="Forwarded")
@@ -3163,7 +3235,7 @@ def hd_masterlist(request):
         'hd_forwarded' : hd_forwarded,
         'hd_inprogress' : hd_inprogress,
         'hd_complete' : hd_complete,
-        
+        'hd_masterlist' : hd_masterlist,
         }
         return render (request, 'chairperson/Others/cOthers-hd-Master.html', context)
 
@@ -3233,7 +3305,10 @@ def pta_request(request):
     if request.user.is_authenticated and request.user.is_chairperson:
         id= request.user.id
         info = FacultyInfo.objects.get(facultyUser=id)
-        parttime = FacultyInfo.objects.all()
+        parttime = FacultyInfo.objects.filter(departmentID=info.departmentID).filter(facultyWorkstatus="Part-Time")
+        searchthis_query = request.GET.get('searchthis')
+        if searchthis_query != " " and searchthis_query is not None:
+            parttime = parttime.filter(Q(facultyUser__lastName__icontains=searchthis_query) | Q(facultyID__icontains=searchthis_query)| Q(facultyUser__firstName__icontains=searchthis_query)| Q(facultyUser__middleName__icontains=searchthis_query)).distinct()
         return render(request, 'chairperson/Others/cOthers-partTime.html', {'parttime':parttime, 'info':info})
 
 def pta_view(request, pt_id):
@@ -3254,6 +3329,9 @@ def sp_general(request):
         info = FacultyInfo.objects.get(facultyUser=id)
         student = StudentInfo.objects.filter(departmentID=info.departmentID)
         sp_masterlist = spApplicant.objects.filter(studentID__in=student)
+        searchthis_query = request.GET.get('searchthis')
+        if searchthis_query != " " and searchthis_query is not None:
+            sp_masterlist  = sp_masterlist.filter(Q(studentID__studentUser__lastName__icontains=searchthis_query) | Q(studentID__studentID__icontains=searchthis_query)| Q(studentID__studentUser__firstName__icontains=searchthis_query)| Q(studentID__studentUser__middleName__icontains=searchthis_query) | Q(remarks__icontains=searchthis_query)).distinct()
         context = {
         'info' : info,
         'sp_masterlist' : sp_masterlist,
@@ -3264,6 +3342,7 @@ def sp_masterlist(request):
         id= request.user.id
         info = FacultyInfo.objects.get(facultyUser=id)
         student = StudentInfo.objects.filter(departmentID=info.departmentID)
+        sp_masterlist = spApplicant.objects.filter(studentID__in=student)
         sp_returned = spApplicant.objects.filter(studentID__in=student).filter(remarks="Returned")
         sp_submitted = spApplicant.objects.filter(studentID__in=student).filter(remarks="Submitted")
         sp_forwarded = spApplicant.objects.filter(studentID__in=student).filter(remarks="Forwarded")
@@ -3277,7 +3356,7 @@ def sp_masterlist(request):
         'sp_forwarded' : sp_forwarded,
         'sp_inprogress' : sp_inprogress,
         'sp_complete' : sp_complete,
-        
+        'sp_masterlist' : sp_masterlist,
         }
         return render (request, 'chairperson/Others/cOthers-studyPlan-Master.html', context)
 
@@ -3323,6 +3402,9 @@ def loa_list(request):
         info = FacultyInfo.objects.get(facultyUser=id)
         student = StudentInfo.objects.filter(departmentID=info.departmentID)
         loas_list = LOAApplicant.objects.filter(studentID__in=student)
+        searchthis_query = request.GET.get('searchthis')
+        if searchthis_query != " " and searchthis_query is not None:
+            loas_list = loas_list.filter(Q(studentID__studentUser__lastName__icontains=searchthis_query) | Q(studentID__studentID__icontains=searchthis_query)| Q(studentID__studentUser__firstName__icontains=searchthis_query)| Q(studentID__studentUser__middleName__icontains=searchthis_query) | Q(remarks__icontains=searchthis_query)).distinct()
         context = {
         'info' : info,
         'loas_list' : loas_list,
@@ -3492,6 +3574,9 @@ def ojt_general(request):
         info = FacultyInfo.objects.get(facultyUser=id)
         student = StudentInfo.objects.filter(departmentID=info.departmentID)
         ojt_masterlist = OjtApplicant.objects.filter(studentID__in=student)
+        searchthis_query = request.GET.get('searchthis')
+        if searchthis_query != " " and searchthis_query is not None:
+            ojt_masterlist  = ojt_masterlist.filter(Q(studentID__studentUser__lastName__icontains=searchthis_query) | Q(studentID__studentID__icontains=searchthis_query)| Q(studentID__studentUser__firstName__icontains=searchthis_query)| Q(studentID__studentUser__middleName__icontains=searchthis_query) | Q(remarks__icontains=searchthis_query)).distinct()
         context = {
         'info' : info,
         'ojt_masterlist' : ojt_masterlist,
@@ -3502,6 +3587,7 @@ def ojt_masterlist(request):
         id= request.user.id
         info = FacultyInfo.objects.get(facultyUser=id)
         student = StudentInfo.objects.filter(departmentID=info.departmentID)
+        ojt_masterlist = OjtApplicant.objects.filter(studentID__in=student)
         ojt_returned = OjtApplicant.objects.filter(studentID__in=student).filter(remarks="Returned")
         ojt_submitted = OjtApplicant.objects.filter(studentID__in=student).filter(remarks="Submitted")
         ojt_forwared = OjtApplicant.objects.filter(studentID__in=student).filter(remarks="Forwarded")
@@ -3515,7 +3601,7 @@ def ojt_masterlist(request):
         'ojt_forwarded' : ojt_forwared,
         'ojt_inprogress' : ojt_inprogress,
         'ojt_complete' : ojt_complete,
-        
+        'ojt_masterlist' : ojt_masterlist,
         }
         return render (request, 'chairperson/Others/cOthers-ojt-Master.html', context)
 
@@ -3585,6 +3671,9 @@ def shifter_list(request):
         id= request.user.id
         info = FacultyInfo.objects.get(facultyUser=id)
         shifters_list = ShifterApplicant.objects.filter(department=info.departmentID.courseName)
+        searchthis_query = request.GET.get('searchthis')
+        if searchthis_query != " " and searchthis_query is not None:
+            shifters_list = shifters_list.filter(Q(lname__icontains=searchthis_query) | Q(studentID__icontains=searchthis_query)| Q(fname__icontains=searchthis_query)| Q(mname__icontains=searchthis_query) | Q(remarks__icontains=searchthis_query)).distinct()
         context = {
         'info' : info,
         'shifters_list' : shifters_list,
@@ -3707,6 +3796,9 @@ def transferee_list(request):
         id= request.user.id
         info = FacultyInfo.objects.get(facultyUser=id)
         trans_list = TransfereeApplicant.objects.filter(department=info.departmentID.courseName)
+        searchthis_query = request.GET.get('searchthis')
+        if searchthis_query != " " and searchthis_query is not None:
+            trans_list = trans_list.filter(Q(lname__icontains=searchthis_query) | Q(studentID__icontains=searchthis_query)| Q(fname__icontains=searchthis_query)| Q(mname__icontains=searchthis_query) | Q(remarks__icontains=searchthis_query)).distinct()
         context = { 'trans_list' : trans_list,
         'info' : info,
         }
@@ -3937,7 +4029,7 @@ def schedOnline2(request,block_id):
     acads = AcademicYearInfo.objects.get(pk=1)
     info = FacultyInfo.objects.get(facultyUser=id)
     schedule = studentScheduling.objects.filter(realsection=block_id)
-    OrderFormSet = inlineformset_factory(BlockSection, studentScheduling, fields=('subjectCode','instructor', 'section','day','timeStart','timeEnd', 'room', 'type'),widgets={'subjectCode': forms.Select(attrs={"class": "form-control", "id":"instructorField"}), 'instructor': forms.Select(attrs={"class": "form-control", "id":"instructorField"}),'section': forms.NumberInput(attrs={"class": "form-control", "placeholder": "Section", "id":"instructorField"}),'day': forms.Select(attrs={"class": "form-control", "id":"remarks"}),'timeStart': forms.TimeInput(attrs={"class": "form-control", "placeholder": "00:00", "id":"timeField"}),'timeEnd': forms.TimeInput(attrs={"class": "form-control","placeholder": "00:00", "id":"timeField"}),'room': forms.TextInput(attrs={"class": "form-control", "placeholder": "Room", "id":"instructorField"}),'type': forms.Select(attrs={"class": "form-control", "id":"instructorField"})}, max_num=1, can_delete=False)
+    OrderFormSet = inlineformset_factory(BlockSection, studentScheduling, fields=('subjectCode','instructor', 'section','day','timeStart','timeEnd', 'room', 'type'),widgets={'subjectCode': forms.Select(attrs={"class": "form-control", "id":"instructorField", "required":True}), 'instructor': forms.Select(attrs={"class": "form-control", "id":"instructorField"}),'section': forms.NumberInput(attrs={"class": "form-control", "placeholder": "Section", "id":"instructorField", "required":True}),'day': forms.Select(attrs={"class": "form-control", "id":"remarks", "required":True}),'timeStart': forms.TimeInput(attrs={"class": "form-control", "placeholder": "%H:%M:%S", "id":"timeField", "required":True}),'timeEnd': forms.TimeInput(attrs={"class": "form-control","placeholder": "%H:%M:%S", "id":"timeField", "required":True}),'room': forms.TextInput(attrs={"class": "form-control", "placeholder": "Room", "id":"instructorField", "required":True}),'type': forms.Select(attrs={"class": "form-control", "id":"instructorField", "required":True})}, max_num=1, can_delete=False)
     block1 = BlockSection.objects.get(id=block_id)
     formset = OrderFormSet(queryset=studentScheduling.objects.none(), instance=block1)
     for form in formset:
@@ -3951,7 +4043,21 @@ def schedOnline2(request,block_id):
             flag = 0
             for form in formset:
                 data=form.cleaned_data
-                block = str(block1)  
+                block = str(block1)
+            tsinput = str(data.get('timeStart')).split(':')
+            teinput = str(data.get('timeEnd')).split(':')
+            if float(tsinput[0]) < 7:
+                messages.error(request, 'Time Start Input is Too Early, time input must not be less than 7:00')
+                print("TIME ERROR EARLY MET")
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+            if (float(teinput[0])+(float(teinput[1])/60)) > 22:
+                messages.error(request, 'Time End Input is Too Late, Time must be no more than 22:00')
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+            if float(tsinput[0]+tsinput[1])>=float(teinput[0]+teinput[1]):
+                messages.error(request, 'Time Start must not equal or be later than Time End')
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
             if studentScheduling.objects.all().exists():
                 sched = studentScheduling.objects.all()
                 for a in sched:      
@@ -3962,6 +4068,8 @@ def schedOnline2(request,block_id):
                         endDb=a.timeEnd
                         dayDb=a.day
                         dayinp=data.get('day')
+                        subinp = data.get('subjectCode')
+                        subDb = a.subjectCode
                         if dayinp == dayDb: 
                             flag = 0
                             startinp = data.get('timeStart')
@@ -4046,90 +4154,179 @@ def schedOnline2(request,block_id):
                     if block == blockcurs:
                         dayinps=data.get('day')
                         dayDbs=a.day
-                        if dayinps == dayDbs:
-                            flag3=flag3+1
-                            if flag > 0:
-                                #JM CODE
-                                print("FLAG = 1, study plan dapat masave pero di dahil sa prof")
-                                faculty_Schedule = studentScheduling.objects.all()
-                                for DATA in formset:
-                                    inputtedData = DATA.cleaned_data
+                        subinps = data.get('subjectCode')
+                        subDbs = a.subjectCode
+                        if subinps == subDbs:
+                            typeinps = data.get('type')
+                            typeDb = a.type
+                            if typeinps != typeDb:
+                                if dayinps == dayDbs:
+                                    flag3=flag3+1
+                                    if flag > 0:
+                                        #JM CODE
+                                        print("FLAG = 1, study plan dapat masave pero di dahil sa prof")
+                                        faculty_Schedule = studentScheduling.objects.all()
+                                        for DATA in formset:
+                                            inputtedData = DATA.cleaned_data
+                                        
+                                        validProf = False
+                                        for databaseInfo in faculty_Schedule:
+                                            dbSubject = databaseInfo.subjectCode
+                                            dbSection = databaseInfo.section
+                                            dbProf = databaseInfo.instructor
+                                            dbDay = databaseInfo.day
+                                            dbTimeIn = str(databaseInfo.timeStart)
+                                            dbInTime = dbTimeIn.split(":")
+                                            dbHourIn = float(dbInTime[0])
+                                            dbMinIn = float(dbInTime[1])/60
+                                            dbStartTime = dbHourIn + dbMinIn
+                                            stringinputTimeStart = str(inputtedData.get('timeStart'))
+                                            list_of_timeStarted = stringinputTimeStart.split(":")
+                                            inputStartTime = float(list_of_timeStarted[0])+float(float(list_of_timeStarted[1])/60)
+                                            dbTimeOut = str(databaseInfo.timeEnd)
+                                            dbOutTime = dbTimeOut.split(":")
+                                            dbHourOut = float(dbOutTime[0])
+                                            dbMinOut = float(dbOutTime[1])/60
+                                            dbEndTime = dbHourOut + dbMinOut
+                                            stringinputTimeEnd = str(inputtedData.get('timeEnd'))
+                                            list_of_timeEnded = stringinputTimeEnd.split(":")
+                                            inputEndTime = float(list_of_timeEnded[0])+float(float(list_of_timeEnded[1])/60)
 
-                                if inputtedData.get('instructor') is None:
-                                    print("IT GOES HERE")
-                                    formset.save()
-                                    validProf = False
-                                    messages.success(request, 'Schedule successfully Added!')
-                                    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-                        
-                                validProf = False
-                                for databaseInfo in faculty_Schedule:
-                                    dbSubject = databaseInfo.subjectCode
-                                    dbSection = databaseInfo.section
-                                    dbProf = databaseInfo.instructor
-                                    dbDay = databaseInfo.day
-                                    dbTimeIn = str(databaseInfo.timeStart)
-                                    dbInTime = dbTimeIn.split(":")
-                                    dbHourIn = float(dbInTime[0])
-                                    dbMinIn = float(dbInTime[1])/60
-                                    dbStartTime = dbHourIn + dbMinIn
-                                    stringinputTimeStart = str(inputtedData.get('timeStart'))
-                                    list_of_timeStarted = stringinputTimeStart.split(":")
-                                    inputStartTime = float(list_of_timeStarted[0])+float(float(list_of_timeStarted[1])/60)
-                                    dbTimeOut = str(databaseInfo.timeEnd)
-                                    dbOutTime = dbTimeOut.split(":")
-                                    dbHourOut = float(dbOutTime[0])
-                                    dbMinOut = float(dbOutTime[1])/60
-                                    dbEndTime = dbHourOut + dbMinOut
-                                    stringinputTimeEnd = str(inputtedData.get('timeEnd'))
-                                    list_of_timeEnded = stringinputTimeEnd.split(":")
-                                    inputEndTime = float(list_of_timeEnded[0])+float(float(list_of_timeEnded[1])/60)
-                                    prof_assigned = inputtedData.get('instructor')
-                                    if prof_assigned == dbProf:
-                                        print(validProf)
-                                        if dbDay == inputtedData.get('day'):
-                                            if inputStartTime == dbStartTime:
-                                                #Same Day and Start Time Sched
-                                                validProf = False
-                                                break
-                                            else:
-                                                if inputStartTime >= dbEndTime:
-                                                    #After the Given Schedule
-                                                    validProf = True
+                                            prof_assigned = inputtedData.get('instructor')
+                                            try:
+                                                profInfo = FacultyInfo.objects.get(facultyUser = prof_assigned)
+                                                print(profInfo)
+                                                AvailIn = str(profInfo.facultyIn)
+                                                print (AvailIn)
+                                                profAvailIn = AvailIn.split(':')
+                                                profAvailOut = str(profInfo.facultyOut).split(':')
+                                                FacAvailTimeIn = float(profAvailIn[0])+float(float(profAvailIn[1])/60)
+                                                FacAvailTimeOut = float(profAvailOut[0])+float(float(profAvailOut[1])/60)
+                                                if  float(inputStartTime) < float(FacAvailTimeIn):
+                                                    #Input Start Time To Early too Availability
+                                                    validProf = False
+                                                    break
+                                                elif float(inputEndTime) > float(FacAvailTimeOut):
+                                                    validProf = False
+                                                    break
                                                 else:
-                                                    #Start time earlier than stored end time
-                                                    if inputEndTime <= dbStartTime:
-                                                        # Sched is Confirmed Earlier than given sched
-                                                        validProf = True
+                                                    #If Time Availibility Test Passes
+                                                    if prof_assigned == dbProf:
+                                                        print(validProf)
+                                                        if dbDay == inputtedData.get('day'):
+                                                            if inputStartTime == dbStartTime:
+                                                                #Same Day and Start Time Sched
+                                                                validProf = False
+                                                                break
+                                                            else:
+                                                                if inputStartTime >= dbEndTime:
+                                                                    #After the Given Schedule
+                                                                    validProf = True
+                                                                else:
+                                                                    #Start time earlier than stored end time
+                                                                    if inputEndTime <= dbStartTime:
+                                                                        # Sched is Confirmed Earlier than given sched
+                                                                        validProf = True
+                                                                    else:
+                                                                        # End time overlap with start time
+                                                                        validProf = False
+                                                                        break
+                                                        else:
+                                                            validProf = True
                                                     else:
-                                                        # End time overlap with start time
-                                                        validProf = False
-                                                        break
-                                        else:
+                                                        validProf = True       
+                                            except:
+                                                validProf = True
+
+                                        print("dbProf:", dbProf," prof_assigned:",prof_assigned)
+                                        print("inputValue:",inputStartTime,"-",inputEndTime)
+                                        print("testValue:", dbStartTime,"-",dbEndTime)
+                                        print(validProf,"flag:", flag,"flag3:", flag3)
+                                        #JM CODE
+                                        if inputtedData.get('instructor') is None:
+                                            print("IT GOES HERE")
                                             validProf = True
+
+                                        roomVacancy = data.get('room')
+                                        roomDB = studentScheduling.objects.all()
+                                        validRoom = True
+                                        for i in roomDB:
+                                            if roomVacancy == i.room:
+                                                roomDay = i.day
+                                                roomStart = str(i.timeStart)
+                                                roomEnd = str(i.timeEnd)
+
+                                                roomStartList = roomStart.split(":")
+                                                roomEndList = roomEnd.split(":")
+
+                                                roomStartTime = float(roomStartList[0])+float(float(roomStartList[1])/60)
+                                                roomEndTime = float(roomEndList[0])+float(float(roomEndList[1])/60)
+
+                                                if inputtedData.get('day') == roomDay:
+                                                    #CODE FOR TIME BLOCKING
+                                                    print("Test:",i.room,"-", i.subjectCode,"time:",roomStart,"-",roomEnd)
+                                                    print("Input",roomVacancy,"-",data.get('subjectCode'),"time:",inputStartTime,"-",inputEndTime)
+                                                    if inputStartTime == roomStartTime:
+                                                        #Sched in room Already Existed
+                                                        subjCode = str(i.subjectCode).split("|")
+                                                        print(subjCode)
+                                                        errorMessage = subjCode[2] +" Section:"+str(i.section)+ "|" +roomDay+"|"+roomStart+"-"+roomEnd
+                                                        validRoom = False
+                                                        
+                                                        break
+                                                    else:
+                                                        #room sched are not the same
+                                                        if inputStartTime >= roomEndTime:
+                                                            #Input Sched is After the sched in Database
+                                                            validRoom = True
+                                                        else:
+                                                            #Input Sched is not after the Sched in Database
+                                                            if inputEndTime <= roomStartTime:
+                                                                #Input Sched is earlier than Sched in Databse
+                                                                validRoom = True
+                                                            else:
+                                                                #Input Sched Conflict in DB Sched
+                                                                validRoom = False
+                                                                subjCode = str(i.subjectCode).split("|")
+                                                                print(subjCode)
+                                                                errorMessage = subjCode[2] +" Section:"+str(i.section)+ "|" +roomDay+"|"+roomStart+"-"+roomEnd
+                                                                validRoom = False
+                                                                break 
+                                                else:
+                                                    #No Day Exist in the room 
+                                                    validRoom = True
+                                        else:
+                                            if studentScheduling.objects.filter(room = roomVacancy).count() == 0:
+                                                validRoom = True 
+
+
+
+                                        if validProf == True:
+                                            if validRoom == True:
+                                                formset.save()
+                                                validProf = False
+                                                validRoom = False
+                                                messages.success(request, 'Schedule successfully Added!')
+                                                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+                                            else:
+                                                messages.error(request, 'Room Time already taken in %s' % errorMessage)
+                                                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+                                        else:
+                                            messageBlockingSched = str(dbSubject) +" section:"+ str(dbSection) + "|"+str(dbDay)+"|"+str(dbTimeIn)+"-"+str(dbTimeOut)
+                                            messages.error(request, 'Professors Time already taken in %s' % messageBlockingSched)
+                                            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
                                     else:
-                                        validProf = True       
-
-                                print("dbProf:", dbProf," prof_assigned:",prof_assigned)
-                                print("inputValue:",inputStartTime,"-",inputEndTime)
-                                print("testValue:", dbStartTime,"-",dbEndTime)
-                                print(validProf,"flag:", flag,"flag3:", flag3)
-                                #JM CODE
-                                if validProf == True:
-                                    formset.save()
-                                    validProf = False
-                                    messages.success(request, 'Schedule successfully Added!')
-                                    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-                                else:
-                                    messageBlockingSched = str(dbSubject) +" section:"+ str(dbSection) + "|"+str(dbDay)+"|"+str(dbTimeIn)+"-"+str(dbTimeOut)
-                                    messages.error(request, 'Professors Time already taken in %s' % messageBlockingSched)
-                                    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
+                                        messages.error(request, 'Time already taken')
+                                        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+                                        #messages.error(request, 'Time already taken')
                             else:
                                 messages.error(request, 'Time already taken')
                                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
                                 #messages.error(request, 'Time already taken')
+                        else:
+                            continue
                     else:
                         continue     
                 if flag3 == 0:
@@ -4138,14 +4335,6 @@ def schedOnline2(request,block_id):
                     faculty_Schedule = studentScheduling.objects.all()
                     for DATA in formset:
                         inputtedData = DATA.cleaned_data
-
-                    if inputtedData.get('instructor') is None:
-                        print("IT GOES HERE")
-                        formset.save()
-                        validProf = False
-                        messages.success(request, 'Schedule successfully Added!')
-                        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
                     validProf = False
                     for databaseInfo in faculty_Schedule:
                         dbSubject = databaseInfo.subjectCode
@@ -4169,47 +4358,124 @@ def schedOnline2(request,block_id):
                         list_of_timeEnded = stringinputTimeEnd.split(":")
                         inputEndTime = float(list_of_timeEnded[0])+float(float(list_of_timeEnded[1])/60)
                         prof_assigned = inputtedData.get('instructor')
-                        if prof_assigned == dbProf:
-                            print(validProf)
-                            if dbDay == inputtedData.get('day'):
-                                if inputStartTime == dbStartTime:
-                                    #Same Day and Start Time Schedule
-                                    validProf = False
-                                    break
-                                else:
-                                    if inputStartTime >= dbEndTime:
-                                        #After the Given Schedule
-                                        validProf = True
-                                    else:
-                                        #Start time earlier than stored end time
-                                        if inputEndTime <= dbStartTime:
-                                            # Sched is Confirmed Earlier than given sched
-                                            validProf = True
-                                        else:
-                                            # End time overlap with start time
+                        print(prof_assigned)
+                        try:
+                            profInfo = FacultyInfo.objects.get(facultyUser = prof_assigned)
+                            print(profInfo)
+                            AvailIn = str(profInfo.facultyIn)
+                            print (AvailIn)
+                            profAvailIn = AvailIn.split(':')
+                            profAvailOut = str(profInfo.facultyOut).split(':')
+                            FacAvailTimeIn = float(profAvailIn[0])+float(float(profAvailIn[1])/60)
+                            FacAvailTimeOut = float(profAvailOut[0])+float(float(profAvailOut[1])/60)
+
+                            if  float(inputStartTime) < float(FacAvailTimeIn):
+                                #Input Start Time To Early too Availability
+                                validProf = False
+                                break
+                            elif float(inputEndTime) > float(FacAvailTimeOut):
+                                validProf = False
+                                break
+                            else:
+                                #If Time Availibility Test Passes
+                                if prof_assigned == dbProf:
+                                    print(validProf)
+                                    if dbDay == inputtedData.get('day'):
+                                        if inputStartTime == dbStartTime:
+                                            #Same Day and Start Time Sched
                                             validProf = False
                                             break
-                            else:
-                                validProf = True
-                        else:
+                                        else:
+                                            if inputStartTime >= dbEndTime:
+                                                #After the Given Schedule
+                                                validProf = True
+                                            else:
+                                                #Start time earlier than stored end time
+                                                if inputEndTime <= dbStartTime:
+                                                    # Sched is Confirmed Earlier than given sched
+                                                    validProf = True
+                                                else:
+                                                    # End time overlap with start time
+                                                    validProf = False
+                                                    break
+                                    else:
+                                        validProf = True
+                                else:
+                                    validProf = True
+                        except:
                             validProf = True       
 
                     print("dbProf:", dbProf," prof_assigned:",prof_assigned)
                     print("inputValue:",inputStartTime,"-",inputEndTime)
                     print("testValue:", dbStartTime,"-",dbEndTime)
                     print(validProf,"flag:", flag,"flag3:", flag3)
-                    #JM CODE
+                    if inputtedData.get('instructor') is None:
+                        print("IT GOES HERE")
+                        validProf = True
+                    roomVacancy = data.get('room')
+                    roomDB = studentScheduling.objects.filter(room = roomVacancy)
+                    validRoom = True
+                    for i in roomDB:
+                        if roomVacancy == i.room:
+                            roomDay = i.day
+                            roomStart = str(i.timeStart)
+                            roomEnd = str(i.timeEnd)
+                            roomStartList = roomStart.split(":")
+                            roomEndList = roomEnd.split(":")
+                            roomStartTime = float(roomStartList[0])+float(float(roomStartList[1])/60)
+                            roomEndTime = float(roomEndList[0])+float(float(roomEndList[1])/60)
+
+                            if inputtedData.get('day') == roomDay:
+                                print("Test:",i.room,"-", i.subjectCode,"time:",roomStart,"-",roomEnd)
+                                print("Input",roomVacancy,"-",data.get('subjectCode'),"time:",inputStartTime,"-",inputEndTime)
+                                #CODE FOR TIME BLOCKING
+                                if inputStartTime == roomStartTime:
+                                    #Sched in room Already Existed
+                                        subjCode = str(i.subjectCode).split("|")
+                                        print(subjCode)
+                                        errorMessage = subjCode[2] +" Section:"+str(i.section)+ "|" +roomDay+"|"+roomStart+"-"+roomEnd
+                                        validRoom = False
+                                        break
+                                else:
+                                    #room sched are not the same
+                                    if inputStartTime >= roomEndTime:
+                                        #Input Sched is After the sched in Database
+                                        validRoom = True
+                                    else:
+                                        #Input Sched is not after the Sched in Database
+                                        if inputEndTime <= roomStartTime:
+                                            #Input Sched is earlier than Sched in Databse
+                                            validRoom = True
+                                        else:
+                                            #Input Sched Conflict in DB Sched
+                                            validRoom = False
+                                            subjCode = str(i.subjectCode).split("|")
+                                            print(subjCode)
+                                            errorMessage = subjCode[2] +" Section:"+str(i.section)+ "|" +roomDay+"|"+roomStart+"-"+roomEnd
+                                            break 
+                            else:
+                                #No Day Exist in the room 
+                                validRoom = True
+                    else:
+                        if studentScheduling.objects.filter(room = roomVacancy).count() == 0:
+                            validRoom = True
+
+
+
                     if validProf == True:
-                        formset.save()
-                        validProf = False
-                        messages.success(request, 'Schedule successfully Added!')
-                        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
- 
+                        if validRoom == True:
+                            formset.save()
+                            validProf = False
+                            validRoom = False
+                            messages.success(request, 'Schedule successfully Added!')
+                            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+                        else:
+                            messages.error(request, 'Room Time already taken in %s' % errorMessage)
+                            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
                     else:
                         messageBlockingSched = str(dbSubject) +" section:"+ str(dbSection) + "|"+str(dbDay)+"|"+str(dbTimeIn)+"-"+str(dbTimeOut)
                         messages.error(request, 'Professors Time already taken in %s' % messageBlockingSched)
                         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
 
             else:
                 formset.save()
@@ -4236,7 +4502,7 @@ def studyplan1(request):
     info = StudentInfo.objects.get(studentUser=id)
     instance = get_object_or_404(StudentInfo, studentUser=id)
     form = studyPlanForm(instance=instance)
-    form.fields['curricula'].queryset = Curricula.objects.filter(schoolYr=info.studentCurriculum).filter(departmentID=info.departmentID)
+    form.fields['curricula'].queryset = Curricula.objects.filter(departmentID=info.departmentID, schoolYr=info.studentCurriculum).order_by('id')
 
     '''if :
         magic = ""
@@ -4275,6 +4541,7 @@ def studyplan2(request):
     subjects = courseList.objects.all()
     status = studyPlan.objects.get(studentinfo=info)
     context = {
+        'info': info,
         'semesters': semesters,
         'subjects': subjects,
         'status': status,
@@ -4299,6 +4566,12 @@ def studyplan3(request):
     list = failedsubs.filter(curricula__cSem=status.curricula.cSem)
     fscourseCode = failedsubs.all().values_list('courseCode', flat=True)
 
+    for semester in semesters:
+        if semester == status.curricula:
+            cCode = subjects.filter(curricula=semester, prerequisite__in=fscourseCode).values_list('courseCode', flat=True)
+            cCode = [item.join("()") for item in cCode]
+                #test = subjects.filter(curricula=semester).values_list('courseCode', 'id')
+
     context = {
         'info': info,
         'semesters': semesters,
@@ -4306,6 +4579,8 @@ def studyplan3(request):
         'status': status,
         'list': list,
         'fscourseCode': fscourseCode,
+        'cCode': cCode,
+        #'test': test,
     }
     return render(request, 'student/sOthers/sStudyplan3.html', context)
 
@@ -4320,6 +4595,11 @@ def download_stdpln(request):
     list = failedsubs.filter(curricula__cSem=status.curricula.cSem)
     fscourseCode = failedsubs.all().values_list('courseCode', flat=True)
 
+    for semester in semesters:
+        if semester == status.curricula:
+            cCode = subjects.filter(curricula=semester, prerequisite__in=fscourseCode).values_list('courseCode', flat=True)
+            cCode = [item.join("()") for item in cCode]
+
     fsunits = list.filter().aggregate(total=Sum('courseUnit'))['total']
     ogunits = status.curricula.totalUnits
     #totalnum = fsunits + ogunits
@@ -4331,6 +4611,7 @@ def download_stdpln(request):
         'subjects': subjects,
         'list': list,
         'fscourseCode': fscourseCode,
+        'cCode': cCode,
         'ogunits': ogunits,
         #'totalnum': totalnum,
     }
@@ -4362,6 +4643,11 @@ def sptest(request):
     list = failedsubs.filter(curricula__cSem=status.curricula.cSem)
     fscourseCode = failedsubs.all().values_list('courseCode', flat=True)
 
+    for semester in semesters:
+        if semester == status.curricula:
+            cCode = subjects.filter(curricula=semester, prerequisite__in=fscourseCode).values_list('courseCode', flat=True)
+            cCode = [item.join("()") for item in cCode]
+
     fsunits = list.filter().aggregate(total=Sum('courseUnit'))['total']
     ogunits = status.curricula.totalUnits
     #totalnum = fsunits + ogunits
@@ -4373,6 +4659,7 @@ def sptest(request):
         'subjects': subjects,
         'list': list,
         'fscourseCode': fscourseCode,
+        'cCode': cCode,
         'ogunits': ogunits,
         #'totalnum': totalnum,
     }
@@ -4385,19 +4672,21 @@ def studyplan4(request):
         info = StudentInfo.objects.get(studentUser=id)
         if (request.method == 'POST'):
             spUpload = request.FILES.get('studyPlanUp')
+            date = timezone.now() 
             try:
                 applicant = spApplicant.objects.get(studentID_id=id)
                 if applicant.remarks == "Returned":
                     if (request.method == 'POST'):
                         spUpload = request.FILES.get('studyPlanUp')
                         applicant.remarks = 'Submitted'
+                        applicant.date = timezone.now() 
                         applicant.save()
                         return redirect('stdplncs') 
                 else:
                     messages.error(request,'You have already submitted an application!')
                     return render(request,'student/sOthers/sStudyplan4.html')
             except ObjectDoesNotExist:
-                sp_Applicant = spApplicant(studentID=info, sdplan=spUpload)
+                sp_Applicant = spApplicant(studentID=info, sdplan=spUpload,date=date)
                 sp_Applicant.save()
                 return redirect('stdplncs')
         return render(request, 'student/sOthers/sStudyplan4.html')
@@ -4414,16 +4703,26 @@ def cfaculty_applicant(request):
         id= request.user.id
         info = FacultyInfo.objects.get(facultyUser=id)
         applicant = FacultyApplicant.objects.filter(department=info.departmentID.courseName)
+        searchthis_query = request.GET.get('searchthis')
+        if searchthis_query != " " and searchthis_query is not None:
+            applicant  = applicant .filter(Q(firstName__icontains=searchthis_query) | Q(id__icontains=searchthis_query)| Q(lastName__icontains=searchthis_query)| Q(middleName__icontains=searchthis_query) | Q(remarks__icontains=searchthis_query)).distinct()
     return render(request, 'chairperson/cfaculty_applicant.html', {"applicant":applicant, "info": info})
 
 def faculty_view(request, faculty_id):
-    facultyapp = FacultyApplicant.objects.get(pk= faculty_id)
-    return render(request, 'chairperson/faculty_view.html', {'facultyapp':facultyapp})
+    if request.method == 'GET':
+        facultyapp = FacultyApplicant.objects.get(pk= faculty_id)
+        return render(request, 'chairperson/faculty_view.html', {'facultyapp':facultyapp})
+    elif request.method == 'POST':
+        facultyapp = FacultyApplicant.objects.get(pk= faculty_id)
+        statform = request.POST.get('slct')
+        facultyapp.remarks = statform
+        facultyapp.save()
+        return redirect ('cfaculty_applicant')
 
 def cfacultyapplicant_sortedlist(request):
     id = request.user.id
     info = FacultyInfo.objects.get(facultyUser=id)
-    applicant = FacultyApplicant.objects.filter(department=info.departmentID)
+    applicant = FacultyApplicant.objects.filter(department=info.departmentID.courseName)
     facultyapp_returned = FacultyApplicant.objects.filter(id__in=applicant).filter(remarks="Returned")
     facultyapp_submitted = FacultyApplicant.objects.filter(id__in=applicant).filter(remarks="Submitted")
     facultyapp_forwared = FacultyApplicant.objects.filter(id__in=applicant).filter(remarks="Forwarded")
@@ -4437,6 +4736,7 @@ def cfacultyapplicant_sortedlist(request):
         'facultyapp_forwarded': facultyapp_forwared,
         'facultyapp_inprogress': facultyapp_inprogress,
         'facultyapp_complete': facultyapp_complete,
+        'applicant' : applicant,
 
     }
     return render(request, 'chairperson/cfaculty_applicant-Master.html', context)
@@ -4507,7 +4807,8 @@ def transferee_9applicationform(request):
             studentHD = request.FILES.get("HonorableDis")
             studentGoodmoral = request.FILES.get("GoodMoral")
             studentGrade = request.FILES.get("Grades")
-            transferee = TransfereeApplicant(studentID=studentID, department=department, lname=lname, fname=fname, mname=mname, eadd=eadd, cnum=cnum, studentStudyplan=studentStudyplan, studentNote=studentNote, studentHD=studentHD, studentGoodmoral=studentGoodmoral, studentGrade=studentGrade)
+            transfer_dateSubmitted = timezone.now()
+            transferee = TransfereeApplicant(studentID=studentID, department=department, lname=lname, fname=fname, mname=mname, eadd=eadd, cnum=cnum, studentStudyplan=studentStudyplan, studentNote=studentNote, studentHD=studentHD, studentGoodmoral=studentGoodmoral, studentGrade=studentGrade,transfer_dateSubmitted=transfer_dateSubmitted)
             transferee.save()
             return redirect('transferee_10success')
         except:          
@@ -4553,7 +4854,8 @@ def shifter9(request):
             studentshifterletter = request.FILES.get("LetterofIntentFile")
             studentGrade = request.FILES.get("GradeScreenshotFile")
             studentStudyplan = request.FILES.get("studyPlanFile")
-            shiftee = ShifterApplicant(studentID=studentID, department=department, lname=lname, fname=fname, mname=mname, eadd=eadd, cnum=cnum, studentshifterletter=studentshifterletter, studentGrade=studentGrade, studentStudyplan=studentStudyplan)
+            shifter_dateSubmitted = timezone.now()
+            shiftee = ShifterApplicant(studentID=studentID, department=department, lname=lname, fname=fname, mname=mname, eadd=eadd, cnum=cnum, studentshifterletter=studentshifterletter, studentGrade=studentGrade, studentStudyplan=studentStudyplan,shifter_dateSubmitted=shifter_dateSubmitted)
             shiftee.save()
             return redirect('shifter10')
         except:          

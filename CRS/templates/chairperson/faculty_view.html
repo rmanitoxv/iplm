@@ -94,7 +94,7 @@
                                 <div>{{ facultyapp.firstName }}</div><!-- DB FIRST NAME -->
                             </div>
                         <!-- END Faculty Panel -->
-
+                        <form action="{% url 'faculty_view' facultyapp.id %}" method="POST"> {% csrf_token %}
                         <!-- Submitted Files-Gray Boxes -->
                         <div class="sub row">
                              <!-- Submitted Files -->
@@ -108,32 +108,32 @@
                                 <div class="dropdown">
                                         <span class="status-select">
                                         <select name="slct" id="stat-slct">
-                                            {% if hd_applicant.remarks == "Submitted" %}
-                                            <option value="{{hd_applicant.remarks}}"> &nbsp; {{hd_applicant.remarks}} </option>
+                                            {% if facultyapp.remarks == "Submitted" %}
+                                            <option value="{{facultyapp.remarks}}"> &nbsp; {{facultyapp.remarks}} </option>
                                             <option value="Returned"> &nbsp; Returned </option>
                                             <option value="In Progress"> &nbsp; In Progress </option>
                                             <option value="Forwarded"> &nbsp; Forwarded </option>
                                             <option value="Complete"> &nbsp; Complete </option>
-                                            {% elif hd_applicant.remarks == "Returned" %}
-                                            <option value="{{hd_applicant.remarks}}"> &nbsp; {{hd_applicant.remarks}} </option>
+                                            {% elif facultyapp.remarks == "Returned" %}
+                                            <option value="{{facultyapp.remarks}}"> &nbsp; {{facultyapp.remarks}} </option>
                                             <option value="Submitted"> &nbsp; Submitted </option>
                                             <option value="In Progress"> &nbsp; In Progress </option>
                                             <option value="Forwarded"> &nbsp; Forwarded </option>
                                             <option value="Complete"> &nbsp; Complete </option>
-                                            {% elif hd_applicant.remarks == "In Progress" %}
-                                            <option value="{{hd_applicant.remarks}}"> &nbsp; {{hd_applicant.remarks}} </option>
+                                            {% elif facultyapp.remarks == "In Progress" %}
+                                            <option value="{{facultyapp.remarks}}"> &nbsp; {{facultyapp.remarks}} </option>
                                             <option value="Submitted"> &nbsp; Submitted </option>
                                             <option value="Returned"> &nbsp; Returned </option>
                                             <option value="Forwarded"> &nbsp; Forwarded </option>
                                             <option value="Complete"> &nbsp; Complete </option>
-                                            {% elif hd_applicant.remarks == "Forwarded" %}
-                                            <option value="{{hd_applicant.remarks}}"> &nbsp; {{hd_applicant.remarks}} </option>
+                                            {% elif facultyapp.remarks == "Forwarded" %}
+                                            <option value="{{facultyapp.remarks}}"> &nbsp; {{facultyapp.remarks}} </option>
                                             <option value="Submitted"> &nbsp; Submitted </option>
                                             <option value="Returned"> &nbsp; Returned </option>
                                             <option value="In Progress"> &nbsp; In Progress </option>
                                             <option value="Complete"> &nbsp; Complete </option>
-                                            {% elif hd_applicant.remarks == "Complete" %}
-                                            <option value="{{hd_applicant.remarks}}"> &nbsp; {{hd_applicant.remarks}} </option>
+                                            {% elif facultyapp.remarks == "Complete" %}
+                                            <option value="{{facultyapp.remarks}}"> &nbsp; {{facultyapp.remarks}} </option>
                                             <option value="Submitted"> &nbsp; Submitted </option>
                                             <option value="Returned"> &nbsp; Returned </option>
                                             <option value="In Progress"> &nbsp; In Progress </option>
@@ -147,7 +147,7 @@
                              </div>
 
                             </div>
-
+                        </form>
                             <!-- END Submitted Files -->
 
                             <!-- Line -->

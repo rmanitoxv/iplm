@@ -103,7 +103,9 @@
                                 <b>Before</b>
                             </div>
                             <div id="head3" class="col-lg-5">
-                                <p style="text-align:left; width: 300px;"><b>{{ status.curricula.cYear }}, {{ status.curricula.cSem }}</b></p>
+                                {% if status.curricula %}
+                                    <p style="text-align:left; width: 300px;"><b>{{ status.curricula.cYear }}, {{ status.curricula.cSem }}</b></p>
+                                {% endif %}
                                 <!--
                                 <select class="curfield col-lg-5" id="upsem" onchange="nxtsem();">
                                     <option selected disabled>Select upcoming semester</option>
@@ -142,7 +144,8 @@
                                     {% if status.curricula %}
                                         {% if semesters and subjects %}
                                             {% for semester in semesters %}
-                                                {% if semester.schoolYr == status.admissionYr %}
+                                                {% if semester.departmentID == info.departmentID %}
+                                                    {% if semester.schoolYr == status.admissionYr %}
                                                         {% if semester == status.curricula %}
                                                         {{ "<!--" }}
                                                         {% else %}
@@ -164,6 +167,7 @@
 
                                                         {% endif %}
                                                     {% endif %}
+                                                {% endif %}    
                                             {% endfor %}
                                             {{ "-->" }}
                                         {% endif %}

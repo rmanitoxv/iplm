@@ -57,11 +57,19 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
+
+    email_error_message = 'Email must be: @plm.edu.ph'
+    email_regex = RegexValidator(
+    regex=r'^[A-Za-z0-9._%+-]+@plm.edu.ph$',
+    message=email_error_message
+    )
+
     email = models.EmailField(
-        verbose_name='email address',
+        verbose_name='email address',validators=[email_regex],
         max_length=255,
         unique=True,
     )
+    
     firstName = models.CharField(max_length=100)
     middleName = models.CharField(max_length=100, blank=True, default=" ")
     lastName = models.CharField(max_length=100)
@@ -197,8 +205,8 @@ class FacultyInfo(models.Model):
     facultyCitizenship = models.CharField(max_length=50, null=True, default='Filipino',verbose_name='Citizenship')
     facultyContact = models.CharField(validators=[phone_regex], max_length=50,
                                       null=True, verbose_name='Contact Number')
-    facultyIn = models.CharField(max_length=100, null=True, blank=True, verbose_name='Time In')
-    facultyOut = models.CharField(max_length=100, null=True, blank=True, verbose_name='Time Out')
+    facultyIn = models.CharField(max_length=100, null=True, blank=True, verbose_name='Time In', default = "7 :00")
+    facultyOut = models.CharField(max_length=100, null=True, blank=True, verbose_name='Time Out', default = "22:00")
 
     class Meta:
         verbose_name_plural = "Faculty Information"
@@ -400,7 +408,7 @@ class hdApplicant(models.Model):
     stdParentsig = models.FileField(upload_to='hdSubmission/', blank=True, null=True)
     remarks = models.CharField(default="Submitted", max_length=25)
     comment = models.TextField(max_length=150, null=True, blank=True, verbose_name='Feedback')
-    hd_dateSubmitted = models.DateTimeField(default=now)
+    hd_dateSubmitted = models.DateField(default=now)
 
     # dateApproved = models.DateTimeField()
     class Meta:
@@ -422,7 +430,7 @@ class OjtApplicant(models.Model):
     ojtMedcert = models.FileField(upload_to='ojtSubmission/', blank=True, null=True)
     remarks = models.CharField(max_length=150, default='Submitted', verbose_name='Status')
     comment = models.TextField(max_length=150, null=True, blank=True, verbose_name='Feedback')
-    ojt_dateSubmitted = models.DateTimeField(default=now)
+    ojt_dateSubmitted = models.DateField(default=now)
 
     class Meta:
         verbose_name_plural = "OJT Applicants"
@@ -454,7 +462,7 @@ class LOAApplicant(models.Model):
     studentChecklist = models.FileField(upload_to='LOASubmission/', blank=True, null=True)
     remarks = models.CharField(max_length=150, default='Submitted', verbose_name='Status')
     comment = models.TextField(null=True, blank=True, verbose_name='Feedback')
-    LOA_dateSubmitted = models.DateTimeField(default=now)
+    LOA_dateSubmitted = models.DateField(default=now)
     signature1 = models.ImageField(upload_to='LOASign/', null=True, blank=True)
     signature2 = models.ImageField(upload_to='LOASign/', null=True, blank=True)
 
@@ -613,7 +621,7 @@ class ShifterApplicant(models.Model):
     studentshifterletter = models.FileField(upload_to='ShifterSubmission/', blank=True, null=True)
     studentGrade = models.FileField(upload_to='ShifterSubmission/', blank=True, null=True)
     remarks = models.CharField(max_length=150, default='Submitted', verbose_name='Status')
-    shifter_dateSubmitted = models.DateTimeField(default=now)
+    shifter_dateSubmitted = models.DateField(default=now)
     signature1 = models.ImageField(upload_to='ShifterSign/', null=True, blank=True)
     signature2 = models.ImageField(upload_to='ShifterSign/', null=True, blank=True)
 
@@ -641,7 +649,7 @@ class TransfereeApplicant(models.Model):
     studentGoodmoral = models.FileField(upload_to='TransfereeSubmission/', blank=True, null=True)
     studentGrade = models.FileField(upload_to='TransfereeSubmission/', blank=True, null=True)
     remarks = models.CharField(max_length=150, default='Submitted', verbose_name='Status')
-    transfer_dateSubmitted = models.DateTimeField(default=now)
+    transfer_dateSubmitted = models.DateField(default=now)
     signature1 = models.ImageField(upload_to='TransfereeSign/', null=True, blank=True)
     signature2 = models.ImageField(upload_to='TransfereeSign/', null=True, blank=True)
 
@@ -767,7 +775,7 @@ class studyPlan(models.Model):
     studentinfo = models.ForeignKey(StudentInfo, unique=True, verbose_name='Student', null=True, on_delete=models.CASCADE)
     admissionYr = models.CharField(max_length=50, verbose_name="Admission Year", null=True, blank=True)
     curricula = models.ForeignKey(Curricula, verbose_name='', null=True, blank=True, on_delete=models.SET_NULL)
-    failedsubs = JSONField(default='')
+    failedsubs = models.JSONField(default='')
 
     def __str__(self):
         return self.studentinfo.studentID

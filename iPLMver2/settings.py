@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -26,7 +26,7 @@ SECRET_KEY = 'sz68q!bdy_(f^!q%azzlt-s)r0_qb7e@jbh)7=68u!z*(i5+^n'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["iplm-site.herokuapp.com","127.0.0.1"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -77,13 +77,16 @@ WSGI_APPLICATION = 'iPLMver2.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd7pkc8hu9k70n4',
-        'HOST': 'ec2-3-89-0-52.compute-1.amazonaws.com',
-        'PORT': 5432,
-        'USER': 'wqzvamthtkdhsk',
-        'PASSWORD': '62f38a8dbfce3688a9e46d289a88017c476666a9369de916ce973c43fd538ea3',
+'default': {
+'ENGINE': 'django.db.backends.mysql',
+'NAME': 'iplmdatabase',
+'USER': 'root',
+'PASSWORD': '',
+'HOST': '',
+'PORT': '',
+'OPTIONS': {
+'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+}
 }
 }
 
@@ -113,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Manila'
 
 USE_I18N = True
 
@@ -125,15 +128,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
-#STATICFILES_DIRS = (
-#    os.path.join(BASE_DIR, 'static'),
-#)
 
+STATICFILES_DIR = [
+    os.path.join(BASE_DIR, 'static')
+]
 MEDIA_ROOT = os.path.join(BASE_DIR, 'files')
 MEDIA_URL = '/files/'
 AUTH_USER_MODEL = 'CRS.User'
+
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'cperson.dummy@gmail.com'
 EMAIL_HOST_PASSWORD = 'CpersonEmail2021'

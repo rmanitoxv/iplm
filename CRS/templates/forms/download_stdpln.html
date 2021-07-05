@@ -77,7 +77,7 @@ td{
 		{% if semesters and subjects %}
 			<!--open-->
 			{% for semester in semesters %}
-				{% if semester.departmentID == info.departmentID %}
+				
 					{% if semester == status.curricula %}
 
 						<td colspan="6">{{ semester.cYear }}, {{ semester.cSem }}</td>
@@ -100,13 +100,15 @@ td{
 						{% for subject in subjects %}
 							{% if semester == subject.curricula %}
 								{% if subject.prerequisite not in fscourseCode %}
-									<tr align="left">
-										<td>{{ subject.courseCode }}</td>
-										<td colspan="2">{{ subject.courseName }}</td>
-										<td>{{ subject.courseUnit }}</td>
-										<td>{{ subject.prerequisite|default_if_none:"" }}</td>
-										<td></td>					
-									</tr>
+									{% if subject.prerequisite not in cCode %}
+										<tr align="left">
+											<td>{{ subject.courseCode }}</td>
+											<td colspan="2">{{ subject.courseName }}</td>
+											<td>{{ subject.courseUnit }}</td>
+											<td>{{ subject.prerequisite|default_if_none:"" }}</td>
+											<td></td>					
+										</tr>
+									{% endif %}
 								{% endif %}
 							{% endif %}
 						{% endfor %}
@@ -149,7 +151,7 @@ td{
 						</tr>-->
 
 					{% endif %}
-				{% endif %}
+				
 			{% endfor %}
 		{% endif %}
 	</table><br><br>

@@ -132,7 +132,7 @@
                                     {% if semesters and subjects %}
                                         <!--open-->
                                         {% for semester in semesters %}
-                                            {% if semester.departmentID == info.departmentID %}
+                                            
                                                 {% if semester == status.curricula %}
 
                                                     <tr class="tabletext1" style="background-color: #cae2ff; box-shadow: 0 0 10px rgb(189, 189, 189);">
@@ -149,12 +149,14 @@
                                                     {% for subject in subjects %}
                                                         {% if semester == subject.curricula %}
                                                             {% if subject.prerequisite not in fscourseCode %}
-                                                                <tr class="tabletext2">
-                                                                    <td><p>{{ subject.courseCode }}</p></td>
-                                                                    <td><p class="subjectName">{{ subject.courseName }}</p></td>
-                                                                    <td><p>{{ subject.courseUnit }}</p></td>
-                                                                    <td><p>{{ subject.prerequisite|default_if_none:"" }}</p></td>
-                                                                </tr>
+                                                                {% if subject.prerequisite not in cCode %}
+                                                                    <tr class="tabletext2">
+                                                                        <td><p>{{ subject.courseCode }}</p></td>
+                                                                        <td><p class="subjectName">{{ subject.courseName }}</p></td>
+                                                                        <td><p>{{ subject.courseUnit }}</p></td>
+                                                                        <td><p>{{ subject.prerequisite|default_if_none:"" }}</p></td>
+                                                                    </tr>
+                                                                {% endif %}
                                                             {% endif %}
                                                         {% endif %}
                                                     {% endfor %}
@@ -177,7 +179,7 @@
                                                     {% endfor %}-->
 
                                                 {% endif %}
-                                            {% endif %}
+                                            
                                         {% endfor %}
                                     {% endif %}
                                     <!---------------------------------------------------------->

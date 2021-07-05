@@ -17,29 +17,13 @@
     <link rel="icon" href="{% static 'CRS/images/cOthers/iPLM.png' %}  " type="image/png" sizes="16x16">
 
     
+    
     <style>
 
         #buttons-1 .btn-1 {
         border-radius: 14px 14px 14px 14px;
         padding-right: 25px;
         padding-left: 25px;
-        margin-right: 30px;
-        float: right;
-        font-size: 18px;
-        text-align: center;
-        width: auto;
-        height: 50px;
-        background-color: white;
-        color: #0C66CC;
-        border: 3px solid #0C66CC ;
-        
-        }
-    
-        #buttons-2 .btn-2 {
-        border-radius: 14px 14px 14px 14px;
-        padding-right: 25px;
-        padding-left: 25px;
-        float: right;
         font-size: 18px;
         text-align: center;
         width: auto;
@@ -47,7 +31,22 @@
         background-color: #0C66CC;
         color: white;
         border: 3px solid #0C66CC ;
+    
         
+        }
+    
+        #buttons-2 .btn-2 {
+        border-radius: 14px 14px 14px 14px;
+        padding-right: 25px;
+        padding-left: 25px;
+        font-size: 18px;
+        text-align: center;
+        width: auto;
+        height: 50px;
+        background-color: white;
+        color: #0C66CC;
+        border: 3px solid #0C66CC ;
+        margin-right: 20px;
         }
     
     
@@ -69,6 +68,113 @@
         padding-bottom: 5px;
         padding-top: 10px;
         }
+    
+        #submit {
+        background-color: #0C66CC;
+        color: white;
+        border-radius: 12px;
+        width: 60px;
+        height: 50px;
+        border: transparent;
+        float: right;
+        margin-top: -55px;
+        }
+    
+        #submit:hover{
+            background-color: #0850a1;
+        }
+    
+    
+        .form-control{
+        border-radius: 15px;
+        background: #ECECEC;
+        border: none;
+        height: 50px;
+        width: 30%;
+        font-size: 20px;
+        }
+    
+        .searchBox{
+        border-radius: 15px;
+        background: #ECECEC;
+        border: none;
+        height: 50px;
+        width: 30%;
+        font-size: 20px;
+        float: right;
+        margin-top: -55px;
+        margin-right: 70px;
+        }
+    
+        .searchbox :focus{
+            outline: none;
+        }
+    
+        .app-panel{
+        box-shadow: none;
+        background: none;
+        height: 70px;
+        font-size: 20px;
+        color: #0C66CC;
+        text-align: left;
+        vertical-align: center;
+        padding: 40px 10px 10px 10px;
+        font-family: 'Nunito';
+        
+        margin-top: 35px;
+        margin-bottom: 35px;
+        padding-left: 35px;
+        }
+    
+        .borderless td,
+            .borderless th {
+                border: none;
+        }
+    
+        .primary-att {
+            position: sticky;
+            text-align: left;
+            position: sticky;
+            top: 0;
+            color: white;
+            background-color: #fcfcfc;
+            }
+    
+            tr:nth-child(even) {background-color: #f2f2f2;}
+    
+            .tablepanel::-webkit-scrollbar {
+                width: 10px;
+                background: white;
+                border-radius: 20px;
+                height: 200px;
+                
+            }
+    
+            .tablepanel::-webkit-scrollbar-thumb {
+                background:#c5c5c5;
+                border-radius: 0 8px 8px 0;
+                height: 300px;
+            }
+    
+            .tabletext1 {
+                text-align: left;
+                letter-spacing: 1px;
+                font-size: 14px;
+                font-family: 'Nunito';
+                color: #0C66CC;
+                
+            }
+    
+            .tablepanel {
+                overflow-y: scroll;
+                width: 100%;
+                height: 560px;
+                border-radius: 20px;
+                font-family: 'Nunito';
+                color: #0C66CC;
+                font-size: 20px;
+            }
+    
     
     
         </style>
@@ -124,75 +230,120 @@
                     </div>
                     <div class="container col-lg-8">
                         <p id="application"><b>Practicum</b>
-                            <a href="{% url 'cOthers-ojt-Master' %}" id="buttons-2"><button type="button" class="btn-2 btn2-1">Master List</button></a>
-                            <a href="{% url 'cOthers-ojt' %}" id="buttons-1"><button type="button" class="btn-1 btn2-1">General</button></a>
+                            <div class="searchbox">
+                                <a href="{% url 'cOthers-ojt' %}" id="buttons-2"><button type="button" class="btn-2 btn2">General</button></a>
+                                <a href="{% url 'cOthers-ojt-Master' %}" id="buttons-1"><button type="button" class="btn-1 btn2">Master List</button></a>
+
+                            </div>
                         </p>
 
-                        <!-- REQUEST LIST -->
-                    {% if ojt_submitted %}
-                        <div class="status">Submitted</div><!-- DB SUBMITTED -->  
-                        {% for ojt in ojt_submitted %}
-                        <div class="app-panel row">
-                            {%if info.departmentID == ojt.studentID.departmentID%}
-                            <div class="col-sm col-lg-2" id="studentNo"><b>{{ ojt.studentID.studentID }}</b></div><!--DB  STUDENT NO -->
-                            <div class="col-sm col-lg-1" id="lastName">{{ ojt.studentID.studentUser.lastName }}</div><!-- DB STUDENT LASTNAME -->
-                            <div class="col-sm col-lg-2" id="firstName">{{ ojt.studentID.studentUser.firstName }}</div><!-- DB STUDENT FIRSTNAME -->
-                            <div class="col-sm col-lg-2" id="firstName"><b>Year: </b>{{ ojt.studentID.studentYearlevel }} </div><!-- DB STUDENT YEAR -->
-                            <div class="col-sm col-lg-2" id="firstName">{{ ojt.studentID.studentRegStatus }}</div><!-- DB STUDENT REGISTRATION STATUS -->
-                            <div class="col-sm col-lg-3" id="firstName"><b>Status:</b> {{ ojt.remarks}}</div><!-- DB STUDENT STATUS -->
-                            {%endif%}
-                        </div>
-                        {% endfor %}
-                    {% endif %}
+                        <br><hr><br>
 
+                    {% if ojt_masterlist %}
+
+                    <div class="tablepanel table-responsive-lg">
+                        <table class="borderless table">
+                            <tr class="primary-att" style="font-size: 20px; background-color: #0C66CC; box-shadow: 0 0 10px rgb(138, 138, 138);">
+                                <td>ID</td>
+                                <td colspan="2">Name</td>
+                                <td>Year</td>
+                                <td>Registration</td>
+                                <td>Date</td>
+                                <td>Status</td>
+                            </tr>
+
+                    
+                            <!--SUBMITTED-->
+                            {% if ojt_submitted %}
+                                
+                            <tr class="tabletext1" style="box-shadow: 0 0 10px rgb(138, 138, 138);">
+                                <td colspan="7" style="font-size: 20px; background-color: #cae2ff;"><b>Submitted</b></td>
+                            </tr>
+                            {% for ojt in ojt_submitted %}
+                            <tr>
+                                {%if info.departmentID == ojt.studentID.departmentID%}
+                                <td><b>{{ ojt.studentID.studentID }}</b></td>
+                                <td colspan="2">{{ ojt.studentID.studentUser.lastName }}, {{ ojt.studentID.studentUser.firstName }}</td>
+                                <td>{{ ojt.studentID.studentYearlevel }}</td>
+                                <td>{{ ojt.studentID.studentRegStatus }}</td>
+                                <td>{{ ojt.ojt_dateSubmitted }}</td>
+                                <td><b>{{ ojt.remarks}}</b></td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                            {% endif %}
+
+
+                    <!--RETURMED-->
                     {% if ojt_returned %}
-                        <div class="status">Returned</div><!-- DB SUBMITTED --> 
-                        {% for ojt in ojt_returned %} 
-                        <div class="app-panel row">
-                            {%if info.departmentID == ojt.studentID.departmentID%}
-                            <div class="col-sm col-lg-2" id="studentNo"><b>{{ ojt.studentID.studentID }}</b></div><!--DB  STUDENT NO -->
-                            <div class="col-sm col-lg-1" id="lastName">{{ ojt.studentID.studentUser.lastName }}</div><!-- DB STUDENT LASTNAME -->
-                            <div class="col-sm col-lg-2" id="firstName">{{ ojt.studentID.studentUser.firstName }}</div><!-- DB STUDENT FIRSTNAME -->
-                            <div class="col-sm col-lg-2" id="firstName"><b>Year: </b>{{ ojt.studentID.studentYearlevel }} </div><!-- DB STUDENT YEAR -->
-                            <div class="col-sm col-lg-2" id="firstName">{{ ojt.studentID.studentRegStatus }}</div><!-- DB STUDENT REGISTRATION STATUS -->
-                            <div class="col-sm col-lg-3" id="firstName"><b>Status:</b> {{ ojt.remarks}}</div><!-- DB STUDENT STATUS -->
-                            {%endif%}
-                        </div>
-                        {% endfor %}
+    
+                    <tr class="tabletext1" style="box-shadow: 0 0 10px rgb(138, 138, 138);">
+                        <td colspan="7" style="font-size: 20px; background-color: #cae2ff;"><b>Returned</b></td>
+                    </tr>
+                    {% for ojt in ojt_returned %}
+                    <tr>
+                        {%if info.departmentID == ojt.studentID.departmentID%}
+                        <td><b>{{ ojt.studentID.studentID }}</b></td>
+                        <td colspan="2">{{ ojt.studentID.studentUser.lastName }}, {{ ojt.studentID.studentUser.firstName }}</td>
+                        <td>{{ ojt.studentID.studentYearlevel }}</td>
+                        <td>{{ ojt.studentID.studentRegStatus }}</td>
+                        <td>{{ ojt.ojt_dateSubmitted }}</td>
+                        <td><b>{{ ojt.remarks}}</b></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
                     {% endif %}
 
+
+                    <!--IN PROGRESS-->
                     {% if ojt_inprogress %}
-                        <div class="status">In Progress</div><!-- DB SUBMITTED -->  
-                        {% for ojt in ojt_inprogress %} 
-                        <div class="app-panel row">
-                            {%if info.departmentID == ojt.studentID.departmentID%}
-                            <div class="col-sm col-lg-2" id="studentNo"><b>{{ ojt.studentID.studentID }}</b></div><!--DB  STUDENT NO -->
-                            <div class="col-sm col-lg-1" id="lastName">{{ ojt.studentID.studentUser.lastName }}</div><!-- DB STUDENT LASTNAME -->
-                            <div class="col-sm col-lg-2" id="firstName">{{ ojt.studentID.studentUser.firstName }}</div><!-- DB STUDENT FIRSTNAME -->
-                            <div class="col-sm col-lg-2" id="firstName"><b>Year: </b>{{ ojt.studentID.studentYearlevel }} </div><!-- DB STUDENT YEAR -->
-                            <div class="col-sm col-lg-2" id="firstName">{{ ojt.studentID.studentRegStatus }}</div><!-- DB STUDENT REGISTRATION STATUS -->
-                            <div class="col-sm col-lg-3" id="firstName"><b>Status:</b> {{ ojt.remarks}}</div><!-- DB STUDENT STATUS -->
-                            {%endif%}
-                        </div>
-                        {% endfor %}
+
+                    <tr class="tabletext1" style="box-shadow: 0 0 10px rgb(138, 138, 138);">
+                        <td colspan="7" style="font-size: 20px; background-color: #cae2ff;"><b>In Progress</b></td>
+                    </tr>
+                    {% for ojt in ojt_inprogress %}
+                    <tr>
+                        {%if info.departmentID == ojt.studentID.departmentID%}
+                        <td><b>{{ ojt.studentID.studentID }}</b></td>
+                        <td colspan="2">{{ ojt.studentID.studentUser.lastName }}, {{ ojt.studentID.studentUser.firstName }}</td>
+                        <td>{{ ojt.studentID.studentYearlevel }}</td>
+                        <td>{{ ojt.studentID.studentRegStatus }}</td>
+                        <td>{{ ojt.ojt_dateSubmitted }}</td>
+                        <td><b>{{ ojt.remarks}}</b></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
                     {% endif %}
 
+
+                    <!--COMPLETE-->
                     {% if ojt_complete %}
-                        <div class="status">Complete</div><!-- DB SUBMITTED -->  
-                        {% for ojt in ojt_complete %} 
-                        <div class="app-panel row">
-                            {%if info.departmentID == ojt.studentID.departmentID%}
-                            <div class="col-sm col-lg-2" id="studentNo"><b>{{ ojt.studentID.studentID }}</b></div><!--DB  STUDENT NO -->
-                            <div class="col-sm col-lg-1" id="lastName">{{ ojt.studentID.studentUser.lastName }}</div><!-- DB STUDENT LASTNAME -->
-                            <div class="col-sm col-lg-2" id="firstName">{{ ojt.studentID.studentUser.firstName }}</div><!-- DB STUDENT FIRSTNAME -->
-                            <div class="col-sm col-lg-2" id="firstName"><b>Year: </b>{{ ojt.studentID.studentYearlevel }} </div><!-- DB STUDENT YEAR -->
-                            <div class="col-sm col-lg-2" id="firstName">{{ ojt.studentID.studentRegStatus }}</div><!-- DB STUDENT REGISTRATION STATUS -->
-                            <div class="col-sm col-lg-3" id="firstName"><b>Status:</b> {{ ojt.remarks}}</div><!-- DB STUDENT STATUS -->
-                            {%endif%}
-                        </div>
-                        {% endfor %}
+
+                    <tr class="tabletext1" style="box-shadow: 0 0 10px rgb(138, 138, 138);">
+                        <td colspan="7" style="font-size: 20px; background-color: #cae2ff;"><b>Complete</b></td>
+                    </tr>
+                    {% for ojt in ojt_complete %}
+                    <tr>
+                        {%if info.departmentID == ojt.studentID.departmentID%}
+                        <td><b>{{ ojt.studentID.studentID }}</b></td>
+                        <td colspan="2">{{ ojt.studentID.studentUser.lastName }}, {{ ojt.studentID.studentUser.firstName }}</td>
+                        <td>{{ ojt.studentID.studentYearlevel }}</td>
+                        <td>{{ ojt.studentID.studentRegStatus }}</td>
+                        <td>{{ ojt.ojt_dateSubmitted }}</td>
+                        <td><b>{{ ojt.remarks}}</b></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
                     {% endif %}
 
+                    </table></div>
+                    {% else %}
+                    <div align="center">
+                        <img src="{% static 'CRS/images/cOthers/clip-2.png' %}" width="600px" height="auto">
+                        <br>
+                        <span class="fileName"> NO OJT APPLICANTS</span>
+                    </div>
+                {% endif %}
 
 
                     </div>

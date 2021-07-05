@@ -114,19 +114,37 @@
         }
 
 
-        .alert{
+
+        .alertError{
         padding: 20px;
-        background-color: white;
+        background-color: #f34e01;
         border-radius: 15px;
-        color: #0C66CC;
+        color: white;
+        font-size: 18px;
+        width: auto;
         box-shadow: 0 0 10px rgb(216, 216, 216);
-        margin-left: -550px;
+        float: right;
+        margin-top: -80px;
         animation: zoom-in-zoom-out 1s ease;
         }
 
-        .closebtn {
+        .alertSuccess{
+        padding: 20px;
+        background-color: #3fb328;
+        border-radius: 15px;
+        color:white;
+        font-size: 18px;
+        width: auto;
+        box-shadow: 0 0 10px rgb(216, 216, 216);
+        float: right;
+        margin-top: -80px;
+        animation: zoom-in-zoom-out 1s ease;
+        
+        }
+
+        .closebtnError {
         margin-left: 15px;
-        color: #0C66CC;
+        color: white;
         font-weight: bold;
         float: right;
         font-size: 22px;
@@ -135,8 +153,23 @@
         transition: 0.3s;
         }
 
-        .closebtn:hover {
-        color: #0c3869;
+        .closebtnError:hover {
+            color: #a33908;
+        }
+
+        .closebtnSuccess {
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+        }
+
+        .closebtnSuccess:hover {
+            color: #1c6b0c;
         }
 
 
@@ -198,21 +231,35 @@
                     <!-- End Schedule -->
 
                     <!-- DB REGULAR AND ONLINE BUTTONS-->
-                    <div class="col-lg-6">
-                        <div class="sub row">  
-                            <div class="col-lg"><p id="subject"><b>Subjects</b></p></div>
+                    <div class="col-lg-12">
+                         
+                            <p id="subject"><b>Subjects</b></p>
                             <!-- Templates > Chairperson > Student -->
-                        </div>
+
+
+                            {% if messages %}
+                            {% for message in messages %}
+                            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                            <div class="alertError">
+                                <span class="closebtnError" onclick="this.parentElement.style.display='none';">&times;</span> 
+                                {{ message }}
+                            </div>
+                            {% endif %}
+        
+                            {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                            <div class="alertSuccess">
+                                <span class="closebtnSuccess" onclick="this.parentElement.style.display='none';">&times;</span> 
+                                {{ message }}
+                            </div>
+                            {% endif %}
+                                
+                            {% endfor %}
+                            {% endif %}
                     </div>
+
                    
-                        {% if messages %}
-                        {% for message in messages %}
-                        <div class="alert">
-                            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-                            <b>{{ message }}</b>
-                        </div>
-                        {% endfor %}
-                        {% endif %}
+                   
+                        
                     
 
                     

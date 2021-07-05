@@ -33,6 +33,33 @@
     }
 
     tr:nth-child(even) {background-color: #f2f2f2;}
+
+    body {
+            overflow-y: auto;
+        }
+    
+            /*SCROLLBAR*/
+            ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #e4e4e4;
+            border-radius: 12px;
+        }
+        
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #cbcbcb;
+            border-radius: 12px;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8f8f8f; 
+        }
+
     </style>
 </head>
 
@@ -52,8 +79,8 @@
             <li><a href="{% url 'is_active' %}"><img src="{% static 'CRS/images/cDepartment/department.svg' %}" width="97px" height="60.56px"></a></li>
             <li><a href="{% url 'students_bsit1' %}"><img src="{% static 'CRS/images/cDepartment/students.svg' %}" width="90px" height="67.14px"></a></li>
             <li><a href="{% url 'full_time' %}"><img src="{% static 'CRS/images/cDepartment/faculty.svg' %}" width="65px" height="74.22px"></a></li>
-            <li><a href="#"><img src="{% static 'CRS/images/cDepartment/others.svg' %}" width="61px" height="68.06px"></a></li>
-            <li><a href="#"><img src="{% static 'CRS/images/cDepartment/log-out.svg' %}" width="72px" height="68.71px"></a></li>
+            <li><a href="{% url 'cOthers-studyPlan' %}"><img src="{% static 'CRS/images/cDepartment/others.svg' %}" width="61px" height="68.06px"></a></li>
+            <li><a href="{% url 'logout' %}"><img src="{% static 'CRS/images/cDepartment/log-out.svg' %}" width="72px" height="68.71px"></a></li>
         </ul>
 		</nav>
 		<!--End of Sidebar -->

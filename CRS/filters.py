@@ -13,7 +13,11 @@ class Search(django_filters.FilterSet):
 
 class Faculty(django_filters.FilterSet):
     facultyID = NumberFilter(lookup_expr='icontains', label='',
-                             widget=TextInput(attrs={'placeholder': 'Faculty Number'}))
+                             widget=TextInput(attrs={                             
+                                "type": "text",
+                                 "name": "search",
+                                 "id": "search",
+                                 "placeholder": "Faculty Number"}))
 
 class ClassCode(django_filters.FilterSet):
     subjectCode = CharFilter(lookup_expr='icontains', label='',
