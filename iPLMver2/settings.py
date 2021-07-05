@@ -78,18 +78,14 @@ WSGI_APPLICATION = 'iPLMver2.wsgi.application'
 
 DATABASES = {
 'default': {
-'ENGINE': 'django.db.backends.mysql',
-'NAME': 'iplmdatabase',
-'USER': 'root',
-'PASSWORD': '',
-'HOST': '',
-'PORT': '',
-'OPTIONS': {
-'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+'ENGINE': 'django.db.backends.postgresql',
+'NAME': 'd7pkc8hu9k70n4',
+'USER': 'wqzvamthtkdhsk',
+'PASSWORD': '62f38a8dbfce3688a9e46d289a88017c476666a9369de916ce973c43fd538ea3',
+'HOST': 'ec2-3-89-0-52.compute-1.amazonaws.com',
+'PORT': '5432',
 }
 }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
