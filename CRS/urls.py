@@ -20,7 +20,9 @@ urlpatterns = [
     url(r'^cfaculty_applicant/$', views.cfaculty_applicant, name='cfaculty_applicant'),
     path(r'^cfaculty_applicant-Master/', views.cfacultyapplicant_sortedlist, name='cfaculty_applicant-Master'),
     path('faculty_view/<faculty_id>', views.faculty_view, name='faculty_view'),
-    url(r'^emailApplicant/$', views.emailApplicant, name='emailApplicant'),
+    path('emailApplicant/<faculty_id>', views.emailApplicant, name='emailApplicant'),
+    path(r'emailTrans/<trans_id>', views.emailTrans, name='emailTrans'),
+    path(r'emailShifter/<shifter_id>', views.emailShifter, name='emailShifter'),
     path('sendmailfile/<faculty_id>', views.sendmailfile, name='sendmailfile'),
 
     url(r'^Department/$', views.is_active, name='is_active'),

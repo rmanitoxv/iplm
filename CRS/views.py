@@ -1497,8 +1497,34 @@ def add_faculty_schedule(request, sid, id):
         fact = studentScheduling.objects.get(id=sid)
         fact.instructor_id = id
         facultySchedule = studentScheduling.objects.filter(instructor_id=id)
-        validSched = True
-        validProf = True
+        validSched = False
+        validProf = False
+        
+        
+        subjectIN = str(fact.timeStart)
+        sIN = subjectIN.split(":")
+        inTimeSubj = float(sIN[0])+float(float(sIN[1])/60)
+        subjectOUT = str(fact.timeEnd)
+        sOUT = subjectOUT.split(":")
+        outTimeSubj = float(sOUT[0])+float(float(sOUT[1])/60)
+
+        profInfo = FacultyInfo.objects.get(facultyUser = id)  
+        profAvailIn = str(profInfo.facultyIn).split(':')
+        profAvailOut = str(profInfo.facultyOut).split(':')
+        FacAvailTimeIn = float(profAvailIn[0])+float(float(profAvailIn[1])/60)
+        FacAvailTimeOut = float(profAvailOut[0])+float(float(profAvailOut[1])/60)
+
+        print("IN Get:",inTimeSubj,"Avail:", FacAvailTimeIn)
+        print("Out Get:",outTimeSubj,"Avail:", FacAvailTimeOut)
+        
+        if float(inTimeSubj) < float(FacAvailTimeIn):
+            #Input Start Time To Early too Availability
+            validProf = False
+        elif float(outTimeSubj) > float(FacAvailTimeOut):
+            validProf = False
+        else:
+            validProf = True
+            
         for data in facultySchedule:
             dbSubject = data.subjectCode
             dbSection = data.section
@@ -1521,6 +1547,9 @@ def add_faculty_schedule(request, sid, id):
             profAvailOut = str(profInfo.facultyOut).split(':')
             FacAvailTimeIn = float(profAvailIn[0])+float(float(profAvailIn[1])/60)
             FacAvailTimeOut = float(profAvailOut[0])+float(float(profAvailOut[1])/60)
+
+
+            
             if float(AssignedTimeIn) < float(FacAvailTimeIn):
                 #Input Start Time To Early too Availability
                 validProf = False
@@ -1553,6 +1582,7 @@ def add_faculty_schedule(request, sid, id):
                 fact.save()
                 validSched = False
                 validProf = False
+                messages.success(request, 'Schedule successfully added!')
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
                 
@@ -1562,11 +1592,10 @@ def add_faculty_schedule(request, sid, id):
             fact.save()
             validSched = False
             validProf = False
-            messages.success(request, 'Schedule succesfully added!')
+            messages.success(request, 'Schedule successfully added!')
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         else:
-            messageBlockingSched = str(dbSubject) +" section:"+ str(dbSection) + "|"+str(dbDay)+"|"+str(TimeIn)+"-"+str(TimeOut)
-            messages.error(request, 'Professors Time already taken in %s' % messageBlockingSched)
+            messages.error(request, 'Professors Time already taken.')
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))        
     else:
         return redirect ('index')
@@ -4741,16 +4770,44 @@ def cfacultyapplicant_sortedlist(request):
     }
     return render(request, 'chairperson/cfaculty_applicant-Master.html', context)
 
-def emailApplicant(request):
+def emailApplicant(request,faculty_id):
+    faculty = FacultyApplicant.objects.get(pk=faculty_id)
+    email = faculty.email
     if request.method == 'POST':
-        email = request.POST.get('email')
         subject = request.POST.get('subject')
         content = request.POST.get('content')
         html = request.POST.get('html')
         msg = EmailMultiAlternatives(f'{subject}',f'{content}', EMAIL_HOST_USER, ['cperson.dummy@gmail.com'], [f' {email}'])
         msg.attach_alternative(html, "text/html")
         msg.send()
-    return render(request, 'chairperson/emailApplicant.html')
+        messages.success(request, "Message sent")
+    return render(request, 'chairperson/emailApplicant.html', {'faculty':faculty})
+
+def emailTrans(request,trans_id):
+    trans = TransfereeApplicant.objects.get(pk=trans_id)
+    email = trans.eadd
+    if request.method == 'POST':
+        subject = request.POST.get('subject')
+        content = request.POST.get('content')
+        html = request.POST.get('html')
+        msg = EmailMultiAlternatives(f'{subject}',f'{content}', EMAIL_HOST_USER, ['cperson.dummy@gmail.com'], [f' {email}'])
+        msg.attach_alternative(html, "text/html")
+        msg.send()
+        messages.success(request, "Message sent")
+    return render(request, 'chairperson/Others/emailApplicant-Transferee.html', {'trans':trans})
+
+def emailShifter(request,shifter_id):
+    shifter = ShifterApplicant.objects.get(pk=shifter_id)
+    email = shifter.eadd
+    if request.method == 'POST':
+        subject = request.POST.get('subject')
+        content = request.POST.get('content')
+        html = request.POST.get('html')
+        msg = EmailMultiAlternatives(f'{subject}',f'{content}', EMAIL_HOST_USER, ['cperson.dummy@gmail.com'], [f' {email}'])
+        msg.attach_alternative(html, "text/html")
+        msg.send()
+        messages.success(request, "Message sent")
+    return render(request, 'chairperson/Others/emailApplicant-Shifter.html', {'shifter':shifter})
 
 
 def sendmailfile(request, faculty_id):

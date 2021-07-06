@@ -365,11 +365,11 @@ transition: 0.3s;
                                 <input type="file" id="uploadCSW" name="uploadCSW" hidden/>
                                 </div><br><br>
 
-                                <div class="list-feedback1">
-                                    <button type ="submit" class="button5hvr" name="transfer-email" value="transfer-email" >Forward to Signatories</button></a><!-- DB FORWARD TO SIGNATORIES BUTTON -->
-                                    <a href="/emailApplicant-Transferee/"><button  class="button4hvr">Email Transferee</button></a><!-- DB EMAIL STUDENT BUTTON -->
-                                </div>
+                            <div class="list-feedback1">
+                                <button type ="submit" class="button5hvr" name="shifter-email" value="shifter-email" >Forward to Signatories</button></a><!-- DB FORWARD TO SIGNATORIES BUTTON -->
                             </form>
+                                <a href="{% url 'emailTrans' trans.id %}"><button  class="button4hvr">Email Applicant</button></a><!-- DB EMAIL STUDENT BUTTON -->
+                            </div>
                         <!-------------END EMAIL APPLICANT----------->
                         
 						</div>

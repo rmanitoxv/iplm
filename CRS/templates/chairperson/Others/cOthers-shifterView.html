@@ -139,8 +139,8 @@ transition: 0.3s;
                             <p id="application"><b>Shifter</b></p>
                             <div class="app-panel row">
                                 <div class="col-lg-3" id="studentNo"><b>{{shift.studentID}}</b></div><!-- DB STUDENT NO -->
-                                <div class="col-lg-3" id="lastName">{{shift.lname}}, {{shift.fname}}</div><!-- DB STUDENT LAST NAME -->
-                                <div class="col-lg-3" id="firstName"></div><!-- DB STUDENT FIRST NAME -->
+                                <div class="col-lg-3" id="lastName">{{shift.lname}}</div><!-- DB STUDENT LAST NAME -->
+                                <div class="col-lg-3" id="firstName">{{shift.fname}}</div><!-- DB STUDENT FIRST NAME -->
                             </div>
                         <!-- END Faculty Panel -->
 
@@ -320,9 +320,10 @@ transition: 0.3s;
 
                                 <div class="list-feedback1">
                                     <button type ="submit" class="button5hvr" name="shifter-email" value="shifter-email" >Forward to Signatories</button></a><!-- DB FORWARD TO SIGNATORIES BUTTON -->
-                                    <a href="/emailApplicant-Shifter/"><button  class="button4hvr">Email Shifter</button></a><!-- DB EMAIL STUDENT BUTTON -->
-                                </div>
                             </form>
+                            <a href="{% url 'emailShifter' shift.id %}"><button  class="button4hvr">Email Transferee</button></a>
+                        </div>
+                            
                     <!-------------END EMAIL APPLICANT----------->
 						</div>
                     </div>
