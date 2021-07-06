@@ -1140,6 +1140,21 @@ ul li{
 	}
 }
 
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 1600px) and (max-width: 1920px) {
+    #content {
+        zoom: 67%
+    }
+    #sidebar {
+        zoom: 75%;
+    }
+	
+	.dropdown {
+		margin-top: -75px;
+		margin-left: 80px;
+	}
+}
+
 /* For screens na 1920x1080 */
 @media (min-width: 1920px) {
     .wrapper {

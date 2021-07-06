@@ -22,12 +22,15 @@
         tr:nth-child(even) {background-color: #f2f2f2;}
 
         .addButton {
+            padding-top: 5px;
             background: #3fb328;
             border-radius: 10px;
             font-size: 20px;
             color: white;
             align-content: center;
             text-align: center;
+            height: 40px;
+            width: 90%;
         }
 
         .addButton:hover{
@@ -35,12 +38,15 @@
         }
 
         .removeButton {
+            padding-top: 5px;
             background: #f34e01;
             border-radius: 10px;
             font-size: 20px;
             color: white;
             align-content: center;
             text-align: center;
+            height: 40px;
+            width: 90%;
         }
 
 
@@ -997,9 +1003,7 @@
                                             <td><p>  {{ i.timeEnd}}</p></td><!-- DB TIME OUT -->
                                             <td><p>  {{i.type}} </p></td>
                                             <td>
-                                                <div class="removeButton"><!-- DB MANAGE FACULTY BUTTON BELOW -->
-                                                    <a href='remove={{i.id}}'>-</a>
-                                                </div>
+                                                <a href='remove={{i.id}}'><div class="removeButton">-</div></a>
                                             </td>    
                                         </tr>
                                         {% endfor %}
@@ -1037,9 +1041,7 @@
                                             <td><p>  {{ i.timeEnd}} </p></td><!-- DB TIME OUT -->
                                             <td><p>  {{ i.type}}</p></td><!-- DB SESSION TYPE -->
                                             <td>
-                                                <div class="addButton"><!-- DB MANAGE FACULTY BUTTON BELOW -->
-                                                    <a href='add={{i.id}}'>+</a>
-                                                </div>
+                                                <a href='add={{i.id}}'><div class="addButton">+</div></a>
                                             </td>  
                                         </tr>
                                        {%endif%}

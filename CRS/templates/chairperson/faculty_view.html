@@ -90,8 +90,8 @@
                             <p id="application"><b>Application</b></p>
                             <div class="app-panel row">
                                 <div class="col-lg-3" id="applicantNo"><b>Application No. {{ facultyapp.id }} </b></div><!-- DB APPLICANT NO -->
-                                <div>{{ facultyapp.lastName }}, &nbsp;</div><!-- DB LAST NAME -->
-                                <div>{{ facultyapp.firstName }}</div><!-- DB FIRST NAME -->
+                                <div>{{ facultyapp.lastName }}, {{ facultyapp.firstName }}</div><!-- DB LAST NAME -->
+                                <div></div><!-- DB FIRST NAME -->
                             </div>
                         <!-- END Faculty Panel -->
                         <form action="{% url 'faculty_view' facultyapp.id %}" method="POST"> {% csrf_token %}

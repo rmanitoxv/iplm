@@ -35,7 +35,7 @@ body{
 		<div>
 	<table align="center"  class="header" width=99%>
 		<tr>
-			<td style="margin-left: 30px;"><img src="{% static 'CRS/images/plm.jpg' %}" id="logo" height="80px" width="80px"> </td>
+			<td style="margin-left: 30px;"><img src="C:\Users\Vea\Desktop\iPLM-master\CRS\static\CRS\images\plm.png" id="logo" height="80px" width="80px"> </td>
 			<td style="margin-left: -340px;"> 
 				<p class="text-center my-0 py-0"> Republic of the Philippines <br>
 				<b>PAMANTASAN NG LUNGSOD NG MAYNILA</b> <br>
@@ -156,7 +156,7 @@ body{
 			<tr><td colspan=2> 1. Endorsed by:	</td> </tr>
 			<tr> <td colspan=1 align="center" width=70%> <u><b>{{info.departmentID.chairperson.cpersonUser.firstName}} {{info.departmentID.chairperson.cpersonUser.middleName}} {{info.departmentID.chairperson.cpersonUser.lastName}}</b></u>
 				<br> Department Chair </td>
-				<td colspan=1 align="center"> <u><b>_________________</b></u> 
+				<td colspan=1 align="center"> <u><b>{{dof}}</b></u> 
 				<br> Date </td>	</table>
 		</td>
 	</tr>
@@ -166,7 +166,7 @@ body{
 			<table  align="center" width=100%>
 				<tr> <td colspan=2>	2. Recommending Approval: </td> </tr>	
 				<tr> <td colspan=1 align="center" width=70%> <u><b></b></u> <br> College Dean </td>
-			    <td colspan=1 align="center"> <u><b>________________</b></u>
+			    <td colspan=1 align="center"> <u><b>{{dof}}</b></u>
 				<br> Date </td>					
 			</table>
 		</td>
@@ -180,7 +180,7 @@ body{
 				<tr> <td colspan=1 align="center" width=70%> <u><b></b></u>
 						<br> University Registrar </td>
 					
-					<td colspan=1 align="center"> <u><b>___________________</b></u>
+					<td colspan=1 align="center"> <u><b>{{dof}}</b></u>
 						<br> Date	</td>					
 			</table>
 		</td>
@@ -193,7 +193,7 @@ body{
 				<tr> <td colspan=1 align="center" width=70%> <u><b></b></u>
 				<br> Vice President of Academic Affairs </td>
 					
-				<td colspan=1 align="center"> ___________________<u><b></b></u>
+				<td colspan=1 align="center">  <u><b></b></u>
 				<br> Date	</td>					
 			</table>
 		</td>

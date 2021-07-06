@@ -4026,7 +4026,7 @@ def schedOnline(request):
 
 def schedOnline2(request,block_id):  
     id= request.user.id
-    acads = AcademicYearInfo.objects.get(pk=1)
+    acads = AcademicYearInfo.objects.last()
     info = FacultyInfo.objects.get(facultyUser=id)
     schedule = studentScheduling.objects.filter(realsection=block_id)
     OrderFormSet = inlineformset_factory(BlockSection, studentScheduling, fields=('subjectCode','instructor', 'section','day','timeStart','timeEnd', 'room', 'type'),widgets={'subjectCode': forms.Select(attrs={"class": "form-control", "id":"instructorField", "required":True}), 'instructor': forms.Select(attrs={"class": "form-control", "id":"instructorField"}),'section': forms.NumberInput(attrs={"class": "form-control", "placeholder": "Section", "id":"instructorField", "required":True}),'day': forms.Select(attrs={"class": "form-control", "id":"remarks", "required":True}),'timeStart': forms.TimeInput(attrs={"class": "form-control", "placeholder": "%H:%M:%S", "id":"timeField", "required":True}),'timeEnd': forms.TimeInput(attrs={"class": "form-control","placeholder": "%H:%M:%S", "id":"timeField", "required":True}),'room': forms.TextInput(attrs={"class": "form-control", "placeholder": "Room", "id":"instructorField", "required":True}),'type': forms.Select(attrs={"class": "form-control", "id":"instructorField", "required":True})}, max_num=1, can_delete=False)

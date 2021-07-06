@@ -117,20 +117,32 @@
             margin-right: 10px;
         }
 
-        .alert{
+        .alertError{
         padding: 20px;
-        background-color: #ffffff;
+        background-color: #f34e01;
         border-radius: 15px;
-        color: #0C66CC;
+        color: white;
+        font-size: 18px;
+        width: auto;
         box-shadow: 0 0 10px rgb(216, 216, 216);
         animation: zoom-in-zoom-out 1s ease;
-        font-size: 18px;
-        width: 300px;
         }
 
-        .closebtn {
+        .alertSuccess{
+        padding: 20px;
+        background-color: #3fb328;
+        border-radius: 15px;
+        color:white;
+        font-size: 18px;
+        width: auto;
+        box-shadow: 0 0 10px rgb(216, 216, 216);
+        animation: zoom-in-zoom-out 1s ease;
+
+        }
+
+        .closebtnError {
         margin-left: 15px;
-        color: #0C66CC;
+        color: white;
         font-weight: bold;
         float: right;
         font-size: 22px;
@@ -139,44 +151,59 @@
         transition: 0.3s;
         }
 
-        .closebtn:hover {
-        color: #0c3869;
+        .closebtnError:hover {
+            color: #a33908;
         }
 
-        /*SCROLLBAR*/
-        ::-webkit-scrollbar {
-            width: 10px;
+        .closebtnSuccess {
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
         }
 
-        /* Track */
-        ::-webkit-scrollbar-track {
-            background: #e4e4e4;
-            border-radius: 12px;
-        }
-        
-        /* Handle */
-        ::-webkit-scrollbar-thumb {
-            background: #cbcbcb;
-            border-radius: 12px;
+        .closebtnSuccess:hover {
+            color: #1c6b0c;
         }
 
-        /* Handle on hover */
-        ::-webkit-scrollbar-thumb:hover {
-            background: #8f8f8f; 
-        }
+                /*SCROLLBAR*/
+                ::-webkit-scrollbar {
+                    width: 10px;
+                }
+
+                /* Track */
+                ::-webkit-scrollbar-track {
+                    background: #e4e4e4;
+                    border-radius: 12px;
+                }
+                
+                /* Handle */
+                ::-webkit-scrollbar-thumb {
+                    background: #cbcbcb;
+                    border-radius: 12px;
+                }
+
+                /* Handle on hover */
+                ::-webkit-scrollbar-thumb:hover {
+                    background: #8f8f8f; 
+                }
 
 
-        @keyframes zoom-in-zoom-out {
-        0% {
-            transform: scale(1, 1);
-        }
-        50% {
-            transform: scale(1.1, 1.1);
-        }
-        100% {
-            transform: scale(1, 1);
-        }
-        }
+                @keyframes zoom-in-zoom-out {
+                0% {
+                    transform: scale(1, 1);
+                }
+                50% {
+                    transform: scale(1.1, 1.1);
+                }
+                100% {
+                    transform: scale(1, 1);
+                }
+                }
     </style>
 </head>
 
@@ -243,13 +270,23 @@
                         <div class="row">
                             <br><br>
                             {% if messages %}
-                            {% for message in messages %}
-                            <div class="alert">
-                                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-                                <b>{{ message }}</b>
-                            </div>
-                            {% endfor %}
-                        {% endif %}
+                                {% for message in messages %}
+                                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                                <div class="alertError">
+                                    <span class="closebtnError" onclick="this.parentElement.style.display='none';">&times;</span> 
+                                    {{ message }}
+                                </div>
+                                {% endif %}
+
+                                {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                                <div class="alertSuccess">
+                                    <span class="closebtnSuccess" onclick="this.parentElement.style.display='none';">&times;</span> 
+                                    {{ message }}
+                                </div>
+                                {% endif %}
+                                    
+                                {% endfor %}
+                                {% endif %}
                             <div><br><br><br><br><br><br><img src="{% static 'CRS/images/sClassroom/clip-1397.png' %}" width="300px" height="auto"></div>
                         </div>
 

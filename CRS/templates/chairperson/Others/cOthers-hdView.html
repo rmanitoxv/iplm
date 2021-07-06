@@ -15,6 +15,73 @@
     <link rel="stylesheet" href="{% static 'CRS/css/cOthers/chairOthers.css' %}">
     <!--Icon-->
     <link rel="icon" href="{% static 'CRS/images/cOthers/iPLM.png' %}  " type="image/png" sizes="16x16">
+    <style>
+        .alertError{
+padding: 20px;
+background-color: #f34e01;
+border-radius: 15px;
+color: white;
+font-size: 18px;
+width: 50%;
+box-shadow: 0 0 10px rgb(216, 216, 216);
+animation: zoom-in-zoom-out 1s ease;
+}
+
+.alertSuccess{
+padding: 20px;
+background-color: #3fb328;
+border-radius: 15px;
+color:white;
+font-size: 18px;
+width: 50%;
+box-shadow: 0 0 10px rgb(216, 216, 216);
+animation: zoom-in-zoom-out 1s ease;
+
+}
+
+.closebtnError {
+margin-left: 15px;
+color: white;
+font-weight: bold;
+float: right;
+font-size: 22px;
+line-height: 20px;
+cursor: pointer;
+transition: 0.3s;
+}
+
+.closebtnError:hover {
+    color: #a33908;
+}
+
+.closebtnSuccess {
+margin-left: 15px;
+color: white;
+font-weight: bold;
+float: right;
+font-size: 22px;
+line-height: 20px;
+cursor: pointer;
+transition: 0.3s;
+}
+
+.closebtnSuccess:hover {
+    color: #1c6b0c;
+}
+
+@keyframes zoom-in-zoom-out {
+0% {
+    transform: scale(1, 1);
+}
+50% {
+    transform: scale(1.1, 1.1);
+}
+100% {
+    transform: scale(1, 1);
+}
+}
+</style>
+
 </head>
 
 <body>
@@ -276,6 +343,27 @@
 
                         <!-------------CHAIRPERSON MANAGEMENT----------->
                         <div id="list-feedback1">
+                            <div align="left"> 
+                                {% if messages %}
+                                {% for message in messages %}
+                                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                                <div class="alertError">
+                                    <span class="closebtnError" onclick="this.parentElement.style.display='none';">&times;</span> 
+                                    {{ message }}
+                                </div>
+                                {% endif %}
+
+                                {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                                <div class="alertSuccess">
+                                    <span class="closebtnSuccess" onclick="this.parentElement.style.display='none';">&times;</span> 
+                                    {{ message }}
+                                </div>
+                                {% endif %}
+                                    
+                                {% endfor %}
+                                {% endif %}
+                                <br>
+                                </div>
                             <div class="fileName">Manage</div><br>
                             <a href="{% url 'feedback' hd_applicant.id %}"><button class="feedbackBtn3" ><img src="{% static 'CRS/images/cOthers/feedback.png' %}" width=auto height="42"><br>Feedback</button></a><!-- DB FEEDBACK BUTTON -->
                             <form action="{% url 'del_allHD' hd_applicant.id %}" method="post">

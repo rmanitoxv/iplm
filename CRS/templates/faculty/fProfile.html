@@ -19,20 +19,33 @@
 
     <style>
 
-    .alert{
-        padding: 20px;
-        background-color: white;
-        border-radius: 15px;
-        color: #0C66CC;
-        box-shadow: 0 0 10px rgb(216, 216, 216);
-        margin-top: 50px;
-        margin-left: 1100px;
-        animation: zoom-in-zoom-out 1s ease;
-        }
+    .alertError{
+    padding: 20px;
+    background-color: #f34e01;
+    border-radius: 15px;
+    color: white;
+    box-shadow: 0 0 10px rgb(216, 216, 216);
+    margin-top: 50px;
+    margin-left: 1100px;
+    margin-bottom: 10px;
+    animation: zoom-in-zoom-out 1s ease;
+    }
 
-        .closebtn {
+    .alertSuccess{
+    padding: 20px;
+    background-color: #3fb328;
+    border-radius: 15px;
+    color: white;
+    box-shadow: 0 0 10px rgb(216, 216, 216);
+    margin-top: 50px;
+    margin-left: 1100px;
+    margin-bottom: 10px;
+    animation: zoom-in-zoom-out 1s ease;
+    }
+
+    .closebtnError {
         margin-left: 15px;
-        color: #0C66CC;
+        color: white;
         font-weight: bold;
         float: right;
         font-size: 22px;
@@ -41,23 +54,38 @@
         transition: 0.3s;
         }
 
-        .closebtn:hover {
-        color: #0c3869;
+        .closebtnError:hover {
+            color: #a33908;
+        }
+
+        .closebtnSuccess {
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+        }
+
+        .closebtnSuccess:hover {
+            color: #1c6b0c;
         }
 
 
 
-        @keyframes zoom-in-zoom-out {
-        0% {
-            transform: scale(1, 1);
-        }
-        50% {
-            transform: scale(1.1, 1.1);
-        }
-        100% {
-            transform: scale(1, 1);
-        }
-        }
+    @keyframes zoom-in-zoom-out {
+    0% {
+        transform: scale(1, 1);
+    }
+    50% {
+        transform: scale(1.1, 1.1);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+    }
     </style>
 </head>
 
@@ -100,12 +128,22 @@
                     <p class="text-profile">Profile</p>
                     {% if messages %}
                     {% for message in messages %}
-                    <div class="alert">
-                        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-                        <b>{{ message }}</b>
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                    <div class="alertError">
+                        <span class="closebtnError" onclick="this.parentElement.style.display='none';">&times;</span> 
+                        {{ message }}
                     </div>
+                    {% endif %}
+
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                    <div class="alertSuccess">
+                        <span class="closebtnSuccess" onclick="this.parentElement.style.display='none';">&times;</span> 
+                        {{ message }}
+                    </div>
+                    {% endif %}
+                        
                     {% endfor %}
-                {% endif %} 
+                    {% endif %}
                 </div>
 
                 <div class="profile-box row">

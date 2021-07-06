@@ -17,20 +17,34 @@
     <link rel="icon" href="cOthersResources/iPLM.png" type="image/png" sizes="16x16">
 
     <style>
-        .alert{
+       .alertError{
         padding: 20px;
-        background-color: #ffffff;
+        background-color: #f34e01;
         border-radius: 15px;
-        color: #0C66CC;
+        color: white;
+        font-size: 18px;
+        width: auto;
         box-shadow: 0 0 10px rgb(216, 216, 216);
+        float: left;
         animation: zoom-in-zoom-out 1s ease;
-        font-size: 16px;
-        width: 300px;
         }
 
-        .closebtn {
+        .alertSuccess{
+        padding: 20px;
+        background-color: #3fb328;
+        border-radius: 15px;
+        color:white;
+        font-size: 18px;
+        width: auto;
+        box-shadow: 0 0 10px rgb(216, 216, 216);
+        float: left;
+        animation: zoom-in-zoom-out 1s ease;
+        
+        }
+
+        .closebtnError {
         margin-left: 15px;
-        color: #0C66CC;
+        color: white;
         font-weight: bold;
         float: right;
         font-size: 22px;
@@ -39,10 +53,24 @@
         transition: 0.3s;
         }
 
-        .closebtn:hover {
-        color: #0c3869;
+        .closebtnError:hover {
+            color: #a33908;
         }
 
+        .closebtnSuccess {
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+        }
+
+        .closebtnSuccess:hover {
+            color: #1c6b0c;
+        }
 
 
         @keyframes zoom-in-zoom-out {
@@ -104,8 +132,8 @@
                           <div class ="greyBox">
                               <table>
                                 <tr>
-                                  <td>{{feed.studentID.studentID}}</td>
-                                  <td>{{feed.studentID.studentUser.lastName }} {{ feed.studentID.studentUser.firstName }}</td>
+                                  <td><b>{{feed.studentID.studentID}}</b></td>
+                                  <td style="font-size: 18px;">{{feed.studentID.studentUser.lastName }} {{ feed.studentID.studentUser.firstName }}</td>
                                 </tr>
                               </table>
                           </div>
@@ -114,16 +142,31 @@
                           <textarea id="actionRequired" name="actionRequired" placeholder="Write something.." style="height:200px"></textarea>
                         </div>
                     </div>
-                    {% if messages %}
-                            {% for message in messages %}
-                            <div class="alert">
-                                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-                                <b>{{ message }}</b>
-                            </div>
-                                {% endfor %}
-                        {% endif %}
+                    
                     <div class="row">
-                      <div class="col-60"><input type="submit" value="Submit"></div>
+                      <div class="col-60"><input type="submit" value="Submit">
+
+                        {% if messages %}
+                        {% for message in messages %}
+                        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        <div class="alertError">
+                            <span class="closebtnError" onclick="this.parentElement.style.display='none';">&times;</span> 
+                            {{ message }}
+                        </div>
+                        {% endif %}
+    
+                        {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                        <div class="alertSuccess">
+                            <span class="closebtnSuccess" onclick="this.parentElement.style.display='none';">&times;</span> 
+                            {{ message }}
+                        </div>
+                        {% endif %}
+                            
+                        {% endfor %}
+                        {% endif %}
+                    
+                    
+                    </div>
                   </div>
                     </form>
             </div>
