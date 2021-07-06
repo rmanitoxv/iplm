@@ -263,7 +263,30 @@
                                     <td><b>{{shifts.studentID}}</b></td>
                                     <td colspan="2">{{shifts.lname}}, {{shifts.fname}}</td>
                                     <td>{{ shifts.shifter_dateSubmitted }}</td>
-                                    <td><b>{{shifts.remarks}}</b></td>
+                                    
+
+                                    {% if shifts.remarks == "Submitted" %}
+                                        <td style="color: #0C66CC;"><b>{{ shifts.remarks }}</b></td>
+                                        {% endif %}
+
+                                        {% if shifts.remarks == "Returned" %}
+                                        <td style="color: #E43C21;"><b>{{ shifts.remarks }}</b></td>
+                                        {% endif %}
+
+                                        {% if shifts.remarks == "In Progress" %}
+                                        <td style="color: #0C66CC;"><b>{{ shifts.remarks }}</b></td>
+                                        {% endif %}
+
+                                        {% if shifts.remarks == "Forwarded" %}
+                                        <td style="color: #0C66CC;"><b>{{ shifts.remarks }}</b></td>
+                                        {% endif %}
+
+                                        {% if shifts.remarks == "Complete" %}
+                                        <td style="color: #3FB328;"><b>{{ shifts.remarks }}</b></td>
+                                        {% endif %}
+
+
+
                                     <td style="float: left;"><a href="{% url 'cOthers-shifterView' shifts.id %}" id="buttons" ><button type="button" class="btn btn2">View</button></a></td>
                                     {% endif %}
                                 </tr>

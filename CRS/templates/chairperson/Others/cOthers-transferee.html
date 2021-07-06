@@ -264,7 +264,29 @@
                                     <td><b>{{transf.studentID}}</b></td>
                                     <td colspan="2">{{ transf.lname }}, {{ transf.fname}}</td>
                                     <td>{{ transf.transfer_dateSubmitted }}</td>
-                                    <td><b>{{ transf.remarks}}</b></td>
+                                   
+
+                                        {% if transf.remarks == "Submitted" %}
+                                        <td style="color: #0C66CC;"><b>{{ transf.remarks }}</b></td>
+                                        {% endif %}
+
+                                        {% if transf.remarks == "Returned" %}
+                                        <td style="color: #E43C21;"><b>{{ transf.remarks }}</b></td>
+                                        {% endif %}
+
+                                        {% if transf.remarks == "In Progress" %}
+                                        <td style="color: #0C66CC;"><b>{{ transf.remarks }}</b></td>
+                                        {% endif %}
+
+                                        {% if transf.remarks == "Forwarded" %}
+                                        <td style="color: #0C66CC;"><b>{{ transf.remarks }}</b></td>
+                                        {% endif %}
+
+                                        {% if transf.remarks == "Complete" %}
+                                        <td style="color: #3FB328;"><b>{{ transf.remarks }}</b></td>
+                                        {% endif %}
+
+
                                     <td style="float: left;"><a href="{% url 'cOthers-transfereeView' transf.id %}" id="buttons" ><button type="button" class="btn btn2">View</button></a></td>
                                     {% endif %}
                                 </tr>

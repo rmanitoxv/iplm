@@ -268,7 +268,27 @@
                                         <td><b>{{loa.studentID}}</b></td>
                                         <td colspan="2">{{ loa.studentID.studentUser.lastName }}, {{ loa.studentID.studentUser.firstName }}</td>
                                         <td>{{ loa.LOA_dateSubmitted }}</td>
-                                        <td><b>{{ loa.remarks }}</b></td>
+
+                                        {% if loa.remarks == "Submitted" %}
+                                        <td style="color: #0C66CC;"><b>{{ loa.remarks }}</b></td>
+                                        {% endif %}
+
+                                        {% if loa.remarks == "Returned" %}
+                                        <td style="color: #E43C21;"><b>{{ loa.remarks }}</b></td>
+                                        {% endif %}
+
+                                        {% if loa.remarks == "In Progress" %}
+                                        <td style="color: #0C66CC;"><b>{{ loa.remarks }}</b></td>
+                                        {% endif %}
+
+                                        {% if loa.remarks == "Forwarded" %}
+                                        <td style="color: #0C66CC;"><b>{{ loa.remarks }}</b></td>
+                                        {% endif %}
+
+                                        {% if loa.remarks == "Complete" %}
+                                        <td style="color: #3FB328;"><b>{{ loa.remarks }}</b></td>
+                                        {% endif %}
+
                                         <td style="float: left;"><a href="{% url 'cOthers-loaView' loa.id %}" id="buttons" ><button type="button" class="btn btn2">View</button></a></td>
                                         {% endif %}
                                     </tr>

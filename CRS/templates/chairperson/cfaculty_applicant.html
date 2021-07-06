@@ -264,7 +264,27 @@
                                     {% if info.departmentID.courseName == faculty.department %}
                                     <td><b>Applicant No. {{ faculty.id }}</b></td>
                                     <td colspan="2">{{ faculty.lastName }}, {{ faculty.firstName }}</td>
-                                    <td><b>{{ faculty.remarks }}</b></td>
+
+                                    {% if faculty.remarks == "Submitted" %}
+                                    <td style="color: #0C66CC;"><b>{{ faculty.remarks }}</b></td>
+                                    {% endif %}
+
+                                    {% if faculty.remarks == "Returned" %}
+                                    <td style="color: #E43C21;"><b>{{ faculty.remarks }}</b></td>
+                                    {% endif %}
+
+                                    {% if faculty.remarks == "In Progress" %}
+                                    <td style="color: #0C66CC;"><b>{{ faculty.remarks }}</b></td>
+                                    {% endif %}
+
+                                    {% if faculty.remarks == "Forwarded" %}
+                                    <td style="color: #0C66CC;"><b>{{ faculty.remarks }}</b></td>
+                                    {% endif %}
+
+                                    {% if faculty.remarks == "Complete" %}
+                                    <td style="color: #3FB328;"><b>{{ faculty.remarks }}</b></td>
+                                    {% endif %}
+
                                     <td style="float: left;"><a href="{% url 'faculty_view' faculty.id %}" id="buttons" ><button type="button" class="btn btn2">View</button></a></td>
                                     {% endif %}
                                 </tr>

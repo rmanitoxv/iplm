@@ -270,7 +270,27 @@
                                     <td><b>{{ sp.studentID.studentID }}</b></td>
                                     <td colspan="2">{{ sp.studentID.studentUser.lastName }}, {{ sp.studentID.studentUser.firstName }}</td>
                                     <td>{{ sp.date }}</td>
-                                    <td><b>{{ sp.remarks }}</b></td>
+
+                                        {% if sp.remarks == "Submitted" %}
+                                        <td style="color: #0C66CC;"><b>{{ sp.remarks }}</b></td>
+                                        {% endif %}
+
+                                        {% if sp.remarks == "Returned" %}
+                                        <td style="color: #E43C21;"><b>{{ sp.remarks }}</b></td>
+                                        {% endif %}
+
+                                        {% if sp.remarks == "In Progress" %}
+                                        <td style="color: #0C66CC;"><b>{{ sp.remarks }}</b></td>
+                                        {% endif %}
+
+                                        {% if sp.remarks == "Forwarded" %}
+                                        <td style="color: #0C66CC;"><b>{{ sp.remarks }}</b></td>
+                                        {% endif %}
+
+                                        {% if sp.remarks == "Complete" %}
+                                        <td style="color: #3FB328;"><b>{{ sp.remarks }}</b></td>
+                                        {% endif %}
+
                                     <td style="float: left;"><a href="{% url 'cOthers-studyPlanView' sp.id %}" id="buttons" ><button type="button" class="btn btn2">View</button></a></td>
                                     {% endif %}
                                 </tr>
