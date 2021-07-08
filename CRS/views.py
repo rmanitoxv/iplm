@@ -2552,7 +2552,7 @@ def sClassroom(request):
 
 def sGradeSubmission1(request):
     if request.user.is_authenticated and request.user.is_student:
-        OrderFormSet = inlineformset_factory(StudentInfo, currchecklist, fields=('owner','curriculumCode', 'subjectGrades','yearTaken','semTaken'),widgets={'curriculumCode': forms.Select(attrs={"class": "form-control", "id":"instructorField", "required": True}), 'subjectGrades': forms.Select(attrs={"class": "form-control", "id":"instructorField","required": True}),'yearTaken': forms.Select(attrs={"class": "form-control", "id":"instructorField","required": True}), 'semTaken': forms.Select(attrs={"class": "form-control", "id":"instructorField","required": True})}, max_num=1, can_delete=False)
+        OrderFormSet = inlineformset_factory(StudentInfo, currchecklist, fields=('owner','curriculumCode', 'subjectGrades','yearTaken','semTaken'),widgets={'curriculumCode': forms.Select(attrs={"class": "form-control", "id":"instructorField"}), 'subjectGrades': forms.Select(attrs={"class": "form-control", "id":"instructorField", "required": True}),'yearTaken': forms.Select(attrs={"class": "form-control", "id":"instructorField"}), 'semTaken': forms.Select(attrs={"class": "form-control", "id":"instructorField"})}, max_num=1, can_delete=False)
         id= request.user.id
         info = StudentInfo.objects.get(studentUser=id)
         subjects = currchecklist.objects.filter(owner=info)
