@@ -132,7 +132,7 @@ class AcademicYearInfo(models.Model):
 
 # ------------------ Chairperson Database----------------------------------------------------
 class ChairpersonInfo (models.Model):
-    cpersonUser = OneToOneField(User, on_delete=CASCADE, primary_key=True)
+    cpersonUser = OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 
     class Meta:
         verbose_name_plural = "Chairperson Information"
@@ -142,10 +142,10 @@ class ChairpersonInfo (models.Model):
 
 
 class Department(models.Model):
-    collegeId = ForeignKey(College, null=True, verbose_name='College', on_delete=CASCADE)
+    collegeId = ForeignKey(College, null=True, verbose_name='College', on_delete=models.CASCADE)
     courseName = models.CharField(max_length=150, null=True, verbose_name='Course')
     courseDesc = models.CharField(max_length=200, null=True, blank=True, verbose_name='Course Description')
-    chairperson = ForeignKey(ChairpersonInfo, on_delete=DO_NOTHING, null=True, blank=True)
+    chairperson = ForeignKey(ChairpersonInfo, on_delete=models.PROTECT, null=True, blank=True)
 
     def __str__(self):
         return self.courseName
@@ -192,7 +192,7 @@ class FacultyInfo(models.Model):
         message=phone_error_message
     )
 
-    facultyUser = OneToOneField(User, on_delete=CASCADE, primary_key=True)
+    facultyUser = OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     facultyID = models.CharField(validators=[facultyID_regex], max_length=50,
                                  unique=True, verbose_name='Faculty ID', null=True)
     collegeID = ForeignKey(College, null=True, verbose_name='College', on_delete=models.SET_NULL, blank=True)
@@ -223,7 +223,7 @@ class BlockSection(models.Model):
     )
     blockYear = models.CharField(max_length=150, null=True, choices= Year_CHOICES, verbose_name='Block Year Level')
     blockSection = models.CharField(max_length=50,null=True, verbose_name='Block Section')
-    college = models.ForeignKey(College, null=True, verbose_name='College', on_delete=DO_NOTHING)
+    college = models.ForeignKey(College, null=True, verbose_name='College', on_delete=models.PROTECT)
     blockCourse = models.CharField(max_length=50, null=True, verbose_name='Block Course')
     curryear = models.CharField(max_length=50, null=True, verbose_name='Curriculum Year')
     adviser = models.ForeignKey(FacultyInfo, on_delete=models.SET_NULL, null=True, blank=True)
@@ -399,7 +399,7 @@ class StudentInfo(models.Model):
 
 # HD Application
 class hdApplicant(models.Model):
-    studentID = models.ForeignKey(StudentInfo, null=True, verbose_name='Student', on_delete=models.SET_NULL, blank=True)
+    studentID = models.ForeignKey(StudentInfo, null=True, verbose_name='Student', on_delete=models.CASCADE, blank=True)
     studentDropform = models.FileField(upload_to='hdSubmission/', blank=True, null=True)
     studentClearanceform = models.FileField(upload_to='hdSubmission/', blank=True, null=True)
     studentTransfercert = models.FileField(upload_to='hdSubmission/', blank=True, null=True)
@@ -420,7 +420,7 @@ class hdApplicant(models.Model):
 
 # OJT Application
 class OjtApplicant(models.Model):
-    studentID = models.ForeignKey(StudentInfo, null=True, verbose_name='Student', on_delete=models.SET_NULL, blank=True)
+    studentID = models.ForeignKey(StudentInfo, null=True, verbose_name='Student', on_delete=models.CASCADE, blank=True)
     ojtResume = models.FileField(upload_to='ojtSubmission/', blank=True, null=True)
     ojtRecLetter = models.FileField(upload_to='ojtSubmission/', blank=True, null=True)
     ojtWaiver = models.FileField(upload_to='ojtSubmission/', blank=True, null=True)
@@ -440,7 +440,7 @@ class OjtApplicant(models.Model):
 
 
 class spApplicant(models.Model):
-    studentID = models.ForeignKey(StudentInfo, null=True, verbose_name='Student', on_delete=models.SET_NULL, blank=True)
+    studentID = models.ForeignKey(StudentInfo, null=True, verbose_name='Student', on_delete=models.CASCADE, blank=True)
     remarks = models.CharField(default="Submitted", max_length=25)
     date = models.DateField(default=now)
     sdplan = models.FileField(upload_to='spSubmission/', null=True, blank=True)
@@ -454,7 +454,7 @@ class spApplicant(models.Model):
 
 
 class LOAApplicant(models.Model):
-    studentID = models.ForeignKey(StudentInfo, null=True, verbose_name='Student', on_delete=models.SET_NULL, blank=True)
+    studentID = models.ForeignKey(StudentInfo, null=True, verbose_name='Student', on_delete=models.CASCADE, blank=True)
     studentLOAClearanceform = models.FileField(upload_to='LOASubmission/', blank=True, null=True)
     studentStudyplan = models.FileField(upload_to='LOASubmission/', blank=True, null=True)
     studentLOAletter = models.FileField(upload_to='LOASubmission/', blank=True, null=True)
@@ -503,9 +503,9 @@ class currchecklist(models.Model):
     ('6', '6th Year'),
     )
     
-    owner = models.ForeignKey(StudentInfo, null=True, verbose_name='Student', on_delete=models.SET_NULL,blank=True)
-    curriculumCode = models.ForeignKey(curriculumInfo, null=True, verbose_name='Subjects', on_delete=models.SET_NULL,blank=True)
-    subjectGrades = models.DecimalField(decimal_places=2, max_digits=3,choices=GRADES, verbose_name="Subject Grades", null=True, blank = True)
+    owner = models.ForeignKey(StudentInfo, null=True, verbose_name='Student', on_delete=models.CASCADE,blank=True)
+    curriculumCode = models.ForeignKey(curriculumInfo, null=True, verbose_name='Subjects', on_delete=models.CASCADE)
+    subjectGrades = models.DecimalField(decimal_places=2, max_digits=3,choices=GRADES, verbose_name="Subject Grades", null=True)
     yearTaken = models.CharField(max_length=50, choices=YEARLEVEL, verbose_name='Year Taken', null=True)
     semTaken = models.CharField(max_length=50, choices=SEMESTER, verbose_name="School Sem", null=True)
 
@@ -515,8 +515,9 @@ class currchecklist(models.Model):
     def __str__(self):
         return self.owner.studentUser.lastName
 
+
 class crsGrade(models.Model):
-    studentID =  models.ForeignKey(StudentInfo, null=True, verbose_name='Student', on_delete=models.SET_NULL,blank=True)
+    studentID =  models.ForeignKey(StudentInfo, null=True, verbose_name='Student', on_delete=models.CASCADE,blank=True)
     crsFile = models.FileField(upload_to='crsSubmission/', blank=True, null=True)
     comment = models.TextField(null=True, blank=True, verbose_name='Feedback')
     remarks = models.CharField(max_length=150, default='Submitted', verbose_name='Status')
@@ -530,7 +531,7 @@ class crsGrade(models.Model):
 
 # FORMS TO FILL-UP
 class hdClearanceForm(models.Model):
-    studentID = models.ForeignKey(StudentInfo, null=True, verbose_name='Student', on_delete=models.SET_NULL, blank=True)
+    studentID = models.ForeignKey(StudentInfo, null=True, verbose_name='Student', on_delete=models.CASCADE, blank=True)
     firstEnrollment = models.CharField(max_length=100, verbose_name="Semester (First enrollment in PLM)", null=True)
     studentFirstSY = models.CharField(max_length=100, verbose_name="School Year (First Enrollment in PLM)", null=True)
     studentFirstCollege = models.CharField(max_length=100, verbose_name="College (First Enrollment in PLM)", null=True)
@@ -550,7 +551,7 @@ class hdClearanceForm(models.Model):
 
 
 class hdTransferCert(models.Model):
-    studentID = models.ForeignKey(StudentInfo, null=True, verbose_name='Student', on_delete=CASCADE)
+    studentID = models.ForeignKey(StudentInfo, null=True, verbose_name='Student', on_delete=models.CASCADE)
     studentSchool = models.CharField(max_length=100, verbose_name="School (Where you'll transfer)", null=True)
     studentSchooladdress = models.CharField(max_length=100, verbose_name="School Address (Where you'll transfer)",
                                             null=True)
@@ -573,7 +574,7 @@ class hdTransferCert(models.Model):
 
 
 class loaClearanceForm(models.Model):
-    studentID = models.ForeignKey(StudentInfo, null=True, verbose_name='Student', on_delete=CASCADE)
+    studentID = models.ForeignKey(StudentInfo, null=True, verbose_name='Student', on_delete=models.CASCADE)
     firstEnrollment2 = models.CharField(max_length=100, verbose_name="Semester (First enrollment in PLM)", null=True)
     studentFirstSY2 = models.CharField(max_length=100, verbose_name="School Year (First Enrollment in PLM)", null=True)
     studentFirstCollege2 = models.CharField(max_length=100, verbose_name="College (First Enrollment in PLM)", null=True)
@@ -590,7 +591,7 @@ class loaClearanceForm(models.Model):
 
 # LOA FORM
 class loaForm(models.Model):
-    studentID = models.ForeignKey(StudentInfo, null=True, verbose_name='Student', on_delete=CASCADE)
+    studentID = models.ForeignKey(StudentInfo, null=True, verbose_name='Student', on_delete=models.CASCADE)
     genave = models.DecimalField(decimal_places=2, max_digits=3, verbose_name="GWA", null=True)
     sem = models.CharField(max_length=100, verbose_name="Effective From Sem", null=True)
     sy = models.CharField(max_length=100, verbose_name="Effective From Sy", null=True)

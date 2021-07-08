@@ -227,6 +227,8 @@ class AcademicYearInfoAdmin(admin.ModelAdmin):
         # Disable delete
         return False
 
+    def has_add_permission(self, request, obj=None):
+        return False
 
 admin.site.register(AcademicYearInfo, AcademicYearInfoAdmin)
 
