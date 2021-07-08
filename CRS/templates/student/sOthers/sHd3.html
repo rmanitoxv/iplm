@@ -92,7 +92,7 @@
                 <!--HD head-->
                 <div class="back row">
 					<!-- FILE PATH: Students/sOthers/sHd2.html-->
-                    <a id="backimg" href="{% url 'sHd2' %}"><img src="{% static 'CRS/images/sOthers/student_back.svg' %}"></a>
+                    <a id="backimg" href="{% url 'sHd1' %}"><img src="{% static 'CRS/images/sOthers/student_back.svg' %}"></a>
                     <p id="head1">
                         Honorable Dismissal
                     </p>
@@ -107,8 +107,8 @@
                                 <div class="progress-bar "></div>
                                 <div class="progressbar">
                                         <li class="active progress-text-active">Clearance<br>Form</li>
-                                        <li class="active progress-text-active">Dropping<br>Form</li>
                                         <li class="active progress-text-active">Transfer<br>Certificate</li>
+                                        <li class="progress-text-active">Dropping<br>Form</li>
                                         <li class="progress-text">Upload<br>Documents</li>
                                         <li class="progress-text">Confirmation<br>Submission</li>
                                 </div>
@@ -159,8 +159,8 @@
 
 						<hr id="line">				
 						<div class="form-group col-lg-12 row">
-							<label class="college-label">Request<br>Date <span style="color:#ff0000"><b>*</b></span></label>
-							<select name="studentMonth" class="form-control">
+							<label class="college-label">Request Date <span style="color:#ff0000"><b>*</b></span></label>
+							<select style="margin-left: 115px;" name="studentMonth" class="form-control">
 								<option value="January">January</option>
 								<option value="February">February</option>
 								<option value="March">March</option>
@@ -223,39 +223,39 @@
 						</div>
 						<div class="form-group col-lg-12 row">
 							<label class="college-label">College <span style="color:#ff0000"><b>*</b></span></label>
-							<input type="text" class="form-control" placeholder="College"  name="studentCollege" required> 
+							<input type="text" style="margin-left: 170px;" class="form-control" placeholder="College"  name="studentCollege" required> 
 						</div>
 
 						<div class="form-group col-lg-12 row">
 							<label class="form-label">Credentials <span style="color:#ff0000"><b>*</b></span>&nbsp;&nbsp;&nbsp;&nbsp;
 								&nbsp;&nbsp;&nbsp;&nbsp;</label>
-							<input type="text" class="form-control" placeholder="Credentials"  name="studentCredentials" required> 
+							<input type="text" style="margin-left: 170px;" class="form-control" placeholder="Credentials"  name="studentCredentials" required> 
 						</div>
 						<div class="form-group col-lg-12 row">
-							<label class="form-label">First Enrollment<br>in College <span style="color:#ff0000"><b>*</b></span></label>
-							<input type="text" class="form-control" placeholder="ex.First Semester, 2019" id="transfer-input-sem" name="studentFirstSY" required> 
+							<label class="form-label">First Enrollment in College <span style="color:#ff0000"><b>*</b></span></label>
+							<input type="text" style="margin-left: 80px;" class="form-control" placeholder="ex.First Semester, 2019" id="transfer-input-sem" name="studentFirstSY" required> 
 						</div>
 						<div class="form-group col-lg-12 row">
-							<p id="semSpan">Sem/Term and Year</p>
-						</div>
-						
-						<div class="form-group col-lg-12 row">
-							<label class="form-label">Last Enrollment<br>in College <span style="color:#ff0000"><b>*</b></span></label>
-							<input type="text" class="form-control" placeholder="ex.First Semester, 2019" id="transfer-input-sem" name="studentLastPSY" required> 
+							<p id="semSpan" style="margin-left: 500px; margin-top: -40px;">Sem/Term and Year</p>
 						</div>
 						
 						<div class="form-group col-lg-12 row">
-							<p id="semSpan">Sem/Term and Year</p>
+							<label class="form-label">Last Enrollment in College <span style="color:#ff0000"><b>*</b></span></label>
+							<input type="text" style="margin-left: 80px;" class="form-control" placeholder="ex.First Semester, 2019" id="transfer-input-sem" name="studentLastPSY" required> 
 						</div>
 						
 						<div class="form-group col-lg-12 row">
-							<label class="form-label1">No. of Semesters/<br>Summers<br>Attended <span style="color:#ff0000"><b>*</b></span></label>
+							<p id="semSpan" style="margin-left: 500px; margin-top: -40px;">Sem/Term and Year</p>
+						</div>
+						
+						<div class="form-group col-lg-12 row">
+							<label class="form-label1">No. of Semesters/Summers Attended <span style="color:#ff0000"><b>*</b></span></label>
 							<input type="text" class="form-control" placeholder="No. of Semester" id="sem-summers" name="studentNoOfSem" required>
 						</div>
 						
 						<div class="form-group col-lg-12 row">
-							<label class="form-label2">Title/Degree<br>Obtained <span style="color:#ff0000"><b>*</b></span></label>
-							<input type="text" class="form-control" placeholder="Title/Degree" id="degree" name="studentDegree" required> 
+							<label class="form-label2">Title/Degree Obtained <span style="color:#ff0000"><b>*</b></span></label>
+							<input type="text" style="margin-left: 120px;" class="form-control" placeholder="Title/Degree" id="degree" name="studentDegree" required> 
 						</div>
 						
 						<br><br>
@@ -263,21 +263,21 @@
 						<hr id="line">
 						
 						<div class="form-group col-lg-12 row">
-							<label class="form-label2">School to<br>Transfer to <span style="color:#ff0000"><b>*</b></span></label>
-							<input type="text" class="form-control" placeholder="School" id="school" name="studentSchool" required> 
+							<label class="form-label2">School to Transfer to <span style="color:#ff0000"><b>*</b></span></label>
+							<input type="text" style="margin-left: 130px;" class="form-control" placeholder="School" id="school" name="studentSchool" required> 
 						</div>
 						
 						<div class="form-group col-lg-12 row">
-							<label class="form-label2">School<br>Address <span style="color:#ff0000"><b>*</b></span></label>
-							<input type="text" class="form-control1" placeholder="School Address" id="school-address" name="studentSchooladdress" required> 
+							<label class="form-label2">School Address <span style="color:#ff0000"><b>*</b></span></label>
+							<input type="text" style="margin-left: 175px;" class="form-control1" placeholder="School Address" id="school-address" name="studentSchooladdress" required> 
 						</div>
 						<br>
 						
 						<hr id="line">
 						
 						<div class="form-group col-lg-12 row">
-							<label class="form-label2">Date of<br>Application <span style="color:#ff0000"><b>*</b></span></label>
-							<input type="date" class="form-control" id="application-date" name="studentCurrentdate" required> <!-- DB DATE OF APPLICATION -->
+							<label class="form-label2">Date of Application <span style="color:#ff0000"><b>*</b></span></label>
+							<input type="date" style="margin-left: 140px;" class="form-control" id="application-date" name="studentCurrentdate" required> <!-- DB DATE OF APPLICATION -->
 						</div>
 						<br>
 						
@@ -286,7 +286,7 @@
 								<a href="#" id="button-edit"><button type="submit" class="btn1">Submit</button></a> <!-- SUBMIT -->
 								<a href="{% url 'stc' %}" id="button-edit"><button type="button" class="btn">Save Copy</button></a> <!-- SAVE COPY -->
 								<!-- FILE PATH: Students/sOthers/sHd4.html-->
-								<a href="{% url 'sHd4' %}" id="button-edit"><button type="button" class="btn"> Next</button></a> <!-- NEXT -->
+								<a href="{% url 'sHd2' %}" id="button-edit"><button type="button" class="btn"> Next</button></a> <!-- NEXT -->
 						</div>
 					</form>
 				</div>

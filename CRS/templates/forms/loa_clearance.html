@@ -2,16 +2,31 @@
 <html>
 <head>
 	<title>Student Clearance Form (SCF)</title>
+
+	<style>
+		body{
+			font-family: "Times New Roman", Times, serif;
+		}
+
+		@page {
+			size: 8.3in 11.7in;
+			margin: 10mm 10mm 10mm 10mm;
+		}
+
+		td{
+			padding-top: 3px;
+		}
+	</style>
 </head>
 
 <body>
 	<table align="center">
-		<tr>
+		<tr  align="center">
 			<td width=150>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			</td>
 			<td align="right" width=50>
-				<img src="C:\Users\Vea\Desktop\iPLM-master\CRS\static\CRS\images\plm.png", height="70px" width="70px">
+				<img src="https://plm.edu.ph/images/Seal/PLM_Seal_BOR-approved_2014.png", height="70px" width="70px">
 			</td>
 			<td align="center">
 				Republic of the Philippines
@@ -40,6 +55,9 @@
 			<td>
 				<b></b>
 			</td>
+			<td></td>
+			<td></td>
+			<td></td>
 			<td align="center">
 				<u><b>{{studentCurrentdate2}}</b></u>
 				<br>
@@ -49,27 +67,27 @@
 	
 	<table border=1 align="center" width=100%>
 		<tr>
-			<td align="center" width=20%>
+			<td align="center" width=20% style="padding: 2px;">
 				<b>NAME</b>
 			</td>
 			<td align="center">
 				<table  align="center" width=100%>
 					<tr align="center">
 						
-						<td>
-							<b><font>{{info.studentUser.lastName}} </font></b><br>
-							LAST NAME
+						<td style="font-size: 12px;">
+							<b>{{info.studentUser.lastName}}</b><br>
+							<span style="font-size: 8px;">(LAST NAME)</span>
 						</td>
-						<td>
+						<td style="font-size: 12px;">
 							<b>{{info.studentUser.firstName}}</b> 
 							<br>
-							FIRST NAME
+							<span style="font-size: 8px;">(FIRST NAME)</span>
 						</td>						
 
-						<td>
+						<td style="font-size: 12px;">
 							<b>{{info.studentUser.middleName}}</b> 
 							<br>
-							MIDDLE NAME
+							<span style="font-size: 8px;">(MIDDLE NAME)</span>
 						</td>
 					</tr>
 				</table>
@@ -77,40 +95,28 @@
 		</tr>
 		
 		<tr>
-			<td align="center">
+			<td align="center" style="padding: 2px;">
 				<b>STUDENT NUMBER</b>
 			</td>
 			
-			<td>
+			<td style="margin-left: 70px;">
 				<b>{{info.studentID}}</b>
 			</td>
 		</tr>
 		
 		<tr>
-			<td align="center">
+			<td align="center" style="padding: 2px;">
 				<b>FIRST ENROLMENT IN PLM</b>
 			</td>
 			
 			<td align="center">
 				<table align="center" width=100%>
-					<tr>
-						<td>
-							<!--&#9744 First Semester-->
-						</td>
-						
-						<td>
-							{{ firstEnrollment2 }}
-						</td>
-
-						<td>
-							<!--&#9744 Summer Term-->
-						</td>
-						
-						<td>
-						</td>
-					</tr>
 					
 					<tr>
+						<td align="center" colspan=2>
+							Semester/Term: <u><b>{{ firstEnrollment2 }}</b></u>
+						</td>
+
 						<td align="center" colspan=2>
 						School Year: <u><b>{{ studentFirstSY2 }}</b></u>
 						</td>
@@ -124,30 +130,18 @@
 		</tr>
 
 		<tr>
-			<td align="center">
+			<td align="center" style="padding: 2px;">
 				<b>LAST/PRESENT ENROLMENT IN PLM</b>
 			</td>
 			
 			<td align="center">
 				<table align="center" width=100%>
-					<tr>
-						<td>
-							<!--&#9744 First Semester-->
-						</td>
-						
-						<td>
-							{{lastEnrollment2}}
-						</td>
-
-						<td>
-							<!--&#9744 Summer Term-->
-						</td>
-						
-						<td>
-						</td>
-					</tr>
 					
 					<tr>
+						<td align="center" colspan=2>
+							Semester/Term: <u><b>{{lastEnrollment2}}</b></u>
+						</td>
+
 						<td align="center" colspan=2>
 						School Year: <u><b>{{studentLastPSY2}}</b></u>
 						</td>
@@ -161,18 +155,16 @@
 		</tr>
 		
 		<tr>
-			<td align="center">
+			<td align="center" style="padding: 2px;">
 				<b>SCHOOL, YEAR, GRADUATED & DEGREE
 			</td>
 			<td align="center">
-				<i>(e.g. PLM, 2016, BS COMPUTER SCIENCE)</i>
-				<br>
 				<b>N/A</b>
 			</td>
 		</tr>
 		
 		<tr>
-			<td align="center">
+			<td align="center" style="padding: 2px;">
 				<b>PURPOSE OF CLEARANCE</b>
 			</td>
 			
@@ -183,10 +175,28 @@
 						<!--&#9744 Graduation-->
 						</td>
 
-						<td>
-						{{studentPurpose2}}
-						&nbsp; &nbsp; Others: {{studentOthers2}}
-						</td>
+						{% if studentPurpose2 == "Graduation" %}
+						<td><b>[&nbsp;&check;&nbsp;] Graduation</b></td>
+						<td><b>[&nbsp;&nbsp;] Transfer</b></td>
+						<td colspan="4"><b>[&nbsp;&nbsp;] Others (please specify):___________________</b></td>
+						{% endif %}
+
+						
+						{% if studentPurpose2 == "Transfer" %}
+						<td><b>[&nbsp;&nbsp;] Graduation</b></td>
+						<td><b>[&nbsp;&check;&nbsp;] Transfer</b></td>
+						<td colspan="4"><b>[&nbsp;&nbsp;] Others (please specify):___________________</b></td>
+						{% endif %}
+
+						{% if studentPurpose2 == "Others" %}
+						<td><b>[&nbsp;&nbsp;] Graduation</b></td>
+						<td><b>[&nbsp;&nbsp;] Transfer</b></td>
+						<td colspan="4"><b>[&nbsp;&check;&nbsp;] Others (please specify): <u>{{studentOthers2}}</u></b></td>
+                        {% endif %}
+
+
+
+						
 
 						<td>
 						<!--&#9744 Others (please specify): <u><b>(insert here - other)</b></u>-->
@@ -196,15 +206,13 @@
 			</td>
 		</tr>
 	</table>
-
-<table border=1 align="center" width=100%>
+<br>
+<table border=1 align="center" width=90%>
 	<tr>
 		<td width=50%>
 			<table align="center" width=100%>
 				<tr>
-					<td>
-						1. No Pending Case
-					</td>
+					<td>&nbsp;1. No Pending Case</td>
 				</tr>
 				
 				<tr>
@@ -224,9 +232,7 @@
 		<td>
 			<table align="center" width=100%>
 				<tr>
-					<td>
-						2. No Obligation
-					</td>
+					<td>&nbsp;2. No Obligation</td>
 				</tr>
 				
 				<tr>
@@ -236,9 +242,7 @@
 				</tr>
 				
 				<tr>
-					<td align="center">
-						University Library
-					</td>
+					<td align="center">University Library</td>
 				</tr>
 			</table>	
 		</td>
@@ -248,9 +252,7 @@
 		<td>
 			<table align="center" width=100%>
 				<tr>
-					<td>
-						3. No Obligation
-					</td>
+					<td>&nbsp;3. No Obligation</td>
 				</tr>
 				
 				<tr>
@@ -260,9 +262,7 @@
 				</tr>
 				
 				<tr>
-					<td align="center">
-						Accounting Office
-					</td>
+					<td align="center">Accounting Office</td>
 				</tr>
 			</table>	
 		</td>
@@ -270,9 +270,7 @@
 		<td>
 			<table align="center" width=100%>
 				<tr>
-					<td>
-						4. No Obligation
-					</td>
+					<td>&nbsp;4. No Obligation</td>
 				</tr>
 				
 				<tr>
@@ -294,9 +292,7 @@
 		<td colspan=2>
 			<table align="center" width=100%>
 				<tr>
-					<td>
-						5. No Obligation
-					</td>
+					<td>&nbsp;5. No Obligation</td>
 				</tr>
 				
 				<tr>
@@ -314,7 +310,7 @@
 		</td>
 	</tr>	
 </table>
-
+<br>
 <b>IMPORTANT INSTRUCTIONS</b>
 <br>
 To ensure a smooth and expedited processing of clearance, please comply with the following instructions:
@@ -364,7 +360,6 @@ To ensure a smooth and expedited processing of clearance, please comply with the
 			Signed:
 		</td>
 	</tr>
-	
 	<tr>
 		<td>
 			<u><b>________________________________</b></u>

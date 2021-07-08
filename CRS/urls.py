@@ -10,6 +10,8 @@ urlpatterns = [
 
     # Login or Index
     url(r'^$', views.index, name='index'),
+    url(r'^AboutUs/$', views.aboutUs, name='aboutUs'),
+
     
     # Chairperson
     url(r'^chairperson/$', views.chairperson, name='chairperson'),

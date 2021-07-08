@@ -15,73 +15,6 @@
     <link rel="stylesheet" href="{% static 'CRS/css/cOthers/chairOthers.css' %}">
     <!--Icon-->
     <link rel="icon" href="{% static 'CRS/images/cOthers/iPLM.png' %}" type="image/png" sizes="16x16">
-<style>
-        .alertError{
-padding: 20px;
-background-color: #f34e01;
-border-radius: 15px;
-color: white;
-font-size: 18px;
-width: 50%;
-box-shadow: 0 0 10px rgb(216, 216, 216);
-animation: zoom-in-zoom-out 1s ease;
-}
-
-.alertSuccess{
-padding: 20px;
-background-color: #3fb328;
-border-radius: 15px;
-color:white;
-font-size: 18px;
-width: 50%;
-box-shadow: 0 0 10px rgb(216, 216, 216);
-animation: zoom-in-zoom-out 1s ease;
-
-}
-
-.closebtnError {
-margin-left: 15px;
-color: white;
-font-weight: bold;
-float: right;
-font-size: 22px;
-line-height: 20px;
-cursor: pointer;
-transition: 0.3s;
-}
-
-.closebtnError:hover {
-    color: #a33908;
-}
-
-.closebtnSuccess {
-margin-left: 15px;
-color: white;
-font-weight: bold;
-float: right;
-font-size: 22px;
-line-height: 20px;
-cursor: pointer;
-transition: 0.3s;
-}
-
-.closebtnSuccess:hover {
-    color: #1c6b0c;
-}
-
-@keyframes zoom-in-zoom-out {
-0% {
-    transform: scale(1, 1);
-}
-50% {
-    transform: scale(1.1, 1.1);
-}
-100% {
-    transform: scale(1, 1);
-}
-}
-</style>
-
 </head>
 
 
@@ -139,8 +72,8 @@ transition: 0.3s;
                             <p id="application"><b>Transferee</b></p>
                             <div class="app-panel row">
                                 <div class="col-lg-3"><b>{{trans.studentID}}</b></div><!-- DB STUDENT NO -->
-                                <div class="col-lg-3" id="lastName">{{trans.lname}}, {{trans.fname}}</div><!-- DB STUDENT LAST NAME -->
-                                <div class="col-lg-3" id="firstName"></div><!-- DB STUDENT FIRST NAME -->
+                                <div class="col-lg-3" id="lastName">{{trans.lname}}</div><!-- DB STUDENT LAST NAME -->
+                                <div class="col-lg-3" id="firstName">{{trans.fname}}</div><!-- DB STUDENT FIRST NAME -->
                             </div>
                         <!-- END Faculty Panel -->
 
@@ -337,26 +270,12 @@ transition: 0.3s;
 
                         <!-------------EMAIL APPLICANT----------->
                         <div id="list-feedback1">
-                            <div align="left"> 
+                            <div align="center" class="fileName"> 
                                 {% if messages %}
-                                {% for message in messages %}
-                                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                                <div class="alertError">
-                                    <span class="closebtnError" onclick="this.parentElement.style.display='none';">&times;</span> 
-                                    {{ message }}
-                                </div>
+                                    {% for message in messages %}
+                                            {{ message }}
+                                        {% endfor %}
                                 {% endif %}
-
-                                {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-                                <div class="alertSuccess">
-                                    <span class="closebtnSuccess" onclick="this.parentElement.style.display='none';">&times;</span> 
-                                    {{ message }}
-                                </div>
-                                {% endif %}
-                                    
-                                {% endfor %}
-                                {% endif %}
-                                <br>
                                 </div>
                             <div class="fileName">Manage</div><br>
                             <a href="{% url 'cOthers-transferee-csw' trans.id %}"><button type="button" class="cswBtn2"><img src="{% static 'CRS/images/cOthers/download2.png' %}" width="auto" height="42"><br>Download CSW</button></a><!-- DB DOWNLOAD CSW BUTTON -->
@@ -365,11 +284,13 @@ transition: 0.3s;
                                 <input type="file" id="uploadCSW" name="uploadCSW" hidden/>
                                 </div><br><br>
 
-                            <div class="list-feedback1">
-                                <button type ="submit" class="button5hvr" name="shifter-email" value="shifter-email" >Forward to Signatories</button></a><!-- DB FORWARD TO SIGNATORIES BUTTON -->
-                            </form>
-                                <a href="{% url 'emailTrans' trans.id %}"><button  class="button4hvr">Email Applicant</button></a><!-- DB EMAIL STUDENT BUTTON -->
-                            </div>
+                                <div class="list-feedback1">
+                                    <button type ="submit" class="button5hvr" name="transfer-email" value="transfer-email" >Forward to Signatories</button></a><!-- DB FORWARD TO SIGNATORIES BUTTON -->
+                                <!-- DB EMAIL STUDENT BUTTON --></form>
+                                <a href="{% url 'emailTrans' trans.id %}"><button  class="button4hvr">Email Transferee</button></a>
+                                </div>
+                            
+                            
                         <!-------------END EMAIL APPLICANT----------->
                         
 						</div>

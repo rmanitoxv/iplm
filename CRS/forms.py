@@ -28,4 +28,8 @@ class StudentsForm(forms.ModelForm):
 class studyPlanForm(forms.ModelForm):
 	class Meta: 
 		model = studyPlan
-		fields = ['curricula']
+		fields = 'curricula',
+		widgets = {
+			'curricula': forms.Select(
+				attrs={"class": "form-control","required":True}),
+				}

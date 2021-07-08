@@ -27,6 +27,15 @@ from CRS.models import FacultyApplicant
 from django.db.models import Q
 from django.utils import timezone
 
+def error_404_view(request,exception):
+    return render(request, 'error.html')
+
+def error_500_view(request):
+    return render(request, 'error2.html')
+
+def aboutUs(request):
+    return render(request, 'aboutUs.html')
+    
 def index(request):
     if request.method == 'POST':
         username = request.POST.get('email')
@@ -1520,8 +1529,10 @@ def add_faculty_schedule(request, sid, id):
         if float(inTimeSubj) < float(FacAvailTimeIn):
             #Input Start Time To Early too Availability
             validProf = False
+            errorMessage = "Faculty Time In: " + profAvailIn[0] +":" + profAvailIn[1]+", too early"
         elif float(outTimeSubj) > float(FacAvailTimeOut):
             validProf = False
+            errorMessage = "Faculty Time Out" + profAvailOut[0] +":" + profAvailOut[1]+ ", too late"
         else:
             validProf = True
             
@@ -1540,30 +1551,12 @@ def add_faculty_schedule(request, sid, id):
             AssignedTimeIn = float(AssignedTimeInList[0])+(float(AssignedTimeInList[1])/60)
             AssignedTimeOutList = str(fact.timeEnd).split(":")
             AssignedTimeOut = float(AssignedTimeOutList[0])+(float(AssignedTimeOutList[1])/60)
-
-            profInfo = FacultyInfo.objects.get(facultyUser = data.instructor)
-                                       
-            profAvailIn = str(profInfo.facultyIn).split(':')
-            profAvailOut = str(profInfo.facultyOut).split(':')
-            FacAvailTimeIn = float(profAvailIn[0])+float(float(profAvailIn[1])/60)
-            FacAvailTimeOut = float(profAvailOut[0])+float(float(profAvailOut[1])/60)
-
-
-            
-            if float(AssignedTimeIn) < float(FacAvailTimeIn):
-                #Input Start Time To Early too Availability
-                validProf = False
-                break
-            elif float(AssignedTimeOut) > float(FacAvailTimeOut):
-                validProf = False
-                break
-            else:
-                validProf = True
             
             if dbDay == AssignedDay:
                 if AssignedTimeIn == dbTimeIn:
                     #Same Sched was assigned
                     validSched = False
+                    errorMessage = "Schedule Already Exist"
                     break
                 if AssignedTimeIn >= dbTimeOut: #Meaning Sched is Later than in the database
                     validSched = True
@@ -1574,6 +1567,7 @@ def add_faculty_schedule(request, sid, id):
                     else:
                         #Sched has overlap with Assignedtimeout and dbTimeIn
                         validSched = False
+                        errorMessage = "Schedule Overlap at " + str(dbSubject)
                         break
             else:
                 validSched = True
@@ -1582,20 +1576,17 @@ def add_faculty_schedule(request, sid, id):
                 fact.save()
                 validSched = False
                 validProf = False
-                messages.success(request, 'Schedule successfully added!')
+                messages.success(request, "Schedule successfully Added!")
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-                
-
 
         if validSched == True and validProf == True:
             fact.save()
             validSched = False
             validProf = False
-            messages.success(request, 'Schedule successfully added!')
+            messages.success(request, "Schedule successfully Added!")
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         else:
-            messages.error(request, 'Professors Time already taken.')
+            messages.error(request, 'Faculty Time Error: %s' % errorMessage)
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))        
     else:
         return redirect ('index')
@@ -2561,9 +2552,10 @@ def sClassroom(request):
 
 def sGradeSubmission1(request):
     if request.user.is_authenticated and request.user.is_student:
-        OrderFormSet = inlineformset_factory(StudentInfo, currchecklist, fields=('owner','curriculumCode', 'subjectGrades','yearTaken','semTaken'),widgets={'curriculumCode': forms.Select(attrs={"class": "form-control", "id":"instructorField"}), 'subjectGrades': forms.Select(attrs={"class": "form-control", "id":"instructorField"}),'yearTaken': forms.Select(attrs={"class": "form-control", "id":"instructorField"}), 'semTaken': forms.Select(attrs={"class": "form-control", "id":"instructorField"})}, extra =10, can_delete=False)
+        OrderFormSet = inlineformset_factory(StudentInfo, currchecklist, fields=('owner','curriculumCode', 'subjectGrades','yearTaken','semTaken'),widgets={'curriculumCode': forms.Select(attrs={"class": "form-control", "id":"instructorField"}), 'subjectGrades': forms.Select(attrs={"class": "form-control", "id":"instructorField", "required": True}),'yearTaken': forms.Select(attrs={"class": "form-control", "id":"instructorField"}), 'semTaken': forms.Select(attrs={"class": "form-control", "id":"instructorField"})}, max_num=1, can_delete=False)
         id= request.user.id
         info = StudentInfo.objects.get(studentUser=id)
+        subjects = currchecklist.objects.filter(owner=info)
         formset = OrderFormSet(queryset=currchecklist.objects.none(), instance=info)
         for form in formset:
             form.fields['curriculumCode'].queryset = curriculumInfo.objects.filter(curriculumyear=info.studentCurriculum).filter(departmentID=info.departmentID)
@@ -2575,7 +2567,7 @@ def sGradeSubmission1(request):
                 return redirect('sGradeSubmission1')
             else:
                 messages.error(request, "Submission Failed!")
-        context = {'formset': formset }
+        context = {'formset': formset, 'subjects':subjects}
         return render(request, './student/sClassroom/sGradeSubmission1.html', context) 
     else:
          return redirect('index')
@@ -3324,6 +3316,8 @@ def sendingemailHD(request, hd_id):
         email.attach_file(os.path.join(settings.MEDIA_ROOT,sends.studentGrades.name))
         email.attach_file(os.path.join(settings.MEDIA_ROOT,sends.stdParentsig.name))
         email.send()
+        messages.success(request,"Successfully sent!")
+
         return HttpResponseRedirect(reverse('cOthers-hdView', args=(hd_id,)))
     except PermissionError:
         return HttpResponse("invalid")
@@ -3690,6 +3684,7 @@ def sendingemailOJT(request, ojt_id):
         email.attach_file(os.path.join(settings.MEDIA_ROOT,sends.ojtMedcert.name))
         email.attach_file(os.path.join(settings.MEDIA_ROOT,sends.ojtCompanyId.name))
         email.send()
+        messages.success(request,"Successfully sent!")
         return HttpResponseRedirect(reverse('cOthers-ojtView', args=(ojt_id,)))
     except PermissionError:
         return HttpResponse("invalid")
@@ -4055,10 +4050,10 @@ def schedOnline(request):
 
 def schedOnline2(request,block_id):  
     id= request.user.id
-    acads = AcademicYearInfo.objects.last()
+    acads = AcademicYearInfo.objects.get(pk=1)
     info = FacultyInfo.objects.get(facultyUser=id)
     schedule = studentScheduling.objects.filter(realsection=block_id)
-    OrderFormSet = inlineformset_factory(BlockSection, studentScheduling, fields=('subjectCode','instructor', 'section','day','timeStart','timeEnd', 'room', 'type'),widgets={'subjectCode': forms.Select(attrs={"class": "form-control", "id":"instructorField", "required":True}), 'instructor': forms.Select(attrs={"class": "form-control", "id":"instructorField"}),'section': forms.NumberInput(attrs={"class": "form-control", "placeholder": "Section", "id":"instructorField", "required":True}),'day': forms.Select(attrs={"class": "form-control", "id":"remarks", "required":True}),'timeStart': forms.TimeInput(attrs={"class": "form-control", "placeholder": "%H:%M:%S", "id":"timeField", "required":True}),'timeEnd': forms.TimeInput(attrs={"class": "form-control","placeholder": "%H:%M:%S", "id":"timeField", "required":True}),'room': forms.TextInput(attrs={"class": "form-control", "placeholder": "Room", "id":"instructorField", "required":True}),'type': forms.Select(attrs={"class": "form-control", "id":"instructorField", "required":True})}, max_num=1, can_delete=False)
+    OrderFormSet = inlineformset_factory(BlockSection, studentScheduling, fields=('subjectCode','instructor', 'section','day','timeStart','timeEnd', 'room', 'type'),widgets={'subjectCode': forms.Select(attrs={"class": "form-control", "id":"instructorField"}), 'instructor': forms.Select(attrs={"class": "form-control", "id":"instructorField"}),'section': forms.NumberInput(attrs={"class": "form-control", "placeholder": "Section", "id":"instructorField"}),'day': forms.Select(attrs={"class": "form-control", "id":"remarks"}),'timeStart': forms.TimeInput(attrs={"class": "form-control", "placeholder": "%H:%M:%S", "id":"timeField"}),'timeEnd': forms.TimeInput(attrs={"class": "form-control","placeholder": "%H:%M:%S", "id":"timeField"}),'room': forms.TextInput(attrs={"class": "form-control", "placeholder": "Room", "id":"instructorField"}),'type': forms.Select(attrs={"class": "form-control", "id":"instructorField"})}, max_num=1, can_delete=False)
     block1 = BlockSection.objects.get(id=block_id)
     formset = OrderFormSet(queryset=studentScheduling.objects.none(), instance=block1)
     for form in formset:
@@ -4076,15 +4071,17 @@ def schedOnline2(request,block_id):
             tsinput = str(data.get('timeStart')).split(':')
             teinput = str(data.get('timeEnd')).split(':')
             if float(tsinput[0]) < 7:
-                messages.error(request, 'Time Start Input is Too Early, time input must not be less than 7:00')
+                messages.error(request, 'Time input must not be less than 7:00')
                 print("TIME ERROR EARLY MET")
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-            if (float(teinput[0])+(float(teinput[1])/60)) > 22:
-                messages.error(request, 'Time End Input is Too Late, Time must be no more than 22:00')
+            elif (float(teinput[0])+(float(teinput[1])/60)) > 22:
+                messages.error(request, 'Time input must be no more than 22:00')
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-            if float(tsinput[0]+tsinput[1])>=float(teinput[0]+teinput[1]):
+            elif float(tsinput[0]+tsinput[1])>=float(teinput[0]+teinput[1]):
                 messages.error(request, 'Time Start must not equal or be later than Time End')
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+            else:
+                pass
 
 
             if studentScheduling.objects.all().exists():
@@ -4197,8 +4194,42 @@ def schedOnline2(request,block_id):
                                         faculty_Schedule = studentScheduling.objects.all()
                                         for DATA in formset:
                                             inputtedData = DATA.cleaned_data
-                                        
                                         validProf = False
+
+                                        #This Code is for Faculty Availability Checking
+
+                                        try:
+                                            profInfo = FacultyInfo.objects.get(facultyUser = inputtedData.instructor)  
+                                            profAvailIn = str(profInfo.facultyIn).split(':')
+                                            profAvailOut = str(profInfo.facultyOut).split(':')
+                                            FacAvailTimeIn = float(profAvailIn[0])+float(float(profAvailIn[1])/60)
+                                            FacAvailTimeOut = float(profAvailOut[0])+float(float(profAvailOut[1])/60)
+
+                                            print("IN Get:",inTimeSubj,"Avail:", FacAvailTimeIn)
+                                            print("Out Get:",outTimeSubj,"Avail:", FacAvailTimeOut)
+                                            
+                                            testTimeInput = (str(inputtedData.timeStart)).split(":")  
+                                            testTimeOutput = (str(inputtedData.timeEnd)).split(":")
+
+                                            TimeTestIn = float(testTimeInput[0])+float(float(testTimeInput[1])/60) 
+                                            TimeTestOut = float(testTimeOutput[0])+float(float(testTimeOutput[1])/60)  
+
+
+                                            if float(TimeTestIn) < float(FacAvailTimeIn):
+                                                #Input Start Time To Early too Availability
+                                                validProf = False
+                                                errorMessage = "Faculty Time In: " + profAvailIn[0] +":" + profAvailIn[1]+", too early"
+                                            elif float(TimeTestOut) > float(FacAvailTimeOut):
+                                                validProf = False
+                                                errorMessage = "Faculty Time Out" + profAvailOut[0] +":" + profAvailOut[1]+ ", too late"
+                                            else:
+                                                validProf = True
+                                        except:
+                                            validProf = True
+
+
+                                        #This Code is for Assigned Sched Prof in database if there are  overlaps 
+
                                         for databaseInfo in faculty_Schedule:
                                             dbSubject = databaseInfo.subjectCode
                                             dbSection = databaseInfo.section
@@ -4222,51 +4253,37 @@ def schedOnline2(request,block_id):
                                             inputEndTime = float(list_of_timeEnded[0])+float(float(list_of_timeEnded[1])/60)
 
                                             prof_assigned = inputtedData.get('instructor')
-                                            try:
-                                                profInfo = FacultyInfo.objects.get(facultyUser = prof_assigned)
-                                                print(profInfo)
-                                                AvailIn = str(profInfo.facultyIn)
-                                                print (AvailIn)
-                                                profAvailIn = AvailIn.split(':')
-                                                profAvailOut = str(profInfo.facultyOut).split(':')
-                                                FacAvailTimeIn = float(profAvailIn[0])+float(float(profAvailIn[1])/60)
-                                                FacAvailTimeOut = float(profAvailOut[0])+float(float(profAvailOut[1])/60)
-                                                if  float(inputStartTime) < float(FacAvailTimeIn):
-                                                    #Input Start Time To Early too Availability
-                                                    validProf = False
-                                                    break
-                                                elif float(inputEndTime) > float(FacAvailTimeOut):
-                                                    validProf = False
-                                                    break
-                                                else:
-                                                    #If Time Availibility Test Passes
-                                                    if prof_assigned == dbProf:
-                                                        print(validProf)
-                                                        if dbDay == inputtedData.get('day'):
-                                                            if inputStartTime == dbStartTime:
-                                                                #Same Day and Start Time Sched
+                                            if prof_assigned == dbProf:
+                                                print(validProf)
+                                                if dbDay == inputtedData.get('day'):
+                                                    if inputStartTime == dbStartTime:
+                                                        #Same Day and Start Time Sched
+                                                        subjCode = str(dbSubject).split("|")
+                                                        print(subjCode)
+                                                        errorMessage = subjCode[2] + " in " + str(i.realsection) + " Same Start Time"
+                                                        validProf = False
+                                                        break
+                                                    else:
+                                                        if inputStartTime >= dbEndTime:
+                                                            #After the Given Schedule
+                                                            validProf = True
+                                                        else:
+                                                            #Start time earlier than stored end time
+                                                            if inputEndTime <= dbStartTime:
+                                                                # Sched is Confirmed Earlier than given sched
+                                                                validProf = True
+                                                            else:
+                                                                # End time overlap with start time
+                                                                subjCode = str(dbSubject).split("|")
+                                                                print(subjCode)
+                                                                errorMessage = subjCode[2] + " in " + str(databaseInfo.realsection) + " Time Overlap"
                                                                 validProf = False
                                                                 break
-                                                            else:
-                                                                if inputStartTime >= dbEndTime:
-                                                                    #After the Given Schedule
-                                                                    validProf = True
-                                                                else:
-                                                                    #Start time earlier than stored end time
-                                                                    if inputEndTime <= dbStartTime:
-                                                                        # Sched is Confirmed Earlier than given sched
-                                                                        validProf = True
-                                                                    else:
-                                                                        # End time overlap with start time
-                                                                        validProf = False
-                                                                        break
-                                                        else:
-                                                            validProf = True
-                                                    else:
-                                                        validProf = True       
-                                            except:
-                                                validProf = True
-
+                                                else:
+                                                    validProf = True
+                                            else:
+                                                validProf = True       
+                                            
                                         print("dbProf:", dbProf," prof_assigned:",prof_assigned)
                                         print("inputValue:",inputStartTime,"-",inputEndTime)
                                         print("testValue:", dbStartTime,"-",dbEndTime)
@@ -4293,13 +4310,11 @@ def schedOnline2(request,block_id):
 
                                                 if inputtedData.get('day') == roomDay:
                                                     #CODE FOR TIME BLOCKING
-                                                    print("Test:",i.room,"-", i.subjectCode,"time:",roomStart,"-",roomEnd)
-                                                    print("Input",roomVacancy,"-",data.get('subjectCode'),"time:",inputStartTime,"-",inputEndTime)
                                                     if inputStartTime == roomStartTime:
                                                         #Sched in room Already Existed
                                                         subjCode = str(i.subjectCode).split("|")
                                                         print(subjCode)
-                                                        errorMessage = subjCode[2] +" Section:"+str(i.section)+ "|" +roomDay+"|"+roomStart+"-"+roomEnd
+                                                        errorMessage = subjCode[2] +" in " + str(i.realsection) + " Same Start Time"
                                                         validRoom = False
                                                         
                                                         break
@@ -4315,10 +4330,9 @@ def schedOnline2(request,block_id):
                                                                 validRoom = True
                                                             else:
                                                                 #Input Sched Conflict in DB Sched
-                                                                validRoom = False
                                                                 subjCode = str(i.subjectCode).split("|")
                                                                 print(subjCode)
-                                                                errorMessage = subjCode[2] +" Section:"+str(i.section)+ "|" +roomDay+"|"+roomStart+"-"+roomEnd
+                                                                errorMessage = subjCode[2] +" in " +str( i.realsection) + " Time Conflct"
                                                                 validRoom = False
                                                                 break 
                                                 else:
@@ -4335,15 +4349,14 @@ def schedOnline2(request,block_id):
                                                 formset.save()
                                                 validProf = False
                                                 validRoom = False
-                                                messages.success(request, 'Schedule successfully Added!')
+                                                messages.success(request, "Schedule successfully Added!")
                                                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
                                             else:
-                                                messages.error(request, 'Room Time already taken in %s' % errorMessage)
+                                                messages.error(request, 'Room and Time error: %s' % errorMessage)
                                                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
                                         else:
-                                            messageBlockingSched = str(dbSubject) +" section:"+ str(dbSection) + "|"+str(dbDay)+"|"+str(dbTimeIn)+"-"+str(dbTimeOut)
-                                            messages.error(request, 'Professors Time already taken in %s' % messageBlockingSched)
+                                            messages.error(request, 'Faculty Time Error: %s' %errorMessage)
                                             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
                                     else:
@@ -4365,6 +4378,38 @@ def schedOnline2(request,block_id):
                     for DATA in formset:
                         inputtedData = DATA.cleaned_data
                     validProf = False
+
+                    #This Code is for Faculty Availability Checking
+
+                    try:
+                        profInfo = FacultyInfo.objects.get(facultyUser = inputtedData.instructor)  
+                        profAvailIn = str(profInfo.facultyIn).split(':')
+                        profAvailOut = str(profInfo.facultyOut).split(':')
+                        FacAvailTimeIn = float(profAvailIn[0])+float(float(profAvailIn[1])/60)
+                        FacAvailTimeOut = float(profAvailOut[0])+float(float(profAvailOut[1])/60)
+
+                        print("IN Get:",inTimeSubj,"Avail:", FacAvailTimeIn)
+                        print("Out Get:",outTimeSubj,"Avail:", FacAvailTimeOut)
+                        
+                        testTimeInput = (str(inputtedData.timeStart)).split(":")  
+                        testTimeOutput = (str(inputtedData.timeEnd)).split(":")
+
+                        TimeTestIn = float(testTimeInput[0])+float(float(testTimeInput[1])/60) 
+                        TimeTestOut = float(testTimeOutput[0])+float(float(testTimeOutput[1])/60)  
+
+
+                        if float(TimeTestIn) < float(FacAvailTimeIn):
+                            #Input Start Time To Early too Availability
+                            validProf = False
+                            errorMessage = "Faculty Time In: " + profAvailIn[0] +":" + profAvailIn[1]+", too early"
+                        elif float(TimeTestOut) > float(FacAvailTimeOut):
+                            validProf = False
+                            errorMessage = "Faculty Time Out" + profAvailOut[0] +":" + profAvailOut[1]+ ", too late"
+                        else:
+                            validProf = True
+                    except:
+                        validProf = True
+
                     for databaseInfo in faculty_Schedule:
                         dbSubject = databaseInfo.subjectCode
                         dbSection = databaseInfo.section
@@ -4388,59 +4433,46 @@ def schedOnline2(request,block_id):
                         inputEndTime = float(list_of_timeEnded[0])+float(float(list_of_timeEnded[1])/60)
                         prof_assigned = inputtedData.get('instructor')
                         print(prof_assigned)
-                        try:
-                            profInfo = FacultyInfo.objects.get(facultyUser = prof_assigned)
-                            print(profInfo)
-                            AvailIn = str(profInfo.facultyIn)
-                            print (AvailIn)
-                            profAvailIn = AvailIn.split(':')
-                            profAvailOut = str(profInfo.facultyOut).split(':')
-                            FacAvailTimeIn = float(profAvailIn[0])+float(float(profAvailIn[1])/60)
-                            FacAvailTimeOut = float(profAvailOut[0])+float(float(profAvailOut[1])/60)
-
-                            if  float(inputStartTime) < float(FacAvailTimeIn):
-                                #Input Start Time To Early too Availability
-                                validProf = False
-                                break
-                            elif float(inputEndTime) > float(FacAvailTimeOut):
-                                validProf = False
-                                break
-                            else:
-                                #If Time Availibility Test Passes
-                                if prof_assigned == dbProf:
-                                    print(validProf)
-                                    if dbDay == inputtedData.get('day'):
-                                        if inputStartTime == dbStartTime:
-                                            #Same Day and Start Time Sched
-                                            validProf = False
-                                            break
-                                        else:
-                                            if inputStartTime >= dbEndTime:
-                                                #After the Given Schedule
-                                                validProf = True
-                                            else:
-                                                #Start time earlier than stored end time
-                                                if inputEndTime <= dbStartTime:
-                                                    # Sched is Confirmed Earlier than given sched
-                                                    validProf = True
-                                                else:
-                                                    # End time overlap with start time
-                                                    validProf = False
-                                                    break
-                                    else:
-                                        validProf = True
+                        #If Time Availibility Test Passes
+                        if prof_assigned == dbProf:
+                            print(validProf)
+                            if dbDay == inputtedData.get('day'):
+                                if inputStartTime == dbStartTime:
+                                    #Same Day and Start Time Sched
+                                    subjCode = str(dbSubject).split("|")
+                                    print(subjCode)
+                                    errorMessage = subjCode[2] + " in " + str(databaseInfo.realsection) + " Time Overlap"
+                                    validProf = False
+                                    break
                                 else:
-                                    validProf = True
-                        except:
-                            validProf = True       
+                                    if inputStartTime >= dbEndTime:
+                                        validProf = True
+                                    else:
+                                        #Start time earlier than stored end time
+                                        if inputEndTime <= dbStartTime:
+                                            # Sched is Confirmed Earlier than given sched
+                                            validProf = True
+                                        else:
+                                            # End time overlap with start time
+                                            validProf = False
+                                            subjCode = str(dbSubject).split("|")
+                                            print(subjCode)
+                                            errorMessage = subjCode[2] + " in " + str(databaseInfo.realsection) + " Time Overlap"
+                                            break
+                            else:
+                                validProf = True
+                        else:
+                            validProf = True
+                               
 
                     print("dbProf:", dbProf," prof_assigned:",prof_assigned)
                     print("inputValue:",inputStartTime,"-",inputEndTime)
                     print("testValue:", dbStartTime,"-",dbEndTime)
-                    print(validProf,"flag:", flag,"flag3:", flag3)
+                
                     if inputtedData.get('instructor') is None:
                         print("IT GOES HERE")
                         validProf = True
+
                     roomVacancy = data.get('room')
                     roomDB = studentScheduling.objects.filter(room = roomVacancy)
                     validRoom = True
@@ -4455,14 +4487,12 @@ def schedOnline2(request,block_id):
                             roomEndTime = float(roomEndList[0])+float(float(roomEndList[1])/60)
 
                             if inputtedData.get('day') == roomDay:
-                                print("Test:",i.room,"-", i.subjectCode,"time:",roomStart,"-",roomEnd)
-                                print("Input",roomVacancy,"-",data.get('subjectCode'),"time:",inputStartTime,"-",inputEndTime)
                                 #CODE FOR TIME BLOCKING
                                 if inputStartTime == roomStartTime:
                                     #Sched in room Already Existed
                                         subjCode = str(i.subjectCode).split("|")
                                         print(subjCode)
-                                        errorMessage = subjCode[2] +" Section:"+str(i.section)+ "|" +roomDay+"|"+roomStart+"-"+roomEnd
+                                        errorMessage = subjCode[2] +" in "+str( i.realsection)+ " Same Start Time"
                                         validRoom = False
                                         break
                                 else:
@@ -4480,7 +4510,7 @@ def schedOnline2(request,block_id):
                                             validRoom = False
                                             subjCode = str(i.subjectCode).split("|")
                                             print(subjCode)
-                                            errorMessage = subjCode[2] +" Section:"+str(i.section)+ "|" +roomDay+"|"+roomStart+"-"+roomEnd
+                                            errorMessage = subjCode[2] + " in " + str(i.realsection) + " Time Overlap" 
                                             break 
                             else:
                                 #No Day Exist in the room 
@@ -4496,19 +4526,18 @@ def schedOnline2(request,block_id):
                             formset.save()
                             validProf = False
                             validRoom = False
-                            messages.success(request, 'Schedule successfully Added!')
+                            messages.success(request, "Schedule successfully Added!")
                             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
                         else:
-                            messages.error(request, 'Room Time already taken in %s' % errorMessage)
+                            messages.error(request, 'Room Time error: %s' % errorMessage)
                             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
                     else:
-                        messageBlockingSched = str(dbSubject) +" section:"+ str(dbSection) + "|"+str(dbDay)+"|"+str(dbTimeIn)+"-"+str(dbTimeOut)
-                        messages.error(request, 'Professors Time already taken in %s' % messageBlockingSched)
+                        messages.error(request, 'Faculty Time Error: %s' % errorMessage)
                         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
             else:
                 formset.save()
-                messages.success(request, 'Schedule successfully Added!')
+                messages.success(request, "Schedule successfully Added!")
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         else:
             messages.error(request, 'There is an error upon adding!')
@@ -4825,6 +4854,7 @@ def sendmailfile(request, faculty_id):
     email.attach_file(os.path.join(settings.MEDIA_ROOT, sends.TOR.name))
 
     email.send()
+    messages.success(request,"Successfully sent!")
     return HttpResponseRedirect(reverse('faculty_view', args=(faculty_id)))
 
 #TRANSFEREE APPLICANT

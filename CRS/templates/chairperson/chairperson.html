@@ -30,6 +30,10 @@
             margin-left: -90px;
         }
 
+        .yellow-box{
+            background-color: white;
+        }
+
 
 
     </style>
@@ -130,13 +134,13 @@
                             {% for acads in acad %}
                             <div class="hordet row">
                                 <div class="text col"><b>Academic Year:</b></div>
-                                <div class="field col">
+                                <div class="field col" style="background-color: #f1f1f1;">
                                     {{acads.yearstarted}}-{{acads.yearended}}
                                 </div>
                             </div>
                             <div class="hordet row">
                                 <div class="text col"><b>Semester:</b></div>
-                                <div class="field col">
+                                <div class="field col" style="background-color: #f1f1f1;">
                                     {{acads.semester}}
                                 </div>
                             </div>
@@ -149,7 +153,7 @@
                             <div class="colwhite col-lg-4">
                                 <div class="white-box row">
                                     <div class="col-lg">
-                                        <h5 id="cardnumber">{{counts}}</h5><!-- DB PUT STUDENT COUNT HERE -->
+                                        <h5 id="cardnumber" style="color: #0C66CC;">{{counts}}</h5><!-- DB PUT STUDENT COUNT HERE -->
                                         <p id="cardtext"> Students </p>
                                     </div>
                                 </div>
@@ -158,7 +162,7 @@
                             <div class="colwhite col-lg-4">
                                 <div class="white-box row">
                                     <div class="col-lg">
-                                        <h5 id="cardnumber">{{countf}}</h5><!-- DB PUT FACULTY COUNT HERE -->
+                                        <h5 id="cardnumber" style="color: #0C66CC;">{{countf}}</h5><!-- DB PUT FACULTY COUNT HERE -->
                                         <p id="cardtext"> Faculty </p>
                                     </div>
                                 </div>
@@ -167,7 +171,7 @@
                             <div class="colwhite col-lg-4">
                                 <div class="white-box row">
                                     <div class="col-lg">
-                                        <h5 id="cardnumber">{{countsub}}</h5><!-- DB PUT SUBJECT COUNT HERE -->
+                                        <h5 id="cardnumber" style="color: #0C66CC;">{{countsub}}</h5><!-- DB PUT SUBJECT COUNT HERE -->
                                         <p id="cardtext"> Subjects </p>
                                     </div>
                                 </div>

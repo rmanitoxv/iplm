@@ -591,7 +591,7 @@ class loaClearanceForm(models.Model):
 # LOA FORM
 class loaForm(models.Model):
     studentID = models.ForeignKey(StudentInfo, null=True, verbose_name='Student', on_delete=CASCADE)
-    genave = models.CharField(max_length=100, verbose_name="GWA", null=True)
+    genave = models.DecimalField(decimal_places=2, max_digits=3, verbose_name="GWA", null=True)
     sem = models.CharField(max_length=100, verbose_name="Effective From Sem", null=True)
     sy = models.CharField(max_length=100, verbose_name="Effective From Sy", null=True)
     sem2 = models.CharField(max_length=100, verbose_name="Effective Until Sem", null=True)

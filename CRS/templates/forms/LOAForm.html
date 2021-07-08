@@ -3,217 +3,226 @@
 <html>
 <head>
 	<title>Leave of Absence Form</title>
-		<meta charset="utf-8">
-	  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	  <!-- Bootstrap CSS -->
-	  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
-
 </head>
 <style>
-.header{
-		text-align: center;
-		margin-left: 20px;
-		align-content: center;
-		 }
-
-
-#logo{
-        position:absolute;
-		left:430px;
-		top:20px;
+@page{
+		size: 8.31in 11.7in;
+		margin: 15mm 20mm 10mm 20mm;
 }
-
-body{
-	font-size: 12px;
+body {
+  font-size: 130%;
 }
-
-
 </style>
 <body>
-	<div class="container">
-		<div>
-	<table align="center"  class="header" width=99%>
-		<tr>
-			<td style="margin-left: 30px;"><img src="C:\Users\Vea\Desktop\iPLM-master\CRS\static\CRS\images\plm.png" id="logo" height="80px" width="80px"> </td>
-			<td style="margin-left: -340px;"> 
-				<p class="text-center my-0 py-0"> Republic of the Philippines <br>
+
+<table align=center width="700">
+	<tr>
+		<td width="190" align=right><img src="https://plm.edu.ph/images/Seal/PLM_Seal_BOR-approved_2014.png" height="80" width="80"></td>
+		<td width="320" align=center><p> Republic of the Philippines <br>
 				<b>PAMANTASAN NG LUNGSOD NG MAYNILA</b> <br>
 				<i>(University of the City of Manila)</i><br>
 				General Luna Street corner Muralla Street<br>
-				Intramuros, Manila </p>
-			</td>
-		</tr>
-		
-		<tr>
-			<td colspan=2 align="center"> <br><br><h1 class="text-center mx-auto"><b>LEAVE OF ABSENCE FORM</b> </p><br><br> </td>
-			
-		</tr>
+				Intramuros, Manila </p></td>
+		<td width="190"></td>
+	</tr>
+	<tr>
+		<td colspan=3 align=center><br><strong>LEAVE OF ABSENCE FORM</strong><br></td>
+	</tr>
+</table>
 
-	</table>
-	<hr style="margin-top: -100px;">
-</div>
-	<div class="mx-auto ml-5">
-<table  class="fillup">
-	<tr>
-		<td colspan=1> <p class="ml-5 my-0 py-0"> Date of Filing: </p> </td>
-		<td colspan=1> <p class="ml-3 my-0 py-0"> <u><b>{{dof}}</b></u> </p></td>
-		<td colspan=2 width=50%>
-		</td>
-		
-	</tr>
-	<tr></tr>
-	<tr>
-		<td> <p class="ml-5 my-0 py-0"> Student No.:</p> </td>
-		<td> <p class="ml-3 my-0 py-0"><u><b>{{info.studentID}}</b></u> </p></td>
-		<td></td>
-		<td> <p class="ml-5 pl-4 my-0 py-0">College:</p> </td>
-		<td> <p class="ml-3 my-0 py-0"><u><b>{{info.collegeID}}</b></u></p></td>
-	</tr>
-	
-	<tr>
-		<td><p class="ml-5 my-0 py-0"> Student Name:	</p>	</td>
-		<td><p class="ml-3 my-0 py-0"> <u><b>{{info.studentUser.firstName}} {{info.studentUser.middleName}} {{info.studentUser.lastName}}</b></u></p> </td>
-		<td></td>
-		<td><p class="ml-5 pl-4 my-0 py-0"> Course: </p> </td>
-		<td> <p class="ml-3 my-0 py-0"><u><b>{{info.studentCourse}}</b></u> </p></td>
-	</tr>
 
+<table align=center width="700">
 	<tr>
-		<td><p class="ml-5 my-0 py-0"> Student Type.: </p> </td>
-		<td> <p class="ml-3 my-0 py-0"><u><b>{{info.studentType}}</b></u> </p> </td>
-		<td></td>
-		<td> <p class="ml-5 pl-4 my-0 py-0"> Year Level:</p> </td>
-		<td> <p class="ml-3 my-0 py-0"><u><b>{{info.studentYearlevel}}</b></u> </p></td>
+		<td width="120" align=right><p>Date of Filing:</p></td>
+		<td width="110"><p>&nbsp;<u><b>{{dof}}</b></u></p></td>
+		<td colspan=2></td>
 	</tr>
+	<tr>
+		<td width="120" align=right><p>Student No.:</p></td>
+		<td width="300"><p><b>&nbsp;<u>{{info.studentID}}</u></b></p></td>
+		<td width="90" align=right><p>College:</p></td>
+		<td width="190"><p><b>&nbsp;<u>{{info.collegeID}}</u></b></p></td>
+	</tr>
+	<tr>
+		<td width="120" align=right><p>Student Name:</p></td>
+		<td width="300"><p><b>&nbsp;<u>{{info.studentUser.firstName}} {{info.studentUser.middleName}} {{info.studentUser.lastName}}</u></b></p></td>
+		<td width="90" align=right><p>Course:</p></td>
+		<td width="190"><p><b>&nbsp;<u>{{info.studentCourse}}</u></b></p></td>
+	</tr>
+	<tr>
+		<td width="120" align=right><p>Student Type:</p></td>
+		<td width="300"><p><b>&nbsp;<u>{{info.studentType}}</u></b></p></td>
+		<td width="90" align=right><p>Year Level:</p></td>
+		<td width="190"><p><b>&nbsp;<u>{{info.studentYearlevel}}</u></b></p></td>
+	</tr>
+	<tr>
+		<td width="120" align=right><p>Academic Status:</p></td>
+		<td width="300"><p><b>&nbsp;<u>{{info.studentRegStatus}}</u></b></p></td>
+		<td width="90" align=right><p>GWA:</p></td>
+		<td width="190"><p><b>&nbsp;<u>{{genave}}</u></b></p></td>
+	</tr>
+</table>
 
-	<tr>
-		<td> <p class="ml-5 my-0 py-0">Academic Status: </p> </td>
-		<td> <p class="ml-3 my-0 py-0"><u><b>{{info.studentRegStatus}}</b></u> </p></td>
-		<td></td>
-		<td> <p class="ml-5 pl-4 my-0 py-0">GWA: </p>	</td>
-		<td> <p class="ml-3 my-0 py-0"><u><b>{{genave}}</b></u> </p></td>
-		<td></td>
-	</tr>
-</table> </div>
+<hr color="#F8F8F8">
 
-<div>
-<hr>
-<table align="center" width=100%>
+<table align=center width="800">
 	<tr>
-		<td><p class="ml-4 my-0 py-0"> Effective From:</p> </td>
-		<td></td>
-		<td> <p class="ml-0 my-0 py-0"><br> Sem/Term, SY: </p> </td>
-		<td><p class="ml-4 my-0 py-0"><br> <u><b>{{sem}},{{sy}}</b></u></p> </td>
-		
-		<!-- PLEASE CHECK HERE KASI IDK KUNG ANO GAGAWIN NIYO DITO TO SOLID THE COLOR OF THE BOX DAHIL SA REQUIREMENTS-->
-		<td rowspan=3><br>
-		<b>Please Attached the Following:</b> <br>
-		[&nbsp;&nbsp;] Letter of Request for LOA <br>
-		[&nbsp;&nbsp;] Clerance from Registrar  <br>
-		[&nbsp;&nbsp;] Note of Undertaking <i>(if applicable)</i> <br>
-		[&nbsp;&nbsp;] Student's Checklist & Study Plan
-		</td>
+		<td width="120" align=right><p>Effective From:</p></td>
+		<td width="115" align=center><p><b>&nbsp;<u>{{sem}}</u></b></p></td>
+		<td width="120" align=right><p>Sem/Term, SY:</p></td>
+		<td width="115"><p><b>&nbsp;<u>{{sy}}</u></b></p></td>
+		<td width="330" align=center><p><b>Please Attached the Following:</b></p></td>
 	</tr>
-	
 	<tr>
-		<td> <p class="ml-5 my-0 py-0"> Effective Until: </p> </td>
-		<td></td>
-		<td> <p class="ml-0 my-0 py-0"><br> Sem/Term, SY:</p> </td>
-		<td> <p class="ml-3 my-0 py-0"><br><u><b>{{sem2}},{{sy2}}</b></u></p> </td>
+		<td width="120" align=right><p>Until:</p></td>
+		<td width="115" align=center><p><b>&nbsp;<u>{{sem2}}</u></b></p></td>
+		<td width="120" align=right><p>Sem/Term, SY:</p></td>
+		<td width="115"><p><b>&nbsp;<u>{{sy2}}</u></b></p></td>
+		<td width="330"><p>[&nbsp;&nbsp;] Letter of Request for LOA</p></td>
 	</tr>
-
 	<tr>
-		<td><p class="ml-5 my-0 py-0"> Reason:</p> </td>
-		<td colspan=3> <p ><u><b>{{reason}}</b></u> </p></td>
+		<td width="470" colspan=4></td>
+		<td width="330"><p>[&nbsp;&nbsp;] Clearance from Registrar</p></td>
+	</tr>
+	<tr>
+		<td width="120" align=right><p>Reason:</p></td>
+		<td width="340" colspan=3><p><b>&nbsp;<u>{{reason}}</u></b></p></td>
+		<td width="330">[&nbsp;&nbsp;] Note of Undertaking <i>(in applicable)</i><br>
+						[&nbsp;&nbsp;] Student's Checklist & Study Plan</td>
+	</tr>
 </table>
 
 <!--end-->
-</div>
 
-<br><br>
-<table align="center" width=100%>
+<table align=center width="800">
 	<tr>
-		<td align="center">
-			<b></b> <br>
-			<u><b>{{info.studentUser.firstName}} {{info.studentUser.middleName}} {{info.studentUser.lastName}}</u></b> <br>
-			Student's Signature over printed name
-		</td>
-		
-		<td align="center">
-			<b></b><br>
-			<u><b>{{info.studentUser.firstName}} {{info.studentUser.middleName}} {{info.studentUser.lastName}}</u></b><br>
-			Student's Signature over printed name
-		</td>
+		<td width="50"></td>
+		<td width="300" align=center><br><br><b>{{info.studentUser.firstName}} {{info.studentUser.middleName}} {{info.studentUser.lastName}}</b></td>
+		<td width="50"></td>
+		<td width="50"></td>
+		<td width="300" align=center><br><br><b></b></td>
+		<td width="50"></td>
+	</tr>
+	<tr>
+		<td width="50"></td>
+		<td width="300" align=center style="border-top: 1px solid black;"><i>Student's Signature over printed name</i></td>
+		<td width="50"></td>
+		<td width="50"></td>
+		<td width="300" align=center style="border-top: 1px solid black;"><i>Parent's Signature over printed name</i></td>
+		<td width="50"></td>
 	</tr>
 </table>
-<br>
-<table border=1 align="center" width=99%>
-	<!-- number 1-->
+
+<table height=20><tr><td></td></tr></table>
+
+<table align=center width="800">
+	<tr><td style="border:1px solid black;">
+		<table>
+			<tr>
+				<td align=left colspan=6 style="padding-top: 2px;padding-left: 2px;">1. Endorsed by:</td>
+			</tr>
+			<tr>
+				<td width="100"></td>
+				<td align=center width="250" style="border-bottom: 1px solid black;padding-bottom: -1px;"><br><br><b>{{info.departmentID.chairperson.cpersonUser.firstName}} {{info.departmentID.chairperson.cpersonUser.middleName}} {{info.departmentID.chairperson.cpersonUser.lastName}}</b></td>
+				<td width="100"></td>
+				<td width="100"></td>
+				<td align=center width="150"><br><br><b>{{dof}}</b></td>
+				<td width="100"></td>
+			</tr>
+			<tr>
+				<td width="100"></td>
+				<td align=center width="250">Department Chair</td>
+				<td width="100"></td>
+				<td width="100"></td>
+				<td align=center width="150" style="border-top: 1px solid black;">Date</td>
+				<td width="100"></td>
+			</tr>
+		</table>
+	</td></tr>
+	<tr><td style="border:1px solid black;">
+		<table>
+			<tr>
+				<td align=left colspan=6 style="padding-top: 2px;padding-left: 2px;">2. Recommending Approval:</td>
+			</tr>
+			<tr>
+				<td width="100"></td>
+				<td align=center width="250"><br><br><b></b></td>
+				<td width="100"></td>
+				<td width="100"></td>
+				<td align=center width="150"><br><br><b>{{dof}}</b></td>
+				<td width="100"></td>
+			</tr>
+			<tr>
+				<td width="100"></td>
+				<td align=center width="250" style="border-top: 1px solid black;">College Dean</td>
+				<td width="100"></td>
+				<td width="100"></td>
+				<td align=center width="150" style="border-top: 1px solid black;">Date</td>
+				<td width="100"></td>
+			</tr>
+		</table>
+	</td></tr>
+	<tr><td style="border:1px solid black;">
+		<table>
+			<tr>
+				<td align=left colspan=6 style="padding-top: 2px;padding-left: 2px;">3. Recommending Approval:</td>
+			</tr>
+			<tr>
+				<td width="100"></td>
+				<td align=center width="250"><br><br><b></b></td>
+				<td width="100"></td>
+				<td width="100"></td>
+				<td align=center width="150"><br><br><b>{{dof}}</b></td>
+				<td width="100"></td>
+			</tr>
+			<tr>
+				<td width="100"></td>
+				<td align=center width="250" style="border-top: 1px solid black;">University Registrar</td>
+				<td width="100"></td>
+				<td width="100"></td>
+				<td align=center width="150" style="border-top: 1px solid black;">Date</td>
+				<td width="100"></td>
+			</tr>
+		</table>
+	</td></tr>
+	<tr><td style="border:1px solid black;">
+		<table>
+			<tr>
+				<td align=left colspan=6 style="padding-top: 2px;padding-left: 2px;">4. Approved/Disaaproved:</td>
+			</tr>
+			<tr>
+				<td width="100"></td>
+				<td align=center width="250"><br><br><b></b></td>
+				<td width="100"></td>
+				<td width="100"></td>
+				<td align=center width="150"><br><br><b>{{dof}}</b></td>
+				<td width="100"></td>
+			</tr>
+			<tr>
+				<td width="90"></td>
+				<td align=center width="270" style="border-top: 1px solid black;">Vice President of Academic Affairs</td>
+				<td width="90"></td>
+				<td width="100"></td>
+				<td align=center width="150" style="border-top: 1px solid black;">Date</td>
+				<td width="100"></td>
+			</tr>
+		</table>
+	</td></tr>
 	<tr>
-		<td>
-			<table align="center" width=100%>
-			<tr><td colspan=2> 1. Endorsed by:	</td> </tr>
-			<tr> <td colspan=1 align="center" width=70%> <u><b>{{info.departmentID.chairperson.cpersonUser.firstName}} {{info.departmentID.chairperson.cpersonUser.middleName}} {{info.departmentID.chairperson.cpersonUser.lastName}}</b></u>
-				<br> Department Chair </td>
-				<td colspan=1 align="center"> <u><b>{{dof}}</b></u> 
-				<br> Date </td>	</table>
-		</td>
-	</tr>
-	<!-- number 2-->
-	<tr>
-		<td>
-			<table  align="center" width=100%>
-				<tr> <td colspan=2>	2. Recommending Approval: </td> </tr>	
-				<tr> <td colspan=1 align="center" width=70%> <u><b></b></u> <br> College Dean </td>
-			    <td colspan=1 align="center"> <u><b>{{dof}}</b></u>
-				<br> Date </td>					
-			</table>
-		</td>
-	</tr>
-	<!-- number 3-->
-	<tr>
-		<td>
-			<table align="center" width=100%>
-				<tr> <td colspan=2>	3. Recommending Approval: </td> </tr>
-				
-				<tr> <td colspan=1 align="center" width=70%> <u><b></b></u>
-						<br> University Registrar </td>
-					
-					<td colspan=1 align="center"> <u><b>{{dof}}</b></u>
-						<br> Date	</td>					
-			</table>
-		</td>
-	</tr>	
-	<!-- number 4-->
-	<tr>
-		<td>
-			<table align="center" width=100%>
-				<tr> <td colspan=2>	4. Approved/Disaaproved:</td> </tr>
-				<tr> <td colspan=1 align="center" width=70%> <u><b></b></u>
-				<br> Vice President of Academic Affairs </td>
-					
-				<td colspan=1 align="center">  <u><b></b></u>
-				<br> Date	</td>					
-			</table>
+		<td style="padding-top: 2px; font-size:0.8em;">
+			PAO 13 S. 2014
 		</td>
 	</tr>
 </table>
 <!--end of table-->
+<br>
 
-<p class="ml-5 my-0 py-0">PAO 13 S. 2014 </p>
-
-<table align="center" width=100%>
-	<tr> <td><p class="ml-5 my-0 py-0"> Signed:<br></p></td> </tr>
-	
-	<tr> <td><p class="ml-5 my-0 py-0"> <b>({{info.departmentID.chairperson.cpersonUser.firstName}} {{info.departmentID.chairperson.cpersonUser.middleName}} {{info.departmentID.chairperson.cpersonUser.lastName}}</b></p> </td> </tr>
-	<tr> <td><p class="ml-5 my-0 py-0"> Chairperson, {{info.departmentID}}</p> </td></tr>
+<table align="center" width="800">
+	<tr><td align=left><p>Signed:<br><br></p></td></tr>
+	<tr><td align=left><p><b>{{info.departmentID.chairperson.cpersonUser.firstName}} {{info.departmentID.chairperson.cpersonUser.middleName}} {{info.departmentID.chairperson.cpersonUser.lastName}}</b></p> </td> </tr>
+	<tr><td align=left><p>Chairperson, {{info.departmentID}}</p> </td></tr>
 </table>
 
-</div>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 </body>
 </html>
