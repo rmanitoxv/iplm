@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'sz68q!bdy_(f^!q%azzlt-s)r0_qb7e@jbh)7=68u!z*(i5+^n'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["iplm-site.herokuapp.com"]
 
