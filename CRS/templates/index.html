@@ -46,7 +46,7 @@
       background: white;
       width: 400px;
       height: 200px;
-      box-shadow: 0 0 10px rgb(83, 83, 83);
+      box-shadow: 0 0 10px rgb(5, 47, 110);
     }
 
     #welcometext
@@ -184,23 +184,10 @@
 	animation: bobble 2.5s ease infinite !important;
 }
 
-.about{
-  text-decoration: none;
-  color: #d9d9d9 !important;
-  padding: 10px;
-  background-color: #2852A4;
-  border-radius: 10px;
-  float: center;
+.about:hover{
+  color: #D6E000;
 }
 
-.about:hover{
-  text-decoration: none;
-  color: #2852A4 !important;
-  padding: 10px;
-  background-color: #D6E000;
-  border-radius: 10px;
-  transition: ease;
-}
 
 .field-icon {
   float: right;
@@ -238,72 +225,19 @@
 	}
 }  
 
-@media screen and (max-height: 450px) {
-  .sidebar {padding-top: 15px;}
-  .sidebar a {font-size: 18px;}
-}
-.sidebar {
-  height: 30%;
-  width: 0;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  right: 0;
-  background-color: #0C66CC;
-  overflow-x: hidden;
-  transition: 0.5s;
-  padding-top: 60px;
-  border-radius: 20px;
-  padding-top: 20px;
-  box-shadow: 0 0 10px rgb(18, 64, 143);
+
+.footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: #2852A4;
+   color: white;
+   text-align: center;
+   color: #BADBFF;
+   padding-top: 3px;
 }
 
-.sidebar a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 20px;
-  color: #f1f1f1;
-  display: block;
-  transition: 0.3s;
-}
-
-.sidebar a:hover {
-  color: #D6E000;
-}
-
-.sidebar .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
-  padding-top: 20px;
-}
-
-.closebtn:hover{
-  color: #D6E000;
-}
-
-.openbtn {
-  font-size: 20px;
-  cursor: pointer;
-  
-  color: #D6E000;
-  padding: 10px 15px;
-  border: none;
-}
-
-.openbtn:hover {
-  color: #BADBFF;
-}
-
-.openbtn:focus {
-  outline: none;
-}
-#main {
-  transition: margin-left .5s;
-  padding: 16px;
-}
 </style>
 </head>
 <body>
@@ -314,12 +248,7 @@
 <div class="row">
 <div class="col-md-9 col-lg-6  col-sm-10">
   
-  <div id="mySidebar" class="sidebar">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()" style="font-size: 20px;">></a>
-    <br>
-    <a href="{% url 'index' %}">Home</a><hr style="border-color: #D6E000;">
-    <a href="{% url 'aboutUs' %}">About</a>
-  </div>
+  
 
   <i id="animationItem-image--bigCloud" style="margin-left: 150px; margin-top: 15px;" class="animationItem material-icons"><img src="{% static 'CRS/images/landingPage/hat.png' %}" width="auto" height="100px"></i>
 
@@ -344,7 +273,7 @@
 
 
 <div class="col-md-3 col-lg-6  col-sm-2">
-  <h1 id="welcometext">Welcome!<button class="openbtn" onclick="openNav()">☰</button> 
+  <h1 id="welcometext">Welcome! 
   </h1>
 
   {% if messages %}
@@ -385,19 +314,18 @@
 
 
 </table>
-<p class="applicantInfo">Are you an applicant? <a href="{% url 'applicant' %}">click here</a></p>
+<p class="applicantInfo">Are you an applicant? <a href="{% url 'applicant' %}"><u>click here</u></a></p>
   
 
   
 </div>
-
-</div>
-
-<picture>
-  
-
 <p id="gridplm"><img src="{% static 'CRS/images/landingPage/grid.png' %}" alt="grid" width="300px" height="300px"></p> </picture>
 
+</div>
+
+<div class="footer">
+  <p style="padding-top: 5px;">Powered by the scrIpTs&nbsp;•&nbsp;<a href="{% url 'aboutUs' %}" class="about"><u>About Us</u></a>&nbsp;•&nbsp;IMxSAD 2020-2021</p>
+</div>
 
 <!-- tether, jQuery first, then Tether, then Bootstrap JS. -->
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>   

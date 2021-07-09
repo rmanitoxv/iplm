@@ -90,33 +90,72 @@
         }
 
         tr:nth-child(even) {background-color: #f2f2f2;}
+
+        .alertError{
+        padding: 20px;
+        background-color: #f34e01;
+        border-radius: 15px;
+        color: white;
+        font-size: 18px;
+        width: 50%;
+        box-shadow: 0 0 10px rgb(216, 216, 216);
+        float: center;
+        animation: zoom-in-zoom-out 1s ease;
+        }
+
+        .closebtnError {
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+        }
+
+        .closebtnError:hover {
+            color: #a33908;
+        }
+
+        @keyframes zoom-in-zoom-out {
+        0% {
+            transform: scale(1, 1);
+        }
+        50% {
+            transform: scale(1.1, 1.1);
+        }
+        100% {
+            transform: scale(1, 1);
+        }
+        }
     </style>  
 
 <body>
 
     <div class="wrapper">
         
-       <!-- Sidebar -->
-       <nav id="sidebar">
-        <div class="sidebar-header">
-            <li>
-                <p><br><br><img src="{% static 'CRS/images/fHomeAndProfile/hat.png' %}" width="126px" height="87px"><br><br>
-            </li>
-        </div>
-        <ul class="sidebar components">
-            <!-- FILE PATH: Faculty/fHomeAndProfile/fHome.html-->
-            <li class="active"><a href="{% url 'fHome' %}"><img src="{% static 'CRS/images/fStudents/home.svg' %}" width="54px" height="68.71px"></a></li>
-            <!-- FILE PATH: Faculty/fHomeAndProfile/fProfile.html-->
-            <li><a href="{% url 'fProfile' %}"><img src="{% static 'CRS/images/fStudents/profile.svg' %}" width="97px" height="60.56px"></a></li>
-            <!-- FILE PATH: Faculty/fStudents/fStudents.html-->
-            <li><a href="{% url 'fStudents_advisory' %}"><img src="{% static 'CRS/images/fStudents/students.svg' %}" width="90px" height="67.14px"></a></li>
-            <!-- FILE PATH: Faculty/fClassroom/fViewSched.html-->
-            <li><a href="{% url 'fViewSched' %}"><img src="{% static 'CRS/images/fStudents/classroom.svg' %}" width="97px" height="74"></a></li>
-            <!-- FILE PATH: LOG-OUT-->
-            <li><a href="{% url 'logout' %}"><img src="{% static 'CRS/images/fStudents/log-out.svg' %}" width="72px" height="68.71px"></a></li>
-        </ul>
-    </nav>
-    <!--End of Sidebar -->
+        <!-- Sidebar -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <li>
+                    <p><br><br><img src="{% static 'CRS/images/fHomeAndProfile/hat.png' %}" width="126px" height="87px"><br><br>
+                </li>
+            </div>
+            <ul class="sidebar components">
+                <!-- FILE PATH: Faculty/fHomeAndProfile/fHome.html-->
+                <li class="active"><a href="{% url 'fHome' %}"><img src="{% static 'CRS/images/cIcons/home2.png' %}" width="97px" height="auto"></a></li>
+                <!-- FILE PATH: Faculty/fHomeAndProfile/fProfile.html-->
+                <li><a href="{% url 'fProfile' %}"><img src="{% static 'CRS/images/cIcons/profile2.png' %}" width="97px" height="auto"></a></li>
+                <!-- FILE PATH: Faculty/fStudents/fStudents.html-->
+                <li><a href="{% url 'fStudents_advisory' %}"><img src="{% static 'CRS/images/cIcons/students2.png' %}" width="97px" height="auto"></a></li>
+                <!-- FILE PATH: Faculty/fClassroom/fViewSched.html-->
+                <li><a href="{% url 'fViewSched' %}"><img src="{% static 'CRS/images/cIcons/classroom2.png' %}" width="97px" height="auto"></a></li>
+                <!-- FILE PATH: LOG-OUT -->
+                <li><a href="{% url 'logout' %}"><img src="{% static 'CRS/images/cIcons/log-out2.png' %}" width="97px" height="auto"></a></li>
+            </ul>
+        </nav>
+        <!--End of Sidebar -->
 
 
         <!-- Content -->
@@ -134,6 +173,7 @@
                 <div class="sub-year row">
                     <p id="fulltime">Advisory</p>
                     <div class="row" id="studentCount">Student: {{count}}</div><!-- STUDENT COUNT -->
+                    
                     
                 </div>
                 
@@ -168,25 +208,28 @@
                             </tr>
                             {% endfor %}
 
-                            <div id="error">
-                                {% if messages %}
-                                            {% for message in messages %}
-                                            <br><br>{{message}}
-                                            {% endfor %}
-                                {% endif %}
-                                
-                            </div>
+                            
                         </table>
+
+                        <br><br><br>
+
+                        <div id="error">
+                            {% if messages %}
+                                        {% for message in messages %}
+                                        <div class="alertError">
+                                            <span class="closebtnError" onclick="this.parentElement.style.display='none';">&times;</span> 
+                                            {{ message }}
+                                        </div>
+                                        {% endfor %}
+                            {% endif %}
+                            
+                        </div>
                     </div>
                 </div>
 
                 <div class="boxed-2">
                     <img  style="margin-left: 50px;" src="{% static 'CRS/images/fStudents/clip-school-teacher-near-the-blackboard.png' %}"g width="400px" height="auto">
                 </div>
-
-                
-
-
             
             </div>
         </div>

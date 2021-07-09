@@ -254,20 +254,13 @@ class RoomSchedule(models.Model):
 
 
 class RoomInfo(models.Model):
-    Building = (('GL', 'GL'), ('GB', 'GB'), ('GK', 'GK'), ('GV', 'GV'),
-                ('GCA', 'GCA'), ('TB', 'TB'), ('Gym', 'Gym'))
-    roomBuilding = models.CharField(max_length=200, choices=Building, null=True)
-    roomNumber = models.IntegerField()
-    roomType = models.CharField(max_length=200)
-    Status = (('Available', 'Available'), ('Not available', 'Not available'))
-    roomStatus = models.CharField(max_length=200, choices=Status),
-    roomSchedule = models.ForeignKey(RoomSchedule, null=True, on_delete=DO_NOTHING)
+    room = models.CharField(max_length=100, null=True, verbose_name='Room',unique=True)
 
     class Meta:
         verbose_name_plural = "Room Information"
 
     def __str__(self):
-        return self.roomBuilding
+        return self.room
 
 
 class subjectInfo(models.Model):
@@ -683,12 +676,12 @@ class studentScheduling(models.Model):
     ('Sychronous','Sychronous'),
 )
     instructor = ForeignKey(FacultyInfo,  null=True, verbose_name='Instructor', on_delete=models.SET_NULL,blank=True)
-    subjectCode = models.ForeignKey(curriculumInfo, null=True, verbose_name='Subjects', on_delete=models.SET_NULL)
+    subjectCode = models.ForeignKey(curriculumInfo, null=True, verbose_name='Subjects', on_delete=models.CASCADE)
     section = models.IntegerField(null=True,verbose_name='Subject Section' )
     day = models.CharField(max_length=100, null=True, choices=MONTH, verbose_name='Day')
     timeStart = models.TimeField()
     timeEnd = models.TimeField()
-    room = models.CharField(max_length=100, null=True, verbose_name='Room')
+    room = models.ForeignKey(RoomInfo, null=True, verbose_name='Room', on_delete=models.CASCADE)
     type= models.CharField(max_length=100, verbose_name="type",choices=TYPE, null=True)
     realsection= models.ForeignKey(BlockSection, null=True, verbose_name='Block Section', on_delete=models.SET_NULL,blank=True)
 

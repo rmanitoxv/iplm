@@ -474,7 +474,7 @@ class studentSchedulingAdmin(admin.ModelAdmin):
     #list_filter = ('subjectCode','section','instructor','day','timeStart','timeEnd','room','type','realsection')
 
 admin.site.register(studentScheduling, studentSchedulingAdmin)
-
+admin.site.register(RoomInfo)
 
 
 # HD STUDENT APPLICANT

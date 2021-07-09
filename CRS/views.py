@@ -1847,19 +1847,16 @@ def fStudents_advisory(request):
     if request.user.is_authenticated and request.user.is_faculty:
         id= request.user.id
         f_user = FacultyInfo.objects.get(pk = id)
-        try:
-            advisory = BlockSection.objects.filter(adviser = f_user)
-            stud_advisory = StudentInfo.objects.filter(studentSection__in = advisory) 
-            count = stud_advisory.count()
-            result = filters.Search(request.GET, queryset=stud_advisory); stud_advisory = result.qs
-            context = {'advisory': advisory, 'count': count, 'stud_advisory': stud_advisory, 'result':result}
-            return render(request, 'faculty/fStudents_advisory.html', context)
-        except BlockSection.DoesNotExist:
+        advisory = BlockSection.objects.filter(adviser = f_user)
+        stud_advisory = StudentInfo.objects.filter(studentSection__in = advisory) 
+        count = stud_advisory.count()
+        if count == 0:
             messages.error (request, 'You have no advisory class!')
             return render (request, './faculty/fStudents_advisory.html')
+        context = {'advisory': advisory, 'count': count, 'stud_advisory': stud_advisory}
+        return render(request, 'faculty/fStudents_advisory.html', context)
     else:
         return redirect('index')
-        
 
 def fStudents_viewStudentGrade (request,stud_id):
     fcount = 0
@@ -2532,6 +2529,7 @@ def sChecklistEmptyConfirmation(request, currchecklist_id):
         subject = currchecklist.objects.get(id = currchecklist_id)
         if request.method =='POST':
             subject.delete()
+            messages.success(request, "Successfully Deleted")
             return redirect('sChecklist')
         context = {'subj': subject}
         return render(request, 'student/sClassroom/sChecklistEmptyConfirmation.html', context)
@@ -3532,48 +3530,51 @@ def attach(request, attach_id):
     
 #RENDER HTML LOA CSW TO PDF
 def loa_Pdf(request, loa_id):
-    pdf1 = LOAApplicant.objects.get(pk=loa_id)
-    if pdf1.studentID.departmentID.courseName == 'BSIT':
-        data = request.session.get('_loa_data')
+    try:
+        pdf1 = LOAApplicant.objects.get(pk=loa_id)
+        if pdf1.studentID.departmentID.courseName == 'BSIT':
+            data = request.session.get('_loa_data')
 
-        template = get_template('chairperson/CSW/it_csw.html')
+            template = get_template('chairperson/CSW/it_csw.html')
 
-        context =  {'pdf1':pdf1,'date':data['date'],'from':data['from'],'subject':data['subject'],'action':data['actionRequired'],'reference':data['reference'],'background':data['background'],'analysis':data['analysis'],'recommendation':data['recommendation'], }
-            
-        html = template.render(context)
-        pdf = render_to_pdf('chairperson/CSW/it_csw.html', context)
+            context =  {'pdf1':pdf1,'date':data['date'],'from':data['from'],'subject':data['subject'],'action':data['actionRequired'],'reference':data['reference'],'background':data['background'],'analysis':data['analysis'],'recommendation':data['recommendation'], }
+                
+            html = template.render(context)
+            pdf = render_to_pdf('chairperson/CSW/it_csw.html', context)
 
-        if pdf:
-            response = HttpResponse(pdf, content_type='application/pdf')
-            filename = "IT_CSW-%s.pdf" %pdf1.studentID
-            content = "inline; filename=%s" %(filename)
-            download = request.GET.get("download")
-            if download:
-                content = "attachment; filename='%s'" %(filename)
-            response['Content-Disposition'] = content
-            return response
-        return HttpResponse("Not found")
+            if pdf:
+                response = HttpResponse(pdf, content_type='application/pdf')
+                filename = "IT_CSW-%s.pdf" %pdf1.studentID
+                content = "inline; filename=%s" %(filename)
+                download = request.GET.get("download")
+                if download:
+                    content = "attachment; filename='%s'" %(filename)
+                response['Content-Disposition'] = content
+                return response
+            return HttpResponse("Not found")
 
-    elif pdf1.studentID.departmentID.courseName == 'BSEE':
-        data = request.session.get('_loa_data')
+        elif pdf1.studentID.departmentID.courseName == 'BSEE':
+            data = request.session.get('_loa_data')
 
-        template = get_template('chairperson/CSW/ee_csw.html')
+            template = get_template('chairperson/CSW/ee_csw.html')
 
-        context =  {'pdf1':pdf1,'date':data['date'],'from':data['from'],'subject':data['subject'],'action':data['action'],'reference':data['reference'],'background':data['background'],'analysis':data['analysis'],'recommendation':data['recommendation'], }
-            
-        html = template.render(context)
-        pdf = render_to_pdf('chairperson/CSW/ee_csw.html', context)
+            context =  {'pdf1':pdf1,'date':data['date'],'from':data['from'],'subject':data['subject'],'action':data['action'],'reference':data['reference'],'background':data['background'],'analysis':data['analysis'],'recommendation':data['recommendation'], }
+                
+            html = template.render(context)
+            pdf = render_to_pdf('chairperson/CSW/ee_csw.html', context)
 
-        if pdf:
-            response = HttpResponse(pdf, content_type='application/pdf')
-            filename = "EE_CSW-%s.pdf" %pdf1.studentID
-            content = "inline; filename=%s" %(filename)
-            download = request.GET.get("download")
-            if download:
-                content = "attachment; filename='%s'" %(filename)
-            response['Content-Disposition'] = content
-            return response
-        return HttpResponse("Not found")
+            if pdf:
+                response = HttpResponse(pdf, content_type='application/pdf')
+                filename = "EE_CSW-%s.pdf" %pdf1.studentID
+                content = "inline; filename=%s" %(filename)
+                download = request.GET.get("download")
+                if download:
+                    content = "attachment; filename='%s'" %(filename)
+                response['Content-Disposition'] = content
+                return response
+            return HttpResponse("Not found")
+    except:
+        return HttpResponse("Not found please attach first")
 
 # FOR DELETING LOA FILES
 def del_allLOA(request, loa_id):
@@ -3765,48 +3766,51 @@ def shifter_csw(request, shift_id):
 
 #SHIFTER CSW TO PDF
 def shifter_Pdf(request, shift_id):
-    pdf1 = ShifterApplicant.objects.get(pk=shift_id)
-    if pdf1.department == 'BSIT':
-        data = request.session.get('_shifter_data')
+    try:
+        pdf1 = ShifterApplicant.objects.get(pk=shift_id)
+        if pdf1.department == 'BSIT':
+            data = request.session.get('_shifter_data')
 
-        template = get_template('chairperson/CSW/it_csw.html')
+            template = get_template('chairperson/CSW/it_csw.html')
 
-        context =  {'pdf1':pdf1,'date':data['date'],'from':data['from'],'subject':data['subject'],'action':data['actionRequired'],'reference':data['reference'],'background':data['background'],'analysis':data['analysis'],'recommendation':data['recommendation'], }
-            
-        html = template.render(context)
-        pdf = render_to_pdf('chairperson/CSW/it_csw.html', context)
+            context =  {'pdf1':pdf1,'date':data['date'],'from':data['from'],'subject':data['subject'],'action':data['actionRequired'],'reference':data['reference'],'background':data['background'],'analysis':data['analysis'],'recommendation':data['recommendation'], }
+                
+            html = template.render(context)
+            pdf = render_to_pdf('chairperson/CSW/it_csw.html', context)
 
-        if pdf:
-            response = HttpResponse(pdf, content_type='application/pdf')
-            filename = "IT_CSW-%s.pdf" %pdf1.studentID
-            content = "inline; filename=%s" %(filename)
-            download = request.GET.get("download")
-            if download:
-                content = "attachment; filename='%s'" %(filename)
-            response['Content-Disposition'] = content
-            return response
-        return HttpResponse("Not found")
+            if pdf:
+                response = HttpResponse(pdf, content_type='application/pdf')
+                filename = "IT_CSW-%s.pdf" %pdf1.studentID
+                content = "inline; filename=%s" %(filename)
+                download = request.GET.get("download")
+                if download:
+                    content = "attachment; filename='%s'" %(filename)
+                response['Content-Disposition'] = content
+                return response
+            return HttpResponse("Not found")
 
-    elif pdf1.department == 'BSEE':
-        data = request.session.get('_shifter_data')
+        elif pdf1.department == 'BSEE':
+            data = request.session.get('_shifter_data')
 
-        template = get_template('chairperson/CSW/ee_csw.html')
+            template = get_template('chairperson/CSW/ee_csw.html')
 
-        context =  {'pdf1':pdf1,'date':data['date'],'from':data['from'],'subject':data['subject'],'action':data['actionRequired'],'reference':data['reference'],'background':data['background'],'analysis':data['analysis'],'recommendation':data['recommendation'], }
-            
-        html = template.render(context)
-        pdf = render_to_pdf('chairperson/CSW/ee_csw.html', context)
+            context =  {'pdf1':pdf1,'date':data['date'],'from':data['from'],'subject':data['subject'],'action':data['actionRequired'],'reference':data['reference'],'background':data['background'],'analysis':data['analysis'],'recommendation':data['recommendation'], }
+                
+            html = template.render(context)
+            pdf = render_to_pdf('chairperson/CSW/ee_csw.html', context)
 
-        if pdf:
-            response = HttpResponse(pdf, content_type='application/pdf')
-            filename = "EE_CSW-%s.pdf" %pdf1.studentID
-            content = "inline; filename=%s" %(filename)
-            download = request.GET.get("download")
-            if download:
-                content = "attachment; filename='%s'" %(filename)
-            response['Content-Disposition'] = content
-            return response
-        return HttpResponse("Not found")
+            if pdf:
+                response = HttpResponse(pdf, content_type='application/pdf')
+                filename = "EE_CSW-%s.pdf" %pdf1.studentID
+                content = "inline; filename=%s" %(filename)
+                download = request.GET.get("download")
+                if download:
+                    content = "attachment; filename='%s'" %(filename)
+                response['Content-Disposition'] = content
+                return response
+            return HttpResponse("Not found")
+    except:
+        return HttpResponse("Not found please attach first")
 
 # FOR DELETING SHIFTER FILES
 def del_allshifter(request, shift_id):
@@ -3889,48 +3893,51 @@ def transferee_csw(request, transf_id):
 
 #TRANSFEREE CSW TO PDF
 def transferee_Pdf(request, transf_id):
-    pdf1 = TransfereeApplicant.objects.get(pk=transf_id)
-    if pdf1.department == 'BSIT':
-        data = request.session.get('_transfer_data')
+    try:
+        pdf1 = TransfereeApplicant.objects.get(pk=transf_id)
+        if pdf1.department == 'BSIT':
+            data = request.session.get('_transfer_data')
 
-        template = get_template('chairperson/CSW/it_csw.html')
+            template = get_template('chairperson/CSW/it_csw.html')
 
-        context =  {'pdf1':pdf1,'date':data['date'],'from':data['from'],'subject':data['subject'],'action':data['actionRequired'],'reference':data['reference'],'background':data['background'],'analysis':data['analysis'],'recommendation':data['recommendation'], }
-            
-        html = template.render(context)
-        pdf = render_to_pdf('chairperson/CSW/it_csw.html', context)
+            context =  {'pdf1':pdf1,'date':data['date'],'from':data['from'],'subject':data['subject'],'action':data['actionRequired'],'reference':data['reference'],'background':data['background'],'analysis':data['analysis'],'recommendation':data['recommendation'], }
+                
+            html = template.render(context)
+            pdf = render_to_pdf('chairperson/CSW/it_csw.html', context)
 
-        if pdf:
-            response = HttpResponse(pdf, content_type='application/pdf')
-            filename = "IT_CSW-%s.pdf" %pdf1.studentID
-            content = "inline; filename=%s" %(filename)
-            download = request.GET.get("download")
-            if download:
-                content = "attachment; filename='%s'" %(filename)
-            response['Content-Disposition'] = content
-            return response
-        return HttpResponse("Not found")
+            if pdf:
+                response = HttpResponse(pdf, content_type='application/pdf')
+                filename = "IT_CSW-%s.pdf" %pdf1.studentID
+                content = "inline; filename=%s" %(filename)
+                download = request.GET.get("download")
+                if download:
+                    content = "attachment; filename='%s'" %(filename)
+                response['Content-Disposition'] = content
+                return response
+            return HttpResponse("Not found")
 
-    elif pdf1.studentID.departmentID.courseName == 'BSEE':
-        data = request.session.get('_transfer_data')
+        elif pdf1.studentID.departmentID.courseName == 'BSEE':
+            data = request.session.get('_transfer_data')
 
-        template = get_template('chairperson/CSW/ee_csw.html')
+            template = get_template('chairperson/CSW/ee_csw.html')
 
-        context =  {'pdf1':pdf1,'date':data['date'],'from':data['from'],'subject':data['subject'],'action':data['actionRequired'],'reference':data['reference'],'background':data['background'],'analysis':data['analysis'],'recommendation':data['recommendation'], }
-            
-        html = template.render(context)
-        pdf = render_to_pdf('chairperson/CSW/ee_csw.html', context)
+            context =  {'pdf1':pdf1,'date':data['date'],'from':data['from'],'subject':data['subject'],'action':data['actionRequired'],'reference':data['reference'],'background':data['background'],'analysis':data['analysis'],'recommendation':data['recommendation'], }
+                
+            html = template.render(context)
+            pdf = render_to_pdf('chairperson/CSW/ee_csw.html', context)
 
-        if pdf:
-            response = HttpResponse(pdf, content_type='application/pdf')
-            filename = "EE_CSW-%s.pdf" %pdf1.studentID
-            content = "inline; filename=%s" %(filename)
-            download = request.GET.get("download")
-            if download:
-                content = "attachment; filename='%s'" %(filename)
-            response['Content-Disposition'] = content
-            return response
-        return HttpResponse("Not found")
+            if pdf:
+                response = HttpResponse(pdf, content_type='application/pdf')
+                filename = "EE_CSW-%s.pdf" %pdf1.studentID
+                content = "inline; filename=%s" %(filename)
+                download = request.GET.get("download")
+                if download:
+                    content = "attachment; filename='%s'" %(filename)
+                response['Content-Disposition'] = content
+                return response
+            return HttpResponse("Not found")
+    except:
+        return HttpResponse("Not found please attach first")
 
 # FOR DELETING TRANSFEREE FILES
 def del_alltransferee(request, transf_id):
@@ -4056,7 +4063,7 @@ def schedOnline2(request,block_id):
     acads = AcademicYearInfo.objects.get(pk=1)
     info = FacultyInfo.objects.get(facultyUser=id)
     schedule = studentScheduling.objects.filter(realsection=block_id)
-    OrderFormSet = inlineformset_factory(BlockSection, studentScheduling, fields=('subjectCode','instructor', 'section','day','timeStart','timeEnd', 'room', 'type'),widgets={'subjectCode': forms.Select(attrs={"class": "form-control", "id":"instructorField", "required":True}), 'instructor': forms.Select(attrs={"class": "form-control", "id":"instructorField"}),'section': forms.NumberInput(attrs={"class": "form-control", "placeholder": "Section", "id":"instructorField", "required":True}),'day': forms.Select(attrs={"class": "form-control", "id":"remarks", "required":True}),'timeStart': forms.TimeInput(attrs={"class": "form-control", "placeholder": "%H:%M:%S", "id":"timeField", "required":True}),'timeEnd': forms.TimeInput(attrs={"class": "form-control","placeholder": "%H:%M:%S", "id":"timeField", "required":True}),'room': forms.TextInput(attrs={"class": "form-control", "placeholder": "Room", "id":"instructorField", "required":True}),'type': forms.Select(attrs={"class": "form-control", "id":"instructorField", "required":True})}, max_num=1, can_delete=False)
+    OrderFormSet = inlineformset_factory(BlockSection, studentScheduling, fields=('subjectCode','instructor', 'section','day','timeStart','timeEnd', 'room', 'type'),widgets={'subjectCode': forms.Select(attrs={"class": "form-control", "id":"instructorField", "required":True}), 'instructor': forms.Select(attrs={"class": "form-control", "id":"instructorField"}),'section': forms.NumberInput(attrs={"class": "form-control", "placeholder": "Section", "id":"instructorField", "required":True}),'day': forms.Select(attrs={"class": "form-control", "id":"remarks", "required":True}),'timeStart': forms.TimeInput(attrs={"class": "form-control", "placeholder": "%H:%M:%S", "id":"timeField", "required":True}),'timeEnd': forms.TimeInput(attrs={"class": "form-control","placeholder": "%H:%M:%S", "id":"timeField", "required":True}),'room': forms.Select(attrs={"class": "form-control", "placeholder": "Room", "id":"instructorField", "required":True}),'type': forms.Select(attrs={"class": "form-control", "id":"instructorField", "required":True})}, max_num=1, can_delete=False)
     block1 = BlockSection.objects.get(id=block_id)
     formset = OrderFormSet(queryset=studentScheduling.objects.none(), instance=block1)
     for form in formset:
@@ -4068,10 +4075,11 @@ def schedOnline2(request,block_id):
         if formset.is_valid():
             global flag
             flag = 0
-
             for form in formset:
                 data=form.cleaned_data
                 block = str(block1)
+
+            #THIS BLOCK IS FOR COMMON TIME INPUT ERROR
 
             tsinput = str(data.get('timeStart')).split(':')
             teinput = str(data.get('timeEnd')).split(':')
@@ -4087,7 +4095,6 @@ def schedOnline2(request,block_id):
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
             else:
                 pass
-
 
             if studentScheduling.objects.all().exists():
                 sched = studentScheduling.objects.all()
@@ -4171,11 +4178,11 @@ def schedOnline2(request,block_id):
                                     break#Conflict in starting minute time is later than minutes
 
                             else:
-                                pass#time does not fall in any category time of conflict
+                                continue#time does not fall in any category time of conflict
                         else:
-                            pass#day is not the same in database
+                            continue#day is not the same in database
                     else:
-                        pass#section is not the same as database compared
+                        continue#section is not the same as database compared
 
                 flag3 = 0
                 catcher = 0
@@ -4302,7 +4309,7 @@ def schedOnline2(request,block_id):
                                         roomDB = studentScheduling.objects.all()
                                         validRoom = True
                                         for i in roomDB:
-                                            if roomVacancy == i.room:
+                                            if roomVacancy.room == i.room:
                                                 roomDay = i.day
                                                 roomStart = str(i.timeStart)
                                                 roomEnd = str(i.timeEnd)
@@ -4347,9 +4354,9 @@ def schedOnline2(request,block_id):
                                             if studentScheduling.objects.filter(room = roomVacancy).count() == 0:
                                                 validRoom = True
 
-                                        limitless_rooms = ["NA", "N.A.", "N/A", "T.B.A.", "TBA", "MS TEAMS", "FIELD"]
+                                        limitless_rooms = ["NA", "N.A.", "N/A", "T.B.A.", "TBA", "MS TEAMS", "FIELD","MS Teams","Ms Teams","Field","GYM","Gym"]
                                         print(limitless_rooms," in ", roomVacancy)
-                                        if roomVacancy.upper() in limitless_rooms:
+                                        if roomVacancy.room in limitless_rooms:
                                             validRoom = True  
 
                                         if validProf == True:
@@ -4375,16 +4382,189 @@ def schedOnline2(request,block_id):
                                 messages.error(request, 'Subject already taken')
                                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
                                 #messages.error(request, 'Time already taken')
-                        else:
-                            pass
+                        elif dayinps == dayDbs:
+                            flag3=flag3+1
+                            if flag > 0:
+                                #NEW
+                                #JM CODE
+                                print("FLAG = 1, study plan dapat masave pero di dahil sa prof")
+                                faculty_Schedule = studentScheduling.objects.all()
+                                for DATA in formset:
+                                    inputtedData = DATA.cleaned_data
+                                validProf = False
+
+                                #This Code is for Faculty Availability Checking
+
+                                try:
+                                    profInfo = FacultyInfo.objects.get(facultyUser = inputtedData.instructor)  
+                                    profAvailIn = str(profInfo.facultyIn).split(':')
+                                    profAvailOut = str(profInfo.facultyOut).split(':')
+                                    FacAvailTimeIn = float(profAvailIn[0])+float(float(profAvailIn[1])/60)
+                                    FacAvailTimeOut = float(profAvailOut[0])+float(float(profAvailOut[1])/60)
+
+                                    print("IN Get:",inTimeSubj,"Avail:", FacAvailTimeIn)
+                                    print("Out Get:",outTimeSubj,"Avail:", FacAvailTimeOut)
+                                    
+                                    testTimeInput = (str(inputtedData.timeStart)).split(":")  
+                                    testTimeOutput = (str(inputtedData.timeEnd)).split(":")
+
+                                    TimeTestIn = float(testTimeInput[0])+float(float(testTimeInput[1])/60) 
+                                    TimeTestOut = float(testTimeOutput[0])+float(float(testTimeOutput[1])/60)  
+
+
+                                    if float(TimeTestIn) < float(FacAvailTimeIn):
+                                        #Input Start Time To Early too Availability
+                                        validProf = False
+                                        errorMessage = "Faculty Time In: " + str(profAvailIn[0]) +":" + str(profAvailIn[1])+", too early"
+                                    elif float(TimeTestOut) > float(FacAvailTimeOut):
+                                        validProf = False
+                                        errorMessage = "Faculty Time Out" + str(profAvailOut[0]) +":" + str(profAvailOut[1])+ ", too late"
+                                    else:
+                                        validProf = True
+                                except:
+                                    validProf = True
+
+
+                                #This Code is for Assigned Sched Prof in database if there are  overlaps 
+
+                                for databaseInfo in faculty_Schedule:
+                                    dbSubject = databaseInfo.subjectCode
+                                    dbSection = databaseInfo.section
+                                    dbProf = databaseInfo.instructor
+                                    dbDay = databaseInfo.day
+                                    dbTimeIn = str(databaseInfo.timeStart)
+                                    dbInTime = dbTimeIn.split(":")
+                                    dbHourIn = float(dbInTime[0])
+                                    dbMinIn = float(dbInTime[1])/60
+                                    dbStartTime = dbHourIn + dbMinIn
+                                    stringinputTimeStart = str(inputtedData.get('timeStart'))
+                                    list_of_timeStarted = stringinputTimeStart.split(":")
+                                    inputStartTime = float(list_of_timeStarted[0])+float(float(list_of_timeStarted[1])/60)
+                                    dbTimeOut = str(databaseInfo.timeEnd)
+                                    dbOutTime = dbTimeOut.split(":")
+                                    dbHourOut = float(dbOutTime[0])
+                                    dbMinOut = float(dbOutTime[1])/60
+                                    dbEndTime = dbHourOut + dbMinOut
+                                    stringinputTimeEnd = str(inputtedData.get('timeEnd'))
+                                    list_of_timeEnded = stringinputTimeEnd.split(":")
+                                    inputEndTime = float(list_of_timeEnded[0])+float(float(list_of_timeEnded[1])/60)
+
+                                    prof_assigned = inputtedData.get('instructor')
+                                    if prof_assigned == dbProf:
+                                        print(validProf)
+                                        if dbDay == inputtedData.get('day'):
+                                            if inputStartTime == dbStartTime:
+                                                #Same Day and Start Time Sched
+                                                subjCode = str(dbSubject).split("|")
+                                                print(subjCode)
+                                                errorMessage = str(subjCode[2]) + " in " + str(databaseInfo.realsection) + " Same Start Time"
+                                                validProf = False
+                                                break
+                                            else:
+                                                if inputStartTime >= dbEndTime:
+                                                    #After the Given Schedule
+                                                    validProf = True
+                                                else:
+                                                    #Start time earlier than stored end time
+                                                    if inputEndTime <= dbStartTime:
+                                                        # Sched is Confirmed Earlier than given sched
+                                                        validProf = True
+                                                    else:
+                                                        # End time overlap with start time
+                                                        subjCode = str(dbSubject).split("|")
+                                                        print(subjCode)
+                                                        errorMessage = str(subjCode[2]) + " in " + str(databaseInfo.realsection) + " Time Overlap"
+                                                        validProf = False
+                                                        break
+                                        else:
+                                            validProf = True
+                                    else:
+                                        validProf = True       
+                                    
+                                print("dbProf:", dbProf," prof_assigned:",prof_assigned)
+                                print("inputValue:",inputStartTime,"-",inputEndTime)
+                                print("testValue:", dbStartTime,"-",dbEndTime)
+                                print(validProf,"flag:", flag,"flag3:", flag3)
+                                #JM CODE
+                                if inputtedData.get('instructor') is None:
+                                    print("IT GOES HERE")
+                                    validProf = True
+
+                                roomVacancy = data.get('room')
+                                roomDB = studentScheduling.objects.all()
+                                validRoom = True
+                                for i in roomDB:
+                                    if roomVacancy.room == i.room.room:
+                                        roomDay = i.day
+                                        roomStart = str(i.timeStart)
+                                        roomEnd = str(i.timeEnd)
+
+                                        roomStartList = roomStart.split(":")
+                                        roomEndList = roomEnd.split(":")
+
+                                        roomStartTime = float(roomStartList[0])+float(float(roomStartList[1])/60)
+                                        roomEndTime = float(roomEndList[0])+float(float(roomEndList[1])/60)
+
+                                        if inputtedData.get('day') == roomDay:
+                                            #CODE FOR TIME BLOCKING
+                                            if inputStartTime == roomStartTime:
+                                                #Sched in room Already Existed
+                                                subjCode = str(i.subjectCode).split("|")
+                                                print(subjCode)
+                                                errorMessage = subjCode[2] +" in " + str(i.realsection) + " Same Start Time"
+                                                validRoom = False
+                                                
+                                                break
+                                            else:
+                                                #room sched are not the same
+                                                if inputStartTime >= roomEndTime:
+                                                    #Input Sched is After the sched in Database
+                                                    validRoom = True
+                                                else:
+                                                    #Input Sched is not after the Sched in Database
+                                                    if inputEndTime <= roomStartTime:
+                                                        #Input Sched is earlier than Sched in Databse
+                                                        validRoom = True
+                                                    else:
+                                                        #Input Sched Conflict in DB Sched
+                                                        subjCode = str(i.subjectCode).split("|")
+                                                        print(subjCode)
+                                                        errorMessage = str(subjCode[2]) +" in " +str( i.realsection) + " Time Conflct"
+                                                        validRoom = False
+                                                        break 
+                                        else:
+                                            #No Day Exist in the room 
+                                            validRoom = True
+                                else:
+                                    if studentScheduling.objects.filter(room = roomVacancy).count() == 0:
+                                        validRoom = True
+
+                                limitless_rooms = ["NA", "N.A.", "N/A", "T.B.A.", "TBA", "MS TEAMS", "FIELD","Ms Teams","Field","GYM","Gym","MS Teams"]
+                                print(limitless_rooms," in ", roomVacancy)
+                                if roomVacancy.room in limitless_rooms:
+                                    validRoom = True  
+
+                                if validProf == True:
+                                    if validRoom == True:
+                                        formset.save()
+                                        validProf = False
+                                        validRoom = False
+                                        messages.success(request, 'Schedule successfully Added!')
+                                        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+                                    else:
+                                        messages.error(request, 'Room and Time error: %s' % errorMessage)
+                                        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+                                else:
+                                    messages.error(request, 'Faculty Time Error: %s' %errorMessage)
+                                    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+                                #NEW
+                            else:
+                                messages.error(request, 'Time already taken')
+                                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+                                #messages.error(request, 'Time already taken')
                     else:
-                        pass
-
-                if flag == 0:
-                    messages.error(request, 'Time already taken')
-                    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-                    #messages.error(request, 'Time already taken')
-
+                        continue     
                 if flag3 == 0:
                     #JM CODE
                     print("FLAG3 = 0, study plan dapat masave pero di dahil sa prof")
@@ -4491,7 +4671,7 @@ def schedOnline2(request,block_id):
                     roomDB = studentScheduling.objects.filter(room = roomVacancy)
                     validRoom = True
                     for i in roomDB:
-                        if roomVacancy == i.room:
+                        if roomVacancy.room == i.room.room:
                             roomDay = i.day
                             roomStart = str(i.timeStart)
                             roomEnd = str(i.timeEnd)
@@ -4533,9 +4713,9 @@ def schedOnline2(request,block_id):
                         if studentScheduling.objects.filter(room = roomVacancy).count() == 0:
                             validRoom = True
 
-                    limitless_rooms = ["NA", "N.A.", "N/A", "T.B.A.", "TBA", "MS TEAMS", "FIELD"]
+                    limitless_rooms = ["NA", "N.A.", "N/A", "T.B.A.", "TBA", "MS TEAMS", "FIELD","Ms Teams","Field","GYM","Gym","MS Teams"]
                     print(limitless_rooms," in ", roomVacancy)
-                    if roomVacancy.upper() in limitless_rooms:
+                    if roomVacancy.room in limitless_rooms:
                         validRoom = True
 
                     if validProf == True:
@@ -4561,10 +4741,13 @@ def schedOnline2(request,block_id):
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     return render(request, 'chairperson/Stud_sched/cStudentSchedOnline2.html', {'formset': formset, 'schedule' :schedule})
 
+
+
 def cStudentDeleteSched(request, block_id):
     schedule = studentScheduling.objects.get(id = block_id)
     if request.method =='POST':
         schedule.delete()
+        messages.success(request,"Successfully Deleted")
         return redirect('cStudentSchedOnline')
     context = {'schedule': schedule}
     return render(request, 'chairperson/Stud_sched/cStudentDeleteSched.html', context)
