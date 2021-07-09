@@ -45,6 +45,28 @@
         margin-top: 40px;
         }
 
+        
+        #list1 {
+            padding-left: 10px;
+            padding-right: 50px;
+            font-size: 23px;
+            color:#0C66CC ;
+            font-family: 'Nunito';
+        }
+
+        .manage1 {
+            padding-right: 20px;
+            padding-left: 20px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            background: #0C66CC;
+            border-radius: 10px 10px 10px 10px;
+            margin-left: 50px;
+            color: white;
+            border: none;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
 
         #submit {
             background-color: #0C66CC;
@@ -59,7 +81,8 @@
 
         .table-wrapper-scroll-y {
             display: inline;
-            width: 930px;
+            width: 1100px;
+            height: 550px;
         }
 
         .list{
@@ -99,43 +122,17 @@
         <!-- Content -->
         <div id="content">
             <div class=" container-fluid">
-                <div class="row" id="head">
-                        <p>Students</p>
+                <div class="row" id="head" style="margin-left: 20px;">
+                        <p><b>Students</b></p>
                     </div>
                 <!-- NAVIGATIO BAR -->
-                <div class="main row">
-                    <div class="firstdropdown">
-                        <p class="firstyear"><a href="{% url 'fStudents_advisory' %}">Advisory</a></p><!-- DB ADVISORY -->
-                    </div>
-                    
-                    {% for i in sub_sched %}
-                    <div class="firstdropdown">
-                        <p class="firstyear">Subject</p><!-- DB SUBJECT NAME -->
-                        <div class="firstdropdown-content">
-                            <!-- FILE PATH: Faculty/fStudents/fStudents.html-->
-                          <a href="{% url 'fStudents' %}">Section 
-                                {{sub_sched.section}}</a><!-- DB SUBJECT SECTION -->
-                        </div>
-                    </div>
-                    {% endfor %}
-     
-                </div>
+                
 
                 <!--End of NAVIGATION BAR-->
                 
                 <!--FULL TIME LIST-->
                 <div class="sub-year row">
-                    <p id="fulltime">Year
-                        {% if advisory %}
-                            {{advisory.blockYear}}
-                        {% endif %}
-                    </p><!-- DB YEAR -->
-                    <p id="fulltime" style="margin-left: 50px;">|</p>
-                    <p id="fulltime" style="margin-left: 50px;">Block
-                        {% if advisory %}
-                            {{advisory.blockSection}}
-                        {% endif %}
-                    </p><!-- DB BLOCK -->
+                    <p id="fulltime">Advisory</p>
                     <div class="row" id="studentCount">Student: {{count}}</div><!-- STUDENT COUNT -->
                     
                 </div>
@@ -144,61 +141,53 @@
                 
                 <!-- TABLE HEADER -->
                 <div class="list row">
-                    <div class="col-15">
+                    <div class="table-wrapper-scroll-y scroll">
                         <table>    
                             <tr>
                                 <td id="list"><b><p>Student No.</p></b></td><!-- Faculty Number Label -->
                                 <td id="list"><b><p>Last Name</p></b></td><!-- Last Name of Faculty -->
                                 <td id="listname"><b><p>First Name</p></b></td><!-- Firs Name of Faculty -->
                                 <td id="listname"><b><p>Middle Name</p></b></td><!-- Middle Name of Faculty -->
+                                <td id="listname"><b><p>Year & Block</p></b></td>
+                                <td></td>
                             </tr>
+
+                            {% for i in stud_advisory %}
+                            <tr> 
+                                
+                                <td id="list">{{ i.studentID }}</td>
+                                <td id="list">{{ i.studentUser.lastName }}</td>
+                                <td id="listname">{{ i.studentUser.firstName }}</td>
+                                <td id="listname">{{ i.studentUser.middleName }}</td>
+                                <td id="listname">{{ i.studentSection }}</td>
+                                <td id="list1 row">
+                                    <!-- FILE PATH: Faculty/fStudents/fStudents_viewStudentGrade.html-->
+                                    <a href="{% url 'fStudents_viewStudentGrade' i.studentUser.id %}"><button class="manage1 row"><!-- DB VIEW STUDENT -->View</button></a>
+                                </td>
+                                
+                            </tr>
+                            {% endfor %}
+
+                            <div id="error">
+                                {% if messages %}
+                                            {% for message in messages %}
+                                            <br><br>{{message}}
+                                            {% endfor %}
+                                {% endif %}
+                                
+                            </div>
                         </table>
                     </div>
                 </div>
 
-                
-
-                <!-- DATA OF TABLE -->
-                <div class="list row">
-                        <div class="table-wrapper-scroll-y scroll">
-                            <table>   
-                                <!--ROW 1-->
-                                {% for i in stud_advisory %}
-                                <tr> 
-                                    
-                                    <td id="list">{{ i.studentID }}</td>
-                                    <td id="list">{{ i.studentUser.lastName }}</td>
-                                    <td id="listname">{{ i.studentUser.firstName }}</td>
-                                    <td id="listname">{{ i.studentUser.middleName }}</td>
-                                    <td id="list row">
-                                        <!-- FILE PATH: Faculty/fStudents/fStudents_viewStudentGrade.html-->
-                                        <a href="{% url 'fStudents_viewStudentGrade' i.studentUser.id %}"><button class="manage row"><!-- DB VIEW STUDENT -->View</button></a>
-                                    </td>
-                                    
-                                </tr>
-                                {% endfor %}
-                                
-                                <div id="error">
-                                    {% if messages %}
-                                                {% for message in messages %}
-                                                <br><br>{{message}}
-                                                {% endfor %}
-                                    {% endif %}
-                                    
-                                </div>
-                            </table>
-                        </div>
-                    </div>
-
-
-
-                
-
-                <!--picture-->
                 <div class="boxed-2">
-                    <img src="{% static 'CRS/images/fStudents/clip-school-teacher-near-the-blackboard.png' %}"g width="400px" height="auto">
+                    <img  style="margin-left: 50px;" src="{% static 'CRS/images/fStudents/clip-school-teacher-near-the-blackboard.png' %}"g width="400px" height="auto">
                 </div>
-                <!--End of picture-->
+
+                
+
+
+            
             </div>
         </div>
         <br><br>

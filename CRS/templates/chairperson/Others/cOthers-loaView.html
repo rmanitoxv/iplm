@@ -17,72 +17,77 @@
     <link rel="icon" href="{% static 'CRS/images/cOthers/iPLM.png' %}" type="image/png" sizes="16x16">
 
     <style>
-                .alertError{
-        padding: 20px;
-        background-color: #f34e01;
-        border-radius: 15px;
-        color: white;
-        font-size: 18px;
-        width: 50%;
-        box-shadow: 0 0 10px rgb(216, 216, 216);
-        animation: zoom-in-zoom-out 1s ease;
-        }
+        .alertError{
+padding: 20px;
+background-color: #f34e01;
+border-radius: 15px;
+color: white;
+font-size: 18px;
+width: 50%;
+box-shadow: 0 0 10px rgb(216, 216, 216);
+animation: zoom-in-zoom-out 1s ease;
+}
 
-        .alertSuccess{
-        padding: 20px;
-        background-color: #3fb328;
-        border-radius: 15px;
-        color:white;
-        font-size: 18px;
-        width: 50%;
-        box-shadow: 0 0 10px rgb(216, 216, 216);
-        animation: zoom-in-zoom-out 1s ease;
-        
-        }
+.alertSuccess{
+padding: 20px;
+background-color: #3fb328;
+border-radius: 15px;
+color:white;
+font-size: 18px;
+width: 50%;
+box-shadow: 0 0 10px rgb(216, 216, 216);
+animation: zoom-in-zoom-out 1s ease;
 
-        .closebtnError {
-        margin-left: 15px;
-        color: white;
-        font-weight: bold;
-        float: right;
-        font-size: 22px;
-        line-height: 20px;
-        cursor: pointer;
-        transition: 0.3s;
-        }
+}
 
-        .closebtnError:hover {
-            color: #a33908;
-        }
+.closebtnError {
+margin-left: 15px;
+color: white;
+font-weight: bold;
+float: right;
+font-size: 22px;
+line-height: 20px;
+cursor: pointer;
+transition: 0.3s;
+}
 
-        .closebtnSuccess {
-        margin-left: 15px;
-        color: white;
-        font-weight: bold;
-        float: right;
-        font-size: 22px;
-        line-height: 20px;
-        cursor: pointer;
-        transition: 0.3s;
-        }
+.closebtnError:hover {
+color: #a33908;
+}
 
-        .closebtnSuccess:hover {
-            color: #1c6b0c;
-        }
+.closebtnSuccess {
+margin-left: 15px;
+color: white;
+font-weight: bold;
+float: right;
+font-size: 22px;
+line-height: 20px;
+cursor: pointer;
+transition: 0.3s;
+}
 
-        @keyframes zoom-in-zoom-out {
-        0% {
-            transform: scale(1, 1);
-        }
-        50% {
-            transform: scale(1.1, 1.1);
-        }
-        100% {
-            transform: scale(1, 1);
-        }
-        }
-    </style>
+.closebtnSuccess:hover {
+color: #1c6b0c;
+}
 
+@keyframes zoom-in-zoom-out {
+0% {
+transform: scale(1, 1);
+}
+50% {
+transform: scale(1.1, 1.1);
+}
+100% {
+transform: scale(1, 1);
+}
+}
+::-webkit-file-upload-button
+	{
+    background-color: #ffffff;
+    border: none;
+    color: white;
+	}
+</style>
 </head>
 
 <body>
@@ -381,15 +386,19 @@
                                 <br>
                                 </div>
                             <div class="fileName">Manage</div><br>
-                            <a href="{% url 'cOthers-loa-csw' loaview.id %}"><button type="button" class="cswBtn2"><img src="{% static 'CRS/images/cOthers/download2.png' %}" width="auto" height="42"><br>Download CSW</button></a><!-- DB DOWNLOAD CSW BUTTON -->
-                        <form action="{% url 'sendmailwfile' loaview.id %}" method="POST" enctype="multipart/form-data" > {% csrf_token %} 
-                            <label class="cswBtn3" for="uploadCSW"><img src="{% static 'CRS/images/cOthers/upload.png' %}" width="auto" height="42"><br>Upload CSW</label><!-- DB UPLOAD CSW BUTTON -->
-                            <input type="file" id="uploadCSW" name="uploadCSW" hidden/>
-
-                            <a href="{% url 'cOthers-loa-feedback' loaview.id %}"><button type="button" class="feedbackBtn2"><img src="{% static 'CRS/images/cOthers/feedback.png' %}" width=auto height="42"><br>Feedback</button></a><!-- DB FEEDBACK BUTTON -->
-                            <a href="{% url 'del_allLOA' loaview.id %}"> <button type="button" class="deleteFileBtn" ><img src="{% static 'CRS/images/cOthers/return.png' %}" width=auto height="42"><br>Return File</button></a><!-- DB RETURN FILE BUTTON -->
                             
-                            </div><br><br>
+                            <a href="{% url 'cOthers-loa-feedback' loaview.id %}"><button type="button" class="feedbackBtn2" style="margin-left: 10px;"><img src="{% static 'CRS/images/cOthers/feedback.png' %}" width=auto height="42"><br>Feedback</button></a><!-- DB FEEDBACK BUTTON -->
+                            <a href="{% url 'del_allLOA' loaview.id %}"> <button type="button" class="deleteFileBtn" style="margin-left: 170px;"><img src="{% static 'CRS/images/cOthers/return.png' %}" width=auto height="42"><br>Return File</button></a><!-- DB RETURN FILE BUTTON -->
+                                
+
+                            <a href="{% url 'cOthers-loa-csw' loaview.id %}"><button type="button" class="cswBtn2" style="margin-left: 400px;"><img src="{% static 'CRS/images/cOthers/download2.png' %}" width="auto" height="42"><br>Download CSW</button></a><!-- DB DOWNLOAD CSW BUTTON -->
+                            <form action="{% url 'sendmailwfile' loaview.id %}" method="POST" enctype="multipart/form-data" > {% csrf_token %} 
+                            
+                            <label class="cswBtn3" id="cswDL" for="uploadCSW" style="margin-left: 550px;"><img src="{% static 'CRS/images/cOthers/upload.png' %}" width="auto" height="42"><br>Upload CSW</label><!-- DB UPLOAD CSW BUTTON -->
+                                
+                            <input type="file" id="uploadCSW" name="uploadCSW" style="margin-left: 600px;" required>
+
+                           </div><br><br>
 
                             <div class="list-feedback1">
                                 <button type="submit" class="button8hvr" name="loa-email" value="loa-email" >Forward to Signatories</button><!-- DB FORWARD TO SIGNATORIES BUTTON -->

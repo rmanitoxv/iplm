@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
  
  <link rel="stylesheet" href="{% static 'CRS/css/landingPage/styles.css' %}">
+ <link rel="stylesheet" href="{% static 'CRS/js/password.js' %}">
  <!--  ICON -->
 <link rel="icon" href="{% static 'CRS/images/landingPage/iPLMlogo.png' %}" type="image/png" sizes="16x16">
 
@@ -45,7 +46,7 @@
       background: white;
       width: 400px;
       height: 200px;
-      box-shadow: 0 0 10px rgb(114, 114, 114);
+      box-shadow: 0 0 10px rgb(83, 83, 83);
     }
 
     #welcometext
@@ -201,6 +202,28 @@
   transition: ease;
 }
 
+.field-icon {
+  float: right;
+  margin-left: -25px;
+  margin-top: -25px;
+  position: relative;
+  z-index: 2;
+}
+
+#email:focus{
+  outline: none;
+  background-color:#BADBFF;
+  border: none;
+  color: #2852A4 !important;
+}
+
+#password:focus{
+  outline: none;
+  background-color:#BADBFF;
+  border: none;
+  color: #2852A4 !important;
+}
+
 @keyframes bobble {
 	0% {
 		transform: translate3d(0px, -25px, 0px);
@@ -215,24 +238,99 @@
 	}
 }  
 
+@media screen and (max-height: 450px) {
+  .sidebar {padding-top: 15px;}
+  .sidebar a {font-size: 18px;}
+}
+.sidebar {
+  height: 30%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  background-color: #0C66CC;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+  border-radius: 20px;
+  padding-top: 20px;
+  box-shadow: 0 0 10px rgb(18, 64, 143);
+}
+
+.sidebar a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #f1f1f1;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidebar a:hover {
+  color: #D6E000;
+}
+
+.sidebar .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+  padding-top: 20px;
+}
+
+.closebtn:hover{
+  color: #D6E000;
+}
+
+.openbtn {
+  font-size: 20px;
+  cursor: pointer;
+  
+  color: #D6E000;
+  padding: 10px 15px;
+  border: none;
+}
+
+.openbtn:hover {
+  color: #BADBFF;
+}
+
+.openbtn:focus {
+  outline: none;
+}
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
 </style>
 </head>
 <body>
 
+  
+
 <div class="container pads">
 <div class="row">
 <div class="col-md-9 col-lg-6  col-sm-10">
+  
+  <div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()" style="font-size: 20px;">></a>
+    <br>
+    <a href="{% url 'index' %}">Home</a><hr style="border-color: #D6E000;">
+    <a href="{% url 'aboutUs' %}">About</a>
+  </div>
+
   <i id="animationItem-image--bigCloud" style="margin-left: 150px; margin-top: 15px;" class="animationItem material-icons"><img src="{% static 'CRS/images/landingPage/hat.png' %}" width="auto" height="100px"></i>
 
 <p id="imageplm" ><img src="{% static 'CRS/images/landingPage/iplm5.png' %}" width="457px" height="343px"></p>
   
   <p class="description">in collaboration with</p>
   
-  <div class="centerImg" style="margin-left: 110px;">
+  <div class="centerImg">
     <img src="{% static 'CRS/images/landingPage/plm.png' %}" alt="plm" width="40px" height="auto">
     <img src="{% static 'CRS/images/landingPage/cet.png' %}" alt="plm" width="45px" height="auto">
     
-    <a href="{% url 'aboutUs' %}" class="about" style="color: #7ec0ee;">About Us</a>
     <img src="{% static 'CRS/images/landingPage/it.png' %}" alt="plm" width="40px" height="auto">
     <img src="{% static 'CRS/images/landingPage/ee.png' %}" alt="plm" width="40px" height="auto">
     
@@ -246,8 +344,8 @@
 
 
 <div class="col-md-3 col-lg-6  col-sm-2">
-  <h1 id="welcometext">Welcome!</h1>
-
+  <h1 id="welcometext">Welcome!<button class="openbtn" onclick="openNav()">☰</button> 
+  </h1>
 
   {% if messages %}
   {% for message in messages %}
@@ -270,15 +368,19 @@
     </tr>
     
     <tr> 
-      <td>
+      <td id="show_hide_password">
       <form  method = 'POST'>
         <br>
         {% csrf_token %}
         <p id="tusername">email &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="email" id="email" name="email" required> </p> 
-        <p id="tpassword">password &nbsp; &nbsp; <input type="password" id="password" name="password" required> </p> 
-        </td> </tr> 
+        <p id="tpassword">password &nbsp; &nbsp; <input type="password" id="password" name="password" required> 
+        <br>
+        <span style="font-size: 12px; float: left; margin-left: 100px;  margin-top: 10px;">
+        <input type="checkbox" onclick="myFunction()">&nbsp;&nbsp;Show Password</span></p> 
+      </td> </tr> 
     
-        <tr> <td> <p class="d-flex justify-content-end align-items-start mr-5"> <input type="submit" class="btn7" value="Log in"></p> </td> </tr>    
+        <tr> <td> <p class="d-flex justify-content-end align-items-start mr-5"> <input type="submit" class="btn7" value="Log in">
+          </p> </td> </tr>    
       </form> 
 
 
@@ -292,6 +394,7 @@
 </div>
 
 <picture>
+  
 
 <p id="gridplm"><img src="{% static 'CRS/images/landingPage/grid.png' %}" alt="grid" width="300px" height="300px"></p> </picture>
 
@@ -301,10 +404,33 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 	
+  <script>
+      function myFunction() {
+        var x = document.getElementById("password");
+        if (x.type === "password") {
+          x.type = "text";
+        } else {
+          x.type = "password";
+        }
+      }
+  </script>
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> 
+
+  <script>
+    function openNav() {
+      document.getElementById("mySidebar").style.width = "250px";
+      document.getElementById("main").style.marginLeft = "250px";
+    }
+
+    function closeNav() {
+      document.getElementById("mySidebar").style.width = "0";
+      document.getElementById("main").style.marginLeft= "0";
+    }
+  </script>
+
 
 </body>
 </html>

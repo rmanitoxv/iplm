@@ -81,6 +81,22 @@ transition: 0.3s;
     transform: scale(1, 1);
 }
 }
+
+::-webkit-file-upload-button
+	{
+    background-color: #ffffff;
+    border: none;
+    color: white;
+    padding: 30px 30px 30px 30px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 20px;
+    height: 130px;
+    width: 140px;
+    margin-left: -140px;
+    margin-top: -20px;
+	}
 </style>
 
 </head>
@@ -312,10 +328,10 @@ transition: 0.3s;
                             <div class="fileName">Manage</div><br>
                             <a href="{% url 'cOthers-shifter-csw' shift.id %}"><button type="button" class="cswBtn2"><img src="{% static 'CRS/images/cOthers/download2.png' %}" width="auto" height="42"><br>Download CSW</button></a><!-- DB DOWNLOAD CSW BUTTON -->
                             <form action="{% url 'sendmailwfile' shift.id %}" method="POST" enctype="multipart/form-data" > {% csrf_token %}
-                                <label class="cswBtn3" for="uploadCSW"><img src="{% static 'CRS/images/cOthers/upload.png' %}" width="auto" height="42"><br>Upload CSW</label><!-- DB UPLOAD CSW BUTTON -->
-                                <input type="file" id="uploadCSW" name="uploadCSW" hidden/>
+                               
 
-                                
+                                <label class="cswBtn3" id="cswDL" for="uploadCSW"><img src="{% static 'CRS/images/cOthers/upload.png' %}" width="auto" height="42"><br>Upload CSW</label><!-- DB UPLOAD CSW BUTTON -->
+                                <input type="file"  id="uploadCSW" name="uploadCSW" required>
                                 </div><br><br>
 
                                 <div class="list-feedback1">

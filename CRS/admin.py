@@ -134,6 +134,7 @@ class ChairpersonInfoAdmin(admin.ModelAdmin):
 
 # FACULTY ADMIN
 class FacultyInfoAdmin(admin.ModelAdmin):
+    search_fields = ['facultyID', 'facultyUser__email', 'facultyUser__firstName', 'facultyUser__lastName','facultyUser__middleName']
     model = FacultyInfo
     list_display = ('get_id', 'get_email', 'get_lname', 'get_fname', 'get_mname')
 
@@ -166,6 +167,7 @@ class FacultyInfoAdmin(admin.ModelAdmin):
 
 # STUDENT ADMIN
 class StudentInfoAdmin(admin.ModelAdmin):
+    search_fields = ['studentID', 'studentUser__email', 'studentUser__firstName', 'studentUser__lastName','studentUser__middleName']
     model = StudentInfo
     list_display = ('get_id', 'get_email', 'get_lname', 'get_fname', 'get_mname',)
 
@@ -371,6 +373,7 @@ admin.site.register(curriculumInfo, curriculumInfoAdmin)
 
 #STUDENT CHECKLIST AND GRADE
 class currchecklistAdmin(admin.ModelAdmin):
+    search_fields = ['owner__studentID']
     model = currchecklist
     list_display = ('get_id','owner','curriculum','yearTaken','semTaken')
 
@@ -402,6 +405,7 @@ admin.site.register(currchecklist, currchecklistAdmin)
 
 #CRS GRADE FILE
 class crsGradeAdmin(admin.ModelAdmin):
+    search_fields = ['studentID__studentID']
     model = crsGrade
     list_display = ('get_id','studentID','firstname','MiddleName','LastName','ApplicationStatus')
 
@@ -475,6 +479,7 @@ admin.site.register(studentScheduling, studentSchedulingAdmin)
 
 # HD STUDENT APPLICANT
 class hdApplicantAdmin(admin.ModelAdmin):
+    search_fields = ['studentID__studentID']
     model = hdApplicant
     list_display = ('get_id','course','studentID','FirstName','MiddleName','LastName','status','Applicationstatus')
 
@@ -510,6 +515,7 @@ admin.site.register(hdApplicant, hdApplicantAdmin)
 
 # OJT STUDENT APPLICANT
 class OjtApplicantAdmin(admin.ModelAdmin):
+    search_fields = ['studentID__studentID']
     model = OjtApplicant
     list_display = ('get_id','course','studentID','FirstName','MiddleName','LastName','status','Applicationstatus')
 
@@ -545,6 +551,7 @@ admin.site.register(OjtApplicant, OjtApplicantAdmin)
 
 # SP STUDENT APPLICANT
 class spApplicantAdmin(admin.ModelAdmin):
+    search_fields = ['studentID__studentID']
     model = spApplicant
     list_display = ('get_id','course','studentID','FirstName','MiddleName','LastName','status','Applicationstatus')
 
@@ -579,6 +586,7 @@ admin.site.register(spApplicant, spApplicantAdmin)
 
 # LOA STUDENT APPLICANT
 class LOAApplicantAdmin(admin.ModelAdmin):
+    search_fields = ['studentID__studentID']
     model = LOAApplicant
     list_display = ('get_id','course','studentID','FirstName','MiddleName','LastName','status','Applicationstatus')
 
@@ -614,6 +622,7 @@ admin.site.register(LOAApplicant, LOAApplicantAdmin)
 
 # SHIFTER STUDENT APPLICANT
 class ShifterApplicantAdmin(admin.ModelAdmin):
+    search_fields = ['studentID', 'lname', 'fname', 'mname','eadd']
     model = ShifterApplicant
     list_display = ('get_id','course','studentID','FirstName','MiddleName','LastName','Applicationstatus')
 
@@ -646,6 +655,7 @@ admin.site.register(ShifterApplicant, ShifterApplicantAdmin)
 
 # TRANSFEREE STUDENT APPLICANT
 class TransfereeApplicantAdmin(admin.ModelAdmin):
+    search_fields = ['studentID', 'lname', 'fname', 'mname','eadd']
     model = TransfereeApplicant
     list_display = ('get_id','course','studentID','FirstName','MiddleName','LastName','Applicationstatus')
 

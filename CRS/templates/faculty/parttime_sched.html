@@ -48,6 +48,93 @@
         background-color: #2852A4;
         cursor: pointer;
     }
+
+    .alertSuccess{
+        padding: 20px;
+        background-color: #3fb328;
+        border-radius: 15px;
+        color: white;
+        box-shadow: 0 0 10px rgb(216, 216, 216);
+        animation: zoom-in-zoom-out 1s ease;
+        font-size: 18px;
+        width: 400px;
+        }
+
+        .alertError{
+        padding: 20px;
+        background-color: #ff5f02;
+        border-radius: 15px;
+        color: white;
+        box-shadow: 0 0 10px rgb(216, 216, 216);
+        animation: zoom-in-zoom-out 1s ease;
+        font-size: 18px;
+        width: 400px;
+        }
+
+        .closebtnError {
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+        }
+
+        .closebtnError:hover {
+            color: #a33908;
+        }
+
+        .closebtnSuccess {
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+        }
+
+        .closebtnSuccess:hover {
+            color: #1c6b0c;
+        }
+
+        /*SCROLLBAR*/
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #e4e4e4;
+            border-radius: 12px;
+        }
+        
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #cbcbcb;
+            border-radius: 12px;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8f8f8f; 
+        }
+
+
+        @keyframes zoom-in-zoom-out {
+        0% {
+            transform: scale(1, 1);
+        }
+        50% {
+            transform: scale(1.1, 1.1);
+        }
+        100% {
+            transform: scale(1, 1);
+        }
+        }
     </style>
 </head>
 
@@ -95,10 +182,23 @@
                           <div class="col-lg-8">
                             <div id="error">
                               {% if messages %}
-                                  {% for message in messages %}
-                                    {{message}}
-                                  {% endfor %}
-                              {% endif %}
+                            {% for message in messages %}
+                            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                            <div class="alertError">
+                                <span class="closebtnError" onclick="this.parentElement.style.display='none';">&times;</span> 
+                                {{ message }}
+                            </div>
+                            {% endif %}
+
+                            {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                            <div class="alertSuccess">
+                                <span class="closebtnSuccess" onclick="this.parentElement.style.display='none';">&times;</span> 
+                                {{ message }}
+                            </div>
+                            {% endif %}
+                                
+                            {% endfor %}
+                            {% endif %}
                             </div>
                           </div>
 

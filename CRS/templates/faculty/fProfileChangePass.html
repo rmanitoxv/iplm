@@ -148,7 +148,7 @@
                                 </div>
                                 <div class="pfield col-lg-5">
 
-                                    {{form.old_password}}
+                                    {{form.old_password}}<span id="eye-span"><i class="fa fa-eye" aria-hidden="true" id="eye2" onclick="toggle()"></i></span>
 
                                 </div>
                             </div>
@@ -159,21 +159,8 @@
                                     <label for="pnew">New Password</label>
                                 </div>
                                 <div class="pfield col-lg-5">
-                                    {{form.new_password1}}
-                                    <div class="password-policies">
-                                        <div class="policy-length">
-                                            8 Characters
-                                        </div>
-                                        <div class="policy-number">
-                                            Contains Number
-                                        </div>
-                                        <div class="policy-uppercase">
-                                            Contains Uppercase
-                                        </div>
-                                        <div class="policy-special">
-                                            Contains Special Characters
-                                        </div>
-                                    </div>
+                                    {{form.new_password1}}<span id="eye-span"><i class="fa fa-eye" aria-hidden="true" id="eye2" onclick="toggle()"></i></span>
+                                    
                                 </div>
                             </div>
 
@@ -183,7 +170,7 @@
                                     <label for="pcon">Re-type New Password</label>
                                 </div>
                                 <div class="pfield col-lg-5">
-                                    {{form.new_password2}}
+                                    {{form.new_password2}}<span id="eye-span"><i class="fa fa-eye" aria-hidden="true" id="eye2" onclick="toggle()"></i></span>
                                 </div>
                             </div>
 

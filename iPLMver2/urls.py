@@ -17,13 +17,16 @@ from django.contrib import admin
 from django.conf.urls import handler400, handler404, url, include
 from django.conf import settings
 from django.views.static import serve
+from django.views.static import serve as mediaserve
 
 urlpatterns = [
     url(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
     url(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
     url('^admin/', admin.site.urls),
     url('accounts/', include('django.contrib.auth.urls')),
-    url(r'^', include ('CRS.urls'))
+    url(r'^', include ('CRS.urls')),
+    (url(f'^{settings.MEDIA_URL.lstrip("/")}(?P<path>.*)$',
+                     mediaserve, {'document_root': settings.MEDIA_ROOT}))
 ]
 
 handler404 = 'CRS.views.error_404_view'

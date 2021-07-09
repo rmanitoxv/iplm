@@ -135,6 +135,7 @@ def chairperson_change_password(request):
                 messages.error(request, 'Your password must contain at least 1 lowercase letter, a-z.')
                 messages.error(request, 'Your password must contain at least 1 symbol character, /@!.')
                 messages.error(request, 'Your password must have 8 minimum characters.')
+                messages.error(request, '"Re-typed password must match to the new password"')
         else:
             form = PasswordChangeForm(request.user)
         return render(request, 'chairperson/Home/chairperson_change_password.html', {'form': form})
@@ -1659,6 +1660,7 @@ def fProfileChangePass(request):
                 messages.error(request, 'Your password must contain at least 1 lowercase letter, a-z.')
                 messages.error(request, 'Your password contain atleast 1 symbol character')
                 messages.error(request, 'Your password must have 8 minimum Characters')
+                messages.error(request, '"Re-typed password must match to the new password"')
         else:
             form = PasswordChangeForm(request.user)
         return render(request,'./faculty/fProfileChangePass.html',{'form':form})
@@ -1811,9 +1813,9 @@ def parttime_sched(request):
 
                 else:
                     if total_teaching_minutes < 90:
-                        messages.error (request,'Time is below minimum hours!')
+                        messages.error(request,'Time is below minimum hours!')
                     else:
-                        messages.error (request,'Time is above minimum hours!')
+                        messages.error(request,'Time is above minimum hours!')
 
 
 
@@ -1835,7 +1837,7 @@ def parttime_sched(request):
                     messages.error (request,'Time is below minimum hours!') 
                 '''
         else:
-            messages.error (request,'You are not eligible to view this page.') 
+            messages.error(request,'You are not eligible to interact with this page.') 
         return render(request,'./faculty/parttime_sched.html',{'user':user})
     else:
         return redirect('index')
@@ -1843,17 +1845,15 @@ def parttime_sched(request):
 
 def fStudents_advisory(request):
     if request.user.is_authenticated and request.user.is_faculty:
-        user = request.user
-        f_user = FacultyInfo.objects.filter(facultyUser = user)
-
+        id= request.user.id
+        f_user = FacultyInfo.objects.get(pk = id)
         try:
-            advisory = BlockSection.objects.get(adviser__in = f_user)
-            if advisory:
-                stud_advisory = StudentInfo.objects.filter(studentSection = advisory) 
-                count = stud_advisory.count()
-                result = filters.Search(request.GET, queryset=stud_advisory); stud_advisory = result.qs
-                context = {'advisory': advisory, 'count': count, 'stud_advisory': stud_advisory, 'result':result}
-                return render(request, 'faculty/fStudents_advisory.html', context)
+            advisory = BlockSection.objects.filter(adviser = f_user)
+            stud_advisory = StudentInfo.objects.filter(studentSection__in = advisory) 
+            count = stud_advisory.count()
+            result = filters.Search(request.GET, queryset=stud_advisory); stud_advisory = result.qs
+            context = {'advisory': advisory, 'count': count, 'stud_advisory': stud_advisory, 'result':result}
+            return render(request, 'faculty/fStudents_advisory.html', context)
         except BlockSection.DoesNotExist:
             messages.error (request, 'You have no advisory class!')
             return render (request, './faculty/fStudents_advisory.html')
@@ -2324,6 +2324,7 @@ def sProfileChangePass(request):
                 messages.error(request, 'Your password must contain at least 1 lowercase letter, a-z.')
                 messages.error(request, 'Your password contain atleast 1 symbol character')
                 messages.error(request, 'Your password must have 8 minimum Characters')
+                messages.error(request, 'Re-typed password must match to the new password')
         else:
             form = PasswordChangeForm(request.user)
         return render(request,'student/sHome/sProfileChangePass.html',{'form':form})
@@ -3417,7 +3418,7 @@ def messagesp(request, sp_id):
     msg = request.POST.get('actionRequired')
     student.comment = msg
     student.save()
-    messages.error(request,'Feedback Sent!')
+    messages.success(request,'Feedback Successfully Sent!')
     return HttpResponseRedirect(reverse('cOthers-studyPlanView', args=(sp_id,)))
 
 #VIEW LIST OF LOA APPLICANTS
@@ -4055,7 +4056,7 @@ def schedOnline2(request,block_id):
     acads = AcademicYearInfo.objects.get(pk=1)
     info = FacultyInfo.objects.get(facultyUser=id)
     schedule = studentScheduling.objects.filter(realsection=block_id)
-    OrderFormSet = inlineformset_factory(BlockSection, studentScheduling, fields=('subjectCode','instructor', 'section','day','timeStart','timeEnd', 'room', 'type'),widgets={'subjectCode': forms.Select(attrs={"class": "form-control", "id":"instructorField"}), 'instructor': forms.Select(attrs={"class": "form-control", "id":"instructorField"}),'section': forms.NumberInput(attrs={"class": "form-control", "placeholder": "Section", "id":"instructorField"}),'day': forms.Select(attrs={"class": "form-control", "id":"remarks"}),'timeStart': forms.TimeInput(attrs={"class": "form-control", "placeholder": "%H:%M:%S", "id":"timeField"}),'timeEnd': forms.TimeInput(attrs={"class": "form-control","placeholder": "%H:%M:%S", "id":"timeField"}),'room': forms.TextInput(attrs={"class": "form-control", "placeholder": "Room", "id":"instructorField"}),'type': forms.Select(attrs={"class": "form-control", "id":"instructorField"})}, max_num=1, can_delete=False)
+    OrderFormSet = inlineformset_factory(BlockSection, studentScheduling, fields=('subjectCode','instructor', 'section','day','timeStart','timeEnd', 'room', 'type'),widgets={'subjectCode': forms.Select(attrs={"class": "form-control", "id":"instructorField", "required":True}), 'instructor': forms.Select(attrs={"class": "form-control", "id":"instructorField"}),'section': forms.NumberInput(attrs={"class": "form-control", "placeholder": "Section", "id":"instructorField", "required":True}),'day': forms.Select(attrs={"class": "form-control", "id":"remarks", "required":True}),'timeStart': forms.TimeInput(attrs={"class": "form-control", "placeholder": "%H:%M:%S", "id":"timeField", "required":True}),'timeEnd': forms.TimeInput(attrs={"class": "form-control","placeholder": "%H:%M:%S", "id":"timeField", "required":True}),'room': forms.TextInput(attrs={"class": "form-control", "placeholder": "Room", "id":"instructorField", "required":True}),'type': forms.Select(attrs={"class": "form-control", "id":"instructorField", "required":True})}, max_num=1, can_delete=False)
     block1 = BlockSection.objects.get(id=block_id)
     formset = OrderFormSet(queryset=studentScheduling.objects.none(), instance=block1)
     for form in formset:
@@ -4067,9 +4068,11 @@ def schedOnline2(request,block_id):
         if formset.is_valid():
             global flag
             flag = 0
+
             for form in formset:
                 data=form.cleaned_data
                 block = str(block1)
+
             tsinput = str(data.get('timeStart')).split(':')
             teinput = str(data.get('timeEnd')).split(':')
             if float(tsinput[0]) < 7:
@@ -4168,11 +4171,11 @@ def schedOnline2(request,block_id):
                                     break#Conflict in starting minute time is later than minutes
 
                             else:
-                                continue#time does not fall in any category time of conflict
+                                pass#time does not fall in any category time of conflict
                         else:
-                            continue#day is not the same in database
+                            pass#day is not the same in database
                     else:
-                        continue#section is not the same as database compared
+                        pass#section is not the same as database compared
 
                 flag3 = 0
                 catcher = 0
@@ -4220,10 +4223,10 @@ def schedOnline2(request,block_id):
                                             if float(TimeTestIn) < float(FacAvailTimeIn):
                                                 #Input Start Time To Early too Availability
                                                 validProf = False
-                                                errorMessage = "Faculty Time In: " + profAvailIn[0] +":" + profAvailIn[1]+", too early"
+                                                errorMessage = "Faculty Time In: " + str(profAvailIn[0]) +":" + str(profAvailIn[1])+", too early"
                                             elif float(TimeTestOut) > float(FacAvailTimeOut):
                                                 validProf = False
-                                                errorMessage = "Faculty Time Out" + profAvailOut[0] +":" + profAvailOut[1]+ ", too late"
+                                                errorMessage = "Faculty Time Out" + str(profAvailOut[0]) +":" + str(profAvailOut[1])+ ", too late"
                                             else:
                                                 validProf = True
                                         except:
@@ -4262,7 +4265,7 @@ def schedOnline2(request,block_id):
                                                         #Same Day and Start Time Sched
                                                         subjCode = str(dbSubject).split("|")
                                                         print(subjCode)
-                                                        errorMessage = subjCode[2] + " in " + str(i.realsection) + " Same Start Time"
+                                                        errorMessage = str(subjCode[2]) + " in " + str(databaseInfo.realsection) + " Same Start Time"
                                                         validProf = False
                                                         break
                                                     else:
@@ -4278,7 +4281,7 @@ def schedOnline2(request,block_id):
                                                                 # End time overlap with start time
                                                                 subjCode = str(dbSubject).split("|")
                                                                 print(subjCode)
-                                                                errorMessage = subjCode[2] + " in " + str(databaseInfo.realsection) + " Time Overlap"
+                                                                errorMessage = str(subjCode[2]) + " in " + str(databaseInfo.realsection) + " Time Overlap"
                                                                 validProf = False
                                                                 break
                                                 else:
@@ -4334,7 +4337,7 @@ def schedOnline2(request,block_id):
                                                                 #Input Sched Conflict in DB Sched
                                                                 subjCode = str(i.subjectCode).split("|")
                                                                 print(subjCode)
-                                                                errorMessage = subjCode[2] +" in " +str( i.realsection) + " Time Conflct"
+                                                                errorMessage = str(subjCode[2]) +" in " +str( i.realsection) + " Time Conflct"
                                                                 validRoom = False
                                                                 break 
                                                 else:
@@ -4342,16 +4345,19 @@ def schedOnline2(request,block_id):
                                                     validRoom = True
                                         else:
                                             if studentScheduling.objects.filter(room = roomVacancy).count() == 0:
-                                                validRoom = True 
+                                                validRoom = True
 
-
+                                        limitless_rooms = ["NA", "N.A.", "N/A", "T.B.A.", "TBA", "MS TEAMS", "FIELD"]
+                                        print(limitless_rooms," in ", roomVacancy)
+                                        if roomVacancy.upper() in limitless_rooms:
+                                            validRoom = True  
 
                                         if validProf == True:
                                             if validRoom == True:
                                                 formset.save()
                                                 validProf = False
                                                 validRoom = False
-                                                messages.success(request, "Schedule successfully Added!")
+                                                messages.success(request, 'Schedule successfully Added!')
                                                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
                                             else:
                                                 messages.error(request, 'Room and Time error: %s' % errorMessage)
@@ -4366,13 +4372,19 @@ def schedOnline2(request,block_id):
                                         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
                                         #messages.error(request, 'Time already taken')
                             else:
-                                messages.error(request, 'Time already taken')
+                                messages.error(request, 'Subject already taken')
                                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
                                 #messages.error(request, 'Time already taken')
                         else:
-                            continue
+                            pass
                     else:
-                        continue     
+                        pass
+
+                if flag == 0:
+                    messages.error(request, 'Time already taken')
+                    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+                    #messages.error(request, 'Time already taken')
+
                 if flag3 == 0:
                     #JM CODE
                     print("FLAG3 = 0, study plan dapat masave pero di dahil sa prof")
@@ -4443,7 +4455,7 @@ def schedOnline2(request,block_id):
                                     #Same Day and Start Time Sched
                                     subjCode = str(dbSubject).split("|")
                                     print(subjCode)
-                                    errorMessage = subjCode[2] + " in " + str(databaseInfo.realsection) + " Time Overlap"
+                                    errorMessage = str(subjCode[2]) + " in " + str(databaseInfo.realsection) + " Time Overlap"
                                     validProf = False
                                     break
                                 else:
@@ -4459,7 +4471,7 @@ def schedOnline2(request,block_id):
                                             validProf = False
                                             subjCode = str(dbSubject).split("|")
                                             print(subjCode)
-                                            errorMessage = subjCode[2] + " in " + str(databaseInfo.realsection) + " Time Overlap"
+                                            errorMessage = str(subjCode[2]) + " in " + str(databaseInfo.realsection) + " Time Overlap"
                                             break
                             else:
                                 validProf = True
@@ -4521,14 +4533,17 @@ def schedOnline2(request,block_id):
                         if studentScheduling.objects.filter(room = roomVacancy).count() == 0:
                             validRoom = True
 
-
+                    limitless_rooms = ["NA", "N.A.", "N/A", "T.B.A.", "TBA", "MS TEAMS", "FIELD"]
+                    print(limitless_rooms," in ", roomVacancy)
+                    if roomVacancy.upper() in limitless_rooms:
+                        validRoom = True
 
                     if validProf == True:
                         if validRoom == True:
                             formset.save()
                             validProf = False
                             validRoom = False
-                            messages.success(request, "Schedule successfully Added!")
+                            messages.success(request, 'Schedule successfully Added!')
                             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
                         else:
                             messages.error(request, 'Room Time error: %s' % errorMessage)
@@ -4539,14 +4554,12 @@ def schedOnline2(request,block_id):
 
             else:
                 formset.save()
-                messages.success(request, "Schedule successfully Added!")
+                messages.success(request, 'Schedule successfully Added!')
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         else:
             messages.error(request, 'There is an error upon adding!')
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     return render(request, 'chairperson/Stud_sched/cStudentSchedOnline2.html', {'formset': formset, 'schedule' :schedule})
-
-
 
 def cStudentDeleteSched(request, block_id):
     schedule = studentScheduling.objects.get(id = block_id)

@@ -16,6 +16,10 @@
     <link rel="icon" href="{% static 'CRS/images/sClassroom/iPLM.png' %}" type="image/png" sizes="16x16">
 
     <style>
+
+    body{
+            font-family: Nunito;
+        }
     .dropdown-menu {
     background-color: white;
     width: 550px;
@@ -33,7 +37,7 @@
     height: 90px;
     background-color: white;
     border-radius: 20px 20px 20px 20px;
-    box-shadow: 1px 5px 30px -10px #888888;
+    box-shadow: 1px 5px 30px -10px #c2c2c2;
     padding-left: 25px;
     padding-top: 20px;
 }
@@ -41,6 +45,11 @@
 
     .notifpanels:hover{
         background-color: #f7f7f7;
+    }
+
+    .reminder{
+        font-size: 30px;
+        color: #0C66CC;
     }
 
     </style>
@@ -88,11 +97,11 @@
                                         <td class="notification"><a href="{% url 'sHomeNotifications' %}"><img id="notif" src="{% static 'CRS/images/sHome/notification.svg' %}" width="40px" height="30px"></a>
                                             <div class="dropdown-menu">
                                                 <p id="notiftitle">Notifications<br></p><!-- DB NOTIFICATION DATA BELOW -->
-                                                <a  href="{% url 'HDNotifdetails' %}"><p id="notifdrops"><b>HONORABLE DISMISSAL FEEDBACK</b><br>See more details...</p><br></a>
-                                                <a  href="{% url 'LOANotifdetails' %}"><p id="notifdrops"><b>LEAVE OF ABSENCE FEEDBACK</b><br>See more details...</p><br></a>
-                                                <a  href="{% url 'OJTNotifdetails' %}"><p id="notifdrops"><b>PRACTICUM FEEDBACK</b><br>See more details...</p><br></a>
-                                                <a  href="{% url 'SPNotifdetails' %}"><p id="notifdrops"><b>STUDY PLAN FEEDBACK</b><br>See more details...</p><br></a>
-                                                <a  href="{% url 'GradesNotifdetails' %}"><p id="notifdrops"><b>GRADE FEEDBACK</b><br>See more details...</p><br></a>
+                                                <a  href="{% url 'HDNotifdetails' %}"><p id="notifdrops"><b>Honorable Dismissal Feedback</b><br>See more details...</p><br></a>
+                                                <a  href="{% url 'LOANotifdetails' %}"><p id="notifdrops"><b>Leave of Absence Feedback</b><br>See more details...</p><br></a>
+                                                <a  href="{% url 'OJTNotifdetails' %}"><p id="notifdrops"><b>Practicum Feedback</b><br>See more details...</p><br></a>
+                                                <a  href="{% url 'SPNotifdetails' %}"><p id="notifdrops"><b>Studyplan Feedback</b><br>See more details...</p><br></a>
+                                                <a  href="{% url 'GradesNotifdetails' %}"><p id="notifdrops"><b>Grade Submission Feedback</b><br>See more details...</p><br></a>
                                             </div>
                                         </td>
                                         <td>
@@ -128,16 +137,22 @@
                 <!--NOTIFICATION-->
                 <div id="notifrow" class="row pt-5">
                     <div id="notifcol" class="col-lg-5">
-                        <p id="notifhead"><img id="bluebell" src="{% static 'CRS/images/sHome/bluebell.svg' %}">&nbsp;&nbsp;Notification</p>
+                        <p id="notifhead" style="font-size: 30px;"><img id="bluebell" src="{% static 'CRS/images/sHome/bluebell.svg' %}">&nbsp;&nbsp;Notifications</p>
                         
                         <!-- DB NOTIFICATION LIST BELOW -->
-                        <p class="notifpanels"><a href="{% url 'HDNotifdetails' %}"><b>HONORABLE DISMISSAL FEEDBACK</b><br>See more details...</a></p>
-                        <p class="notifpanels"><a href="{% url 'LOANotifdetails' %}"><b>LEAVE OF ABSENCE FEEDBACK</b><br>See more details...</a></p>
-                        <p class="notifpanels"><a href="{% url 'OJTNotifdetails' %}"><b>PRACTICUM FEEDBACK</b></a><br>See more details...</p>
-                        <p class="notifpanels"><a href="{% url 'SPNotifdetails' %}"><b>STUDY PLAN FEEDBACK</b></a><br>See more details...</p>     
-                        <p class="notifpanels"><a href="{% url 'GradesNotifdetails' %}"><b>GRADE FEEDBACK</b></a><br>See more details...</p>  
+                        <a href="{% url 'HDNotifdetails' %}"><p class="notifpanels"><b>Honorable Dismissal Feedback</b><br>See more details...</p></a>
+                        <a href="{% url 'LOANotifdetails' %}"><p class="notifpanels"><b>Leave of Absence Feedback</b><br>See more details...</p></a>
+                        <a href="{% url 'OJTNotifdetails' %}"><p class="notifpanels"><b>Practicum Feedback</b><br>See more details...</p></a>
+                        <a href="{% url 'SPNotifdetails' %}"><p class="notifpanels"><b>Studyplan Feedback</b><br>See more details...</p></a>    
+                        <a href="{% url 'GradesNotifdetails' %}"><p class="notifpanels"><b>Grade Submission Feedback</b><br>See more details...</p></a> 
                         
                         <br>                
+                    </div>
+
+                    <div class="col-lg-7" align=center>
+                        <br><br><br>
+                        <img  src="{% static 'CRS/images/sHome/clip-notif.png' %}" width="auto" height="400px">
+                        
                     </div>
 
                 </div>

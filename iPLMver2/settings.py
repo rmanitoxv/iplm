@@ -104,6 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'CRS.validators.UppercaseValidator', },
     {'NAME': 'CRS.validators.LowercaseValidator', },
     {'NAME': 'CRS.validators.SymbolValidator', },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', },
 ]
 
 

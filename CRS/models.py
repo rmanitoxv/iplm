@@ -149,6 +149,8 @@ class Department(models.Model):
 
     def __str__(self):
         return self.courseName
+    class Meta:
+        constraints =[models.UniqueConstraint(fields=['collegeId', 'courseName'], name='Department')]
 
 
 
@@ -230,6 +232,7 @@ class BlockSection(models.Model):
 
     class Meta:
         verbose_name_plural = "Block Sections"
+        constraints =[models.UniqueConstraint(fields=['blockYear', 'blockSection','blockCourse'], name='block section')]
 
     def __str__(self):
         return '%s %s - %s' %(self.blockCourse,self.blockYear, self.blockSection)
@@ -276,6 +279,7 @@ class subjectInfo(models.Model):
 
     class Meta:
         verbose_name_plural = "Subject Information"
+        constraints =[models.UniqueConstraint(fields=['subjectCode', 'subjectName','college'], name='subject')]
 
     def __str__(self):
         return '| %s | %s |' % (self.subjectCode, self.subjectName)
@@ -333,6 +337,7 @@ class curriculumInfo(models.Model):
 
     class Meta:
         verbose_name_plural = "Curriculum Information"
+        constraints = [models.UniqueConstraint(fields=['curriculumyear', 'schoolYear','schoolSem','departmentID','subjectCode'], name='curriculum')]
 
     def __str__(self):
         return '| %s  %s | %s ' % (self.curriculumyear, self.subjectCode,self.blockCourse)
