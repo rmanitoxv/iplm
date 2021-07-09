@@ -91,6 +91,7 @@
         color:white;
         font-size: 18px;
         width: auto;
+        height: 70px;
         box-shadow: 0 0 10px rgb(216, 216, 216);
         float: right;
         animation: zoom-in-zoom-out 1s ease;
@@ -172,7 +173,8 @@
             <div class=" container-fluid">
 
                 <div class="backrw row">
-                    <a href="{% url 'sClassroom' %}"><object type="image/svg+xml" data="{% static 'CRS/images/fStudents/studclassroom_back.svg' %}" id="backimg"></object></a>
+                    <a href="{% url 'sClassroom' %}" id="back-edit"><img src="{% static 'CRS/images/sClassroom/back.svg' %}" width="50" style="margin-top: 30px;"></a>
+
                   <p id="head1">Checklist</p>
                 </div>
                 
@@ -452,7 +454,7 @@
                         
                     </div> 
                     
-                    <div class="checklist-img row col-lg-3">
+                    <div class="row col-lg-3">
 
                         {% if messages %}
                         {% for message in messages %}
@@ -464,7 +466,7 @@
                         {% endif %}
     
                         {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-                        <div class="alertSuccess">
+                        <div class="alertSuccess" style="padding-bottom: -20px;">
                             <span class="closebtnSuccess" onclick="this.parentElement.style.display='none';">&times;</span> 
                             {{ message }}
                         </div>
@@ -472,7 +474,7 @@
                             
                         {% endfor %}
                         {% endif %}
-                        <br><br><br><br>
+                       
                        
 
                        <img src="{% static 'CRS/images/sClassroom/studclassroom_checklist-img.png' %}" width=456 height=456>            

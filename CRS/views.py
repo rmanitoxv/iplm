@@ -1679,7 +1679,7 @@ def parttime_sched(request):
 
                 convertIn1 = facultyin.split(":")
                 convertIn2 = convertIn1[1].split(" ")
-                if convertIn2[1] == 'PM':
+                if convertIn2[1] == 'PM' and int(convertIn1[0]) != 12:
                     newTimeIn = int(convertIn1[0])+12
                 else:
                     newTimeIn = int(convertIn1[0])
@@ -1687,7 +1687,7 @@ def parttime_sched(request):
 
                 convertOut1 = facultyout.split(":")
                 convertOut2 = convertOut1[1].split(" ")
-                if convertOut2[1] == 'PM':
+                if convertOut2[1] == 'PM' and int(convertOut1[0]) != 12:
                     newTimeOut = int(convertOut1[0])+12
                 else:
                     newTimeOut = int(convertOut1[0])
@@ -1813,31 +1813,11 @@ def parttime_sched(request):
 
                 else:
                     if total_teaching_minutes < 90:
-                        messages.error(request,'Time is below minimum hours!')
+                        messages.error (request,'Time is below minimum hours!')
                     else:
-                        messages.error(request,'Time is above minimum hours!')
-
-
-
-                '''    
-                if outside - f_in == 300 :
-                    facultyIn=request.POST.get('in')
-                    facultyOut=request.POST.get('out')
-
-                    f_user.facultyIn = facultyIn
-                    f_user.facultyOut = facultyOut
-
-                    f_user.save()
-                    messages.success(request, 'Successfully added your input!')
-                    return redirect('parttime_sched')
-
-                if outside - f_in > 300:
-                    messages.error (request,'Time is above minimum hours!') 
-                if outside - f_in < 300:
-                    messages.error (request,'Time is below minimum hours!') 
-                '''
+                        messages.error (request,'Time is above minimum hours!')
         else:
-            messages.error(request,'You are not eligible to interact with this page.') 
+            messages.error (request,'You are not eligible to interact with this page.') 
         return render(request,'./faculty/parttime_sched.html',{'user':user})
     else:
         return redirect('index')
