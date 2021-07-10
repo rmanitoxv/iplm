@@ -4723,12 +4723,12 @@ def schedOnline2(request,block_id):
 
 
 
-def cStudentDeleteSched(request, block_id):
+def cStudentDeleteSched(request, block_id, sec_id):
     schedule = studentScheduling.objects.get(id = block_id)
     if request.method =='POST':
         schedule.delete()
-        messages.success(request,"Successfully Deleted")
-        return redirect('cStudentSchedOnline')
+        messages.success(request, 'Successfully removed!')
+        return HttpResponseRedirect(reverse('cStudentSchedOnline2', args=(sec_id)))
     context = {'schedule': schedule}
     return render(request, 'chairperson/Stud_sched/cStudentDeleteSched.html', context)
 

@@ -410,7 +410,7 @@ urlpatterns = [
     url(r'^cStudentViewBlock/$', views.viewblock, name='cStudentViewBlock'),
     url(r'^cStudentSchedOnline/$', views.schedOnline, name='cStudentSchedOnline'),
     path(r'^cStudentSchedOnline2/<block_id>$', views.schedOnline2, name='cStudentSchedOnline2'),
-    path(r'^cStudentDeleteSched/<block_id>$', views.cStudentDeleteSched, name='cStudentDeleteSched'),
+    url(r'^cStudentDeleteSched/(?P<block_id>[a-zA-Z0-9]+)/(?P<sec_id>[a-zA-Z0-9]+$)', views.cStudentDeleteSched, name='cStudentDeleteSched'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) \
               + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

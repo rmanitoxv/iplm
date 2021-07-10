@@ -24,6 +24,10 @@
     <link rel="icon" href="{% static 'CRS/images/cStudents/iPLM.png'%}" type="image/png" sizes="16x16">
 
     <style>
+
+        body{
+            overflow-y: auto;
+        }
         
         #subjectMessage {
         margin-top: 10px;
@@ -171,6 +175,29 @@
         .closebtnSuccess:hover {
             color: #1c6b0c;
         }
+
+                /*SCROLLBAR*/
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #e4e4e4;
+            border-radius: 12px;
+        }
+        
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #cbcbcb;
+            border-radius: 12px;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8f8f8f; 
+        }
+
 
 
 
@@ -331,7 +358,7 @@
                                     <td><div class="subjectName">{{sched.timeEnd}}</div></td>
                                     <td><div class="subjectName">{{sched.room}}</div></td>
                                     <td><div class="subjectName">{{sched.type}}</div></td>
-                                    <td><a href="{% url 'cStudentDeleteSched' sched.id %}"><button type=submit id="deletebtn">-</button></a></td><!-- DB ADD BUTTON -->
+                                    <td><a href="{% url 'cStudentDeleteSched' sched.id sched.realsection.id %}"><button type=submit id="deletebtn">-</button></a></td><!-- DB ADD BUTTON -->
                                 </tr>
                                 {% endfor %}
                                 <!---------------------------------------------------------->
